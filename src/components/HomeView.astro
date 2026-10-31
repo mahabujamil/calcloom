@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import { allTools } from '../data/get';
+import { ui, localePath, type Lang } from '../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = ui[lang];
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Calcloom', url: Astro.site?.href, inLanguage: lang },
+];
+---
+<Base title={t.homeTitle} description={t.homeDesc} {lang} {schema}>
+  <h1>{t.homeH1}</h1>
+  <p class="lead">{t.homeLead}</p>
+  <h2>{t.allCalcs}</h2>
+  <div class="grid">
+    {allTools(lang).map((tool) => (
+      <a class="tile" href={localePath(lang, `/${tool.slug}/`)}>
+        <strong>{tool.name}</strong>
+        <span>{tool.intro}</span>
+      </a>
+    ))}
+  </div>
+</Base>

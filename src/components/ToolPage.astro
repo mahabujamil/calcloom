@@ -1,0 +1,100 @@
+---
+import Base from '../layouts/Base.astro';
+import { getTool } from '../data/get';
+import { ui, localePath, type Lang } from '../i18n';
+import Percentage from './tools/Percentage.astro';
+import Loan from './tools/Loan.astro';
+import Compound from './tools/Compound.astro';
+import Age from './tools/Age.astro';
+import Bmi from './tools/Bmi.astro';
+import Tip from './tools/Tip.astro';
+import Discount from './tools/Discount.astro';
+import DaysBetween from './tools/DaysBetween.astro';
+import Hourly from './tools/Hourly.astro';
+import Words from './tools/Words.astro';
+
+interface Props { slug: string; lang: Lang }
+const { slug, lang } = Astro.props;
+
+const components: Record<string, any> = {
+  'percentage-calculator': Percentage,
+  'loan-calculator': Loan,
+  'compound-interest-calculator': Compound,
+  'age-calculator': Age,
+  'bmi-calculator': Bmi,
+  'tip-calculator': Tip,
+  'discount-calculator': Discount,
+  'days-between-dates-calculator': DaysBetween,
+  'hourly-to-salary-calculator': Hourly,
+  'word-counter': Words,
+};
+
+const t = ui[lang];
+const tool = getTool(slug, lang);
+const Tool = components[slug];
+const url = new URL(localePath(lang, `/${slug}/`), Astro.site).href;
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: tool.name,
+    url,
+    inLanguage: lang,
+    description: tool.description,
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Any',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    inLanguage: lang,
+    mainEntity: tool.faq.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: t.home, item: new URL(localePath(lang, '/'), Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: tool.name, item: url },
+    ],
+  },
+];
+---
+<Base title={tool.title} description={tool.description} {lang} {schema}>
+  <h1>{tool.h1}</h1>
+  <p class="lead">{tool.intro}</p>
+
+  <section class="card" aria-label={tool.name}>
+    <Tool {lang} />
+  </section>
+
+  <h2>{t.howTo(tool.name)}</h2>
+  <ol>{tool.steps.map((s) => <li>{s}</li>)}</ol>
+
+  <h2>{t.faq}</h2>
+  {tool.faq.map((f) => (
+    <details>
+      <summary>{f.q}</summary>
+      <p>{f.a}</p>
+    </details>
+  ))}
+
+  <h2>{t.more}</h2>
+  <div class="grid">
+    {tool.related.map((r) => {
+      const rt = getTool(r, lang);
+      return (
+        <a class="tile" href={localePath(lang, `/${rt.slug}/`)}>
+          <strong>{rt.name}</strong>
+          <span>{rt.intro}</span>
+        </a>
+      );
+    })}
+  </div>
+</Base>

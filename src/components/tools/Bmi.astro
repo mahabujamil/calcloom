@@ -1,0 +1,50 @@
+---
+const { lang } = Astro.props;
+const S = lang === 'ar'
+  ? { units: 'الوحدات', metric: 'متري (سم، كغ)', imperial: 'إمبراطوري (إنش، رطل)', hCm: 'الطول (سم)', wKg: 'الوزن (كغ)',
+      hIn: 'الطول (إنش)', wLb: 'الوزن (رطل)', calc: 'احسب', err: 'أدخل طولاً ووزناً موجبين.',
+      under: 'نحافة', normal: 'وزن طبيعي', over: 'زيادة وزن', obese: 'سمنة',
+      cat: 'الفئة (حسب منظمة الصحة العالمية للبالغين): <strong>{0}</strong>', note: 'أداة فحص أولي فقط وليست تشخيصاً طبياً.' }
+  : { units: 'Units', metric: 'Metric (cm, kg)', imperial: 'Imperial (in, lb)', hCm: 'Height (cm)', wKg: 'Weight (kg)',
+      hIn: 'Height (inches)', wLb: 'Weight (lb)', calc: 'Calculate', err: 'Enter a positive height and weight.',
+      under: 'Underweight', normal: 'Normal weight', over: 'Overweight', obese: 'Obese',
+      cat: 'Category (WHO adult ranges): <strong>{0}</strong>', note: 'A screening tool only, not a medical diagnosis.' };
+---
+<form id="bm" onsubmit="return false" data-s={JSON.stringify(S)}>
+  <label for="bm-u">{S.units}</label>
+  <select id="bm-u">
+    <option value="m">{S.metric}</option>
+    <option value="i">{S.imperial}</option>
+  </select>
+  <div class="row">
+    <div><label for="bm-h" id="bm-hl">{S.hCm}</label><input id="bm-h" type="number" min="0" step="any" value="175" /></div>
+    <div><label for="bm-w" id="bm-wl">{S.wKg}</label><input id="bm-w" type="number" min="0" step="any" value="70" /></div>
+  </div>
+  <button id="bm-go" type="button">{S.calc}</button>
+  <div class="result" id="bm-out" aria-live="polite"></div>
+</form>
+
+<script>
+  import { $, fill, strings } from '../../lib/util';
+  const S = strings('bm');
+  function run() {
+    const imp = $('bm-u').value === 'i';
+    const h = parseFloat($('bm-h').value), w = parseFloat($('bm-w').value);
+    const out = $('bm-out');
+    if (isNaN(h) || isNaN(w) || h <= 0 || w <= 0) { out.textContent = S.err; return; }
+    const bmi = imp ? (703 * w) / (h * h) : w / Math.pow(h / 100, 2);
+    const cat = bmi < 18.5 ? S.under : bmi < 25 ? S.normal : bmi < 30 ? S.over : S.obese;
+    out.innerHTML = `<p class="big">${bmi.toFixed(1)}</p><p>${fill(S.cat, cat)}</p><p>${S.note}</p>`;
+  }
+  $('bm-u').addEventListener('change', () => {
+    const imp = $('bm-u').value === 'i';
+    $('bm-hl').textContent = imp ? S.hIn : S.hCm;
+    $('bm-wl').textContent = imp ? S.wLb : S.wKg;
+    $('bm-h').value = imp ? '69' : '175';
+    $('bm-w').value = imp ? '154' : '70';
+    run();
+  });
+  $('bm-go').addEventListener('click', run);
+  ['bm-h', 'bm-w'].forEach((id) => $(id).addEventListener('input', run));
+  run();
+</script>

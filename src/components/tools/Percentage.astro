@@ -1,0 +1,57 @@
+---
+const { lang } = Astro.props;
+const S = lang === 'ar'
+  ? { find: 'ماذا تريد أن تحسب؟', of: 'كم يساوي س% من ص؟', is: 'س تمثل كم بالمئة من ص؟', chg: 'نسبة التغير من س إلى ص',
+      xp: 'س (النسبة %)', yn: 'ص (الرقم)', xn: 'س (الرقم)', xo: 'س (القيمة القديمة)', yv: 'ص (القيمة الجديدة)',
+      calc: 'احسب', both: 'أدخل الرقمين.', yzero: 'لا يمكن أن تكون ص صفراً.', xzero: 'لا يمكن أن تكون القيمة القديمة صفراً.',
+      rOf: '{0}% من {1}', rIs: '{0} تمثل {1}% من {2}', inc: 'زيادة من {0} إلى {1}', dec: 'نقصان من {0} إلى {1}' }
+  : { find: 'What do you want to find?', of: 'What is X% of Y?', is: 'X is what percent of Y?', chg: 'Percentage change from X to Y',
+      xp: 'X (percent)', yn: 'Y (number)', xn: 'X (number)', xo: 'X (old value)', yv: 'Y (new value)',
+      calc: 'Calculate', both: 'Enter both numbers.', yzero: 'Y cannot be zero.', xzero: 'The old value cannot be zero.',
+      rOf: '{0}% of {1}', rIs: '{0} is {1}% of {2}', inc: 'Increase from {0} to {1}', dec: 'Decrease from {0} to {1}' };
+---
+<form id="pc" onsubmit="return false" data-s={JSON.stringify(S)}>
+  <label for="pc-mode">{S.find}</label>
+  <select id="pc-mode">
+    <option value="of">{S.of}</option>
+    <option value="is">{S.is}</option>
+    <option value="chg">{S.chg}</option>
+  </select>
+  <div class="row">
+    <div><label for="pc-x" id="pc-xl">{S.xp}</label><input id="pc-x" type="number" step="any" value="15" /></div>
+    <div><label for="pc-y" id="pc-yl">{S.yn}</label><input id="pc-y" type="number" step="any" value="200" /></div>
+  </div>
+  <button id="pc-go" type="button">{S.calc}</button>
+  <div class="result" id="pc-out" aria-live="polite"></div>
+</form>
+
+<script>
+  import { $, fill, strings } from '../../lib/util';
+  const S = strings('pc');
+  const fmt = (n: number) => Number(n.toFixed(6)).toLocaleString('en-US', { maximumFractionDigits: 6 });
+  const labels: Record<string, [string, string]> = {
+    of: [S.xp, S.yn],
+    is: [S.xn, S.yn],
+    chg: [S.xo, S.yv],
+  };
+  function run() {
+    const m = $('pc-mode').value, x = parseFloat($('pc-x').value), y = parseFloat($('pc-y').value);
+    const out = $('pc-out');
+    if (isNaN(x) || isNaN(y)) { out.textContent = S.both; return; }
+    if (m === 'of') out.innerHTML = `<p class="big">${fmt((x / 100) * y)}</p><p>${fill(S.rOf, fmt(x), fmt(y))}</p>`;
+    else if (y === 0 && m === 'is') out.textContent = S.yzero;
+    else if (m === 'is') out.innerHTML = `<p class="big">${fmt((x / y) * 100)}%</p><p>${fill(S.rIs, fmt(x), fmt((x / y) * 100), fmt(y))}</p>`;
+    else if (x === 0) out.textContent = S.xzero;
+    else {
+      const c = ((y - x) / Math.abs(x)) * 100;
+      out.innerHTML = `<p class="big"><span dir="ltr">${c >= 0 ? '+' : ''}${fmt(c)}%</span></p><p>${fill(c >= 0 ? S.inc : S.dec, fmt(x), fmt(y))}</p>`;
+    }
+  }
+  $('pc-mode').addEventListener('change', () => {
+    const [a, b] = labels[$('pc-mode').value];
+    $('pc-xl').textContent = a; $('pc-yl').textContent = b; run();
+  });
+  $('pc-go').addEventListener('click', run);
+  ['pc-x', 'pc-y'].forEach((id) => $(id).addEventListener('input', run));
+  run();
+</script>

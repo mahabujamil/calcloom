@@ -1,0 +1,40 @@
+---
+const { lang } = Astro.props;
+const S = lang === 'ar'
+  ? { start: 'الرصيد الابتدائي', monthly: 'الإيداع الشهري', rate: 'نسبة الفائدة السنوية (%)', years: 'السنوات', calc: 'احسب',
+      err: 'أدخل أرقاماً صحيحة غير سالبة (سنة واحدة على الأقل).',
+      put: 'إجمالي ما أودعته: <strong>{0}</strong>', earned: 'الفائدة المكتسبة: <strong>{0}</strong>',
+      note: 'تُركَّب الفائدة شهرياً، وتُودَع المبالغ في نهاية كل شهر.' }
+  : { start: 'Starting balance', monthly: 'Monthly deposit', rate: 'Yearly interest rate (%)', years: 'Years', calc: 'Calculate',
+      err: 'Enter valid, non-negative numbers (at least 1 year).',
+      put: 'Total you put in: <strong>{0}</strong>', earned: 'Interest earned: <strong>{0}</strong>',
+      note: 'Compounded monthly, deposits at the end of each month.' };
+---
+<form id="ci" onsubmit="return false" data-s={JSON.stringify(S)}>
+  <div class="row">
+    <div><label for="ci-p">{S.start}</label><input id="ci-p" type="number" min="0" step="any" value="5000" /></div>
+    <div><label for="ci-m">{S.monthly}</label><input id="ci-m" type="number" min="0" step="any" value="200" /></div>
+    <div><label for="ci-r">{S.rate}</label><input id="ci-r" type="number" min="0" step="any" value="7" /></div>
+    <div><label for="ci-t">{S.years}</label><input id="ci-t" type="number" min="1" step="1" value="20" /></div>
+  </div>
+  <button id="ci-go" type="button">{S.calc}</button>
+  <div class="result" id="ci-out" aria-live="polite"></div>
+</form>
+
+<script>
+  import { $, money, fill, strings } from '../../lib/util';
+  const S = strings('ci');
+  function run() {
+    const p = parseFloat($('ci-p').value), m = parseFloat($('ci-m').value), apr = parseFloat($('ci-r').value), yrs = parseInt($('ci-t').value);
+    const out = $('ci-out');
+    if ([p, m, apr, yrs].some(isNaN) || p < 0 || m < 0 || apr < 0 || yrs < 1) { out.textContent = S.err; return; }
+    const r = apr / 100 / 12, months = yrs * 12;
+    let bal = p;
+    for (let i = 0; i < months; i++) bal = bal * (1 + r) + m;
+    const put = p + m * months;
+    out.innerHTML = `<p class="big">${money(bal)}</p><p>${fill(S.put, money(put))}</p><p>${fill(S.earned, money(bal - put))}</p><p>${S.note}</p>`;
+  }
+  $('ci-go').addEventListener('click', run);
+  ['ci-p', 'ci-m', 'ci-r', 'ci-t'].forEach((id) => $(id).addEventListener('input', run));
+  run();
+</script>

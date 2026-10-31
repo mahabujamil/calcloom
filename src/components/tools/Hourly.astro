@@ -1,0 +1,36 @@
+---
+const { lang } = Astro.props;
+const S = lang === 'ar'
+  ? { rate: 'الأجر بالساعة', hours: 'ساعات العمل في الأسبوع', weeks: 'أسابيع العمل في السنة', calc: 'احسب',
+      err: 'أدخل أرقاماً صحيحة (الأسابيع بين 1 و52).',
+      year: '{0} / سنوياً', mo: 'شهرياً: <strong>{0}</strong>', wk: 'أسبوعياً: <strong>{0}</strong>', day: 'يومياً (5 أيام): <strong>{0}</strong>',
+      note: 'كل المبالغ قبل الضريبة.' }
+  : { rate: 'Hourly rate', hours: 'Hours per week', weeks: 'Weeks per year', calc: 'Calculate',
+      err: 'Enter valid numbers (weeks between 1 and 52).',
+      year: '{0} / year', mo: 'Monthly: <strong>{0}</strong>', wk: 'Weekly: <strong>{0}</strong>', day: 'Daily (5 days): <strong>{0}</strong>',
+      note: 'All amounts are before tax.' };
+---
+<form id="hr" onsubmit="return false" data-s={JSON.stringify(S)}>
+  <div class="row">
+    <div><label for="hr-r">{S.rate}</label><input id="hr-r" type="number" min="0" step="any" value="20" /></div>
+    <div><label for="hr-h">{S.hours}</label><input id="hr-h" type="number" min="0" step="any" value="40" /></div>
+    <div><label for="hr-w">{S.weeks}</label><input id="hr-w" type="number" min="1" max="52" step="any" value="52" /></div>
+  </div>
+  <button id="hr-go" type="button">{S.calc}</button>
+  <div class="result" id="hr-out" aria-live="polite"></div>
+</form>
+
+<script>
+  import { $, money, fill, strings } from '../../lib/util';
+  const S = strings('hr');
+  function run() {
+    const r = parseFloat($('hr-r').value), h = parseFloat($('hr-h').value), w = parseFloat($('hr-w').value);
+    const out = $('hr-out');
+    if ([r, h, w].some(isNaN) || r < 0 || h < 0 || w < 1 || w > 52) { out.textContent = S.err; return; }
+    const week = r * h, year = week * w;
+    out.innerHTML = `<p class="big">${fill(S.year, money(year))}</p><p>${fill(S.mo, money(year / 12))}</p><p>${fill(S.wk, money(week))}</p><p>${fill(S.day, money(week / 5))}</p><p>${S.note}</p>`;
+  }
+  $('hr-go').addEventListener('click', run);
+  ['hr-r', 'hr-h', 'hr-w'].forEach((id) => $(id).addEventListener('input', run));
+  run();
+</script>

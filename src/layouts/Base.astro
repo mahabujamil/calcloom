@@ -1,0 +1,90 @@
+---
+import { ui, localePath, BASE, type Lang } from '../i18n';
+
+interface Props {
+  title: string;
+  description: string;
+  lang?: Lang;
+  schema?: object[];
+}
+const { title, description, lang = 'en', schema = [] } = Astro.props;
+const t = ui[lang];
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+// English path of the current page, used to build both language URLs
+const enPath = Astro.url.pathname.slice(BASE.length).replace(/^\/ar(?=\/|$)/, '') || '/';
+const href = (l: Lang) => new URL(localePath(l, enPath), Astro.site).href;
+const other: Lang = lang === 'ar' ? 'en' : 'ar';
+---
+<!doctype html>
+<html lang={lang} dir={t.dir}>
+  <head>
+    <link rel="alternate" hreflang="en" href={href('en')} />
+    <link rel="alternate" hreflang="ar" href={href('ar')} />
+    <link rel="alternate" hreflang="x-default" href={href('en')} />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={lang === 'ar' ? 'ar_AR' : 'en_US'} />
+    <meta name="twitter:card" content="summary" />
+    {schema.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+  </head>
+  <body>
+    <header class="top">
+      <a class="brand" href={localePath(lang, '/')}>Calc<span>loom</span></a>
+      <nav>
+        <a href={localePath(lang, '/')}>{t.allTools}</a>
+        <a href={localePath(lang, '/about/')}>{t.about}</a>
+        <a href={localePath(other, enPath)} hreflang={other} lang={other}>{ui[other].switchLabel}</a>
+      </nav>
+    </header>
+    <main><slot /></main>
+    <footer>
+      <p>{t.footer}</p>
+      <p><a href={localePath(lang, '/about/')}>{t.about}</a> · <a href={localePath(lang, '/privacy/')}>{t.privacy}</a></p>
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --bg: #fafaf7; --card: #fff; --ink: #1c1f26; --muted: #5d6573;
+    --line: #e4e4dc; --accent: #0f766e; --accent-ink: #fff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #14161a; --card: #1c1f26; --ink: #ecece6; --muted: #a0a8b5; --line: #2c313b; --accent: #2dd4bf; --accent-ink: #062b27; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.65 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  a { color: var(--accent); }
+  .top { display: flex; justify-content: space-between; align-items: center; max-width: 960px; margin: 0 auto; padding: 16px; }
+  .top nav a { margin-inline-start: 16px; text-decoration: none; color: var(--muted); }
+  .brand { font-weight: 800; font-size: 1.4rem; text-decoration: none; color: var(--ink); }
+  .brand span { color: var(--accent); }
+  main { max-width: 960px; margin: 0 auto; padding: 0 16px 48px; }
+  h1 { font-size: clamp(1.8rem, 5vw, 2.5rem); line-height: 1.2; margin: 8px 0 12px; }
+  h2 { margin-top: 2.2rem; }
+  .lead { color: var(--muted); font-size: 1.1rem; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px; margin: 20px 0; }
+  .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+  .grid a.tile { display: block; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px; text-decoration: none; color: var(--ink); }
+  .grid a.tile:hover { border-color: var(--accent); }
+  .tile strong { display: block; color: var(--accent); margin-bottom: 4px; }
+  .tile span { color: var(--muted); font-size: .95rem; }
+  label { display: block; font-weight: 600; margin: 12px 0 4px; font-size: .95rem; }
+  input, select { width: 100%; padding: 11px 12px; font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; }
+  .row { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+  button { margin-top: 16px; padding: 12px 22px; font: inherit; font-weight: 700; border: 0; border-radius: 10px; background: var(--accent); color: var(--accent-ink); cursor: pointer; }
+  .result { margin-top: 18px; padding: 16px; border-radius: 10px; background: var(--bg); border: 1px dashed var(--line); min-height: 3.5rem; }
+  .result .big { font-size: 1.8rem; font-weight: 800; color: var(--accent); }
+  .result p { margin: 4px 0; }
+  details { border-bottom: 1px solid var(--line); padding: 12px 0; }
+  summary { font-weight: 600; cursor: pointer; }
+  footer { max-width: 960px; margin: 0 auto; padding: 24px 16px 40px; color: var(--muted); font-size: .9rem; border-top: 1px solid var(--line); }
+  ol li { margin: 4px 0; }
+</style>

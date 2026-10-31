@@ -1,0 +1,34 @@
+---
+const { lang } = Astro.props;
+const S = lang === 'ar'
+  ? { bill: 'قيمة الفاتورة', tip: 'البقشيش (%)', people: 'عدد الأشخاص', calc: 'احسب',
+      err: 'أدخل فاتورة وبقشيشاً وشخصاً واحداً على الأقل.',
+      per: '{0} للشخص', tipl: 'البقشيش: <strong>{0}</strong> ({1} لكل شخص)', total: 'إجمالي الفاتورة مع البقشيش: <strong>{0}</strong>' }
+  : { bill: 'Bill amount', tip: 'Tip (%)', people: 'People', calc: 'Calculate',
+      err: 'Enter a bill, a tip and at least 1 person.',
+      per: '{0} per person', tipl: 'Tip: <strong>{0}</strong> ({1} each)', total: 'Total bill with tip: <strong>{0}</strong>' };
+---
+<form id="tp" onsubmit="return false" data-s={JSON.stringify(S)}>
+  <div class="row">
+    <div><label for="tp-b">{S.bill}</label><input id="tp-b" type="number" min="0" step="any" value="85" /></div>
+    <div><label for="tp-p">{S.tip}</label><input id="tp-p" type="number" min="0" step="any" value="18" /></div>
+    <div><label for="tp-n">{S.people}</label><input id="tp-n" type="number" min="1" step="1" value="2" /></div>
+  </div>
+  <button id="tp-go" type="button">{S.calc}</button>
+  <div class="result" id="tp-out" aria-live="polite"></div>
+</form>
+
+<script>
+  import { $, money, fill, strings } from '../../lib/util';
+  const S = strings('tp');
+  function run() {
+    const b = parseFloat($('tp-b').value), p = parseFloat($('tp-p').value), n = parseInt($('tp-n').value);
+    const out = $('tp-out');
+    if ([b, p, n].some(isNaN) || b < 0 || p < 0 || n < 1) { out.textContent = S.err; return; }
+    const tip = (b * p) / 100, total = b + tip;
+    out.innerHTML = `<p class="big">${fill(S.per, money(total / n))}</p><p>${fill(S.tipl, money(tip), money(tip / n))}</p><p>${fill(S.total, money(total))}</p>`;
+  }
+  $('tp-go').addEventListener('click', run);
+  ['tp-b', 'tp-p', 'tp-n'].forEach((id) => $(id).addEventListener('input', run));
+  run();
+</script>

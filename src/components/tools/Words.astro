@@ -1,0 +1,32 @@
+---
+const { lang } = Astro.props;
+const S = lang === 'ar'
+  ? { label: 'النص', ph: 'الصق أو اكتب هنا...', words: '{0} كلمة',
+      chars: 'الأحرف: <strong>{0}</strong> ({1} بدون مسافات)', sp: 'الجمل: <strong>{0}</strong> · الفقرات: <strong>{1}</strong>',
+      time: 'وقت القراءة: <strong>{0}</strong> · وقت الحديث: <strong>{1}</strong>', lt1: 'أقل من دقيقة', min: '{0} دقيقة' }
+  : { label: 'Your text', ph: 'Paste or type here...', words: '{0} words',
+      chars: 'Characters: <strong>{0}</strong> ({1} without spaces)', sp: 'Sentences: <strong>{0}</strong> · Paragraphs: <strong>{1}</strong>',
+      time: 'Reading time: <strong>{0}</strong> · Speaking time: <strong>{1}</strong>', lt1: 'under 1 min', min: '{0} min' };
+---
+<div id="wc" data-s={JSON.stringify(S)}>
+  <label for="wc-t">{S.label}</label>
+  <textarea id="wc-t" rows="9" placeholder={S.ph} style="width:100%;padding:12px;font:inherit;color:inherit;background:var(--bg);border:1px solid var(--line);border-radius:10px"></textarea>
+  <div class="result" id="wc-out" aria-live="polite"></div>
+</div>
+
+<script>
+  import { num, fill, strings } from '../../lib/util';
+  const S = strings('wc');
+  const t = document.getElementById('wc-t') as HTMLTextAreaElement;
+  const out = document.getElementById('wc-out')!;
+  const mins = (m: number) => (m < 1 ? S.lt1 : fill(S.min, Math.ceil(m)));
+  function run() {
+    const s = t.value;
+    const words = s.trim() ? s.trim().split(/\s+/).length : 0;
+    const sentences = (s.match(/[^.!?؟]+[.!?؟]+/g) || (s.trim() ? [s] : [])).length;
+    const paras = s.split(/\n\s*\n/).filter((p) => p.trim()).length;
+    out.innerHTML = `<p class="big">${fill(S.words, num(words))}</p><p>${fill(S.chars, num(s.length), num(s.replace(/\s/g, '').length))}</p><p>${fill(S.sp, sentences, paras)}</p><p>${fill(S.time, mins(words / 238), mins(words / 150))}</p>`;
+  }
+  t.addEventListener('input', run);
+  run();
+</script>

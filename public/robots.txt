@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mahabujamil.github.io/calcloom/sitemap-index.xml

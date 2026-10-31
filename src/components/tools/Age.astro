@@ -1,0 +1,43 @@
+---
+const { lang } = Astro.props;
+const S = lang === 'ar'
+  ? { birth: 'تاريخ الميلاد', at: 'العمر في تاريخ', calc: 'احسب', both: 'أدخل التاريخين.',
+      after: 'يجب أن يكون تاريخ «العمر في» بعد تاريخ الميلاد.',
+      age: '{0} سنة و{1} شهر و{2} يوم', days: 'إجمالي الأيام التي عشتها: <strong>{0}</strong>', next: 'عيد ميلادك القادم بعد <strong>{0}</strong> يوم' }
+  : { birth: 'Date of birth', at: 'Age at date', calc: 'Calculate', both: 'Enter both dates.',
+      after: 'The "age at" date must be after the birth date.',
+      age: '{0} years, {1} months, {2} days', days: 'Total days lived: <strong>{0}</strong>', next: 'Next birthday in <strong>{0}</strong> days' };
+---
+<form id="ag" onsubmit="return false" data-s={JSON.stringify(S)}>
+  <div class="row">
+    <div><label for="ag-b">{S.birth}</label><input id="ag-b" type="date" value="1990-01-01" /></div>
+    <div><label for="ag-t">{S.at}</label><input id="ag-t" type="date" /></div>
+  </div>
+  <button id="ag-go" type="button">{S.calc}</button>
+  <div class="result" id="ag-out" aria-live="polite"></div>
+</form>
+
+<script>
+  import { $, num, fill, strings } from '../../lib/util';
+  const S = strings('ag');
+  const iso = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  const parse = (s: string) => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+  $('ag-t').value = iso(new Date());
+  function run() {
+    const out = $('ag-out');
+    if (!$('ag-b').value || !$('ag-t').value) { out.textContent = S.both; return; }
+    const b = parse($('ag-b').value), t = parse($('ag-t').value);
+    if (t < b) { out.textContent = S.after; return; }
+    let y = t.getFullYear() - b.getFullYear(), m = t.getMonth() - b.getMonth(), d = t.getDate() - b.getDate();
+    if (d < 0) { m--; d += new Date(t.getFullYear(), t.getMonth(), 0).getDate(); }
+    if (m < 0) { y--; m += 12; }
+    const days = Math.round((t.getTime() - b.getTime()) / 86400000);
+    let next = new Date(t.getFullYear(), b.getMonth(), b.getDate());
+    if (next <= t) next = new Date(t.getFullYear() + 1, b.getMonth(), b.getDate());
+    const left = Math.round((next.getTime() - t.getTime()) / 86400000);
+    out.innerHTML = `<p class="big">${fill(S.age, y, m, d)}</p><p>${fill(S.days, num(days))}</p><p>${fill(S.next, left)}</p>`;
+  }
+  $('ag-go').addEventListener('click', run);
+  ['ag-b', 'ag-t'].forEach((id) => $(id).addEventListener('input', run));
+  run();
+</script>

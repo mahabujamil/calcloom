@@ -1,0 +1,45 @@
+---
+const { lang } = Astro.props;
+const S = lang === 'ar'
+  ? { start: 'تاريخ البداية', end: 'تاريخ النهاية', incl: 'احتساب يوم النهاية', calc: 'احسب', both: 'أدخل التاريخين.',
+      days: '{0} يوم', ymd: '{0} سنة و{1} شهر و{2} يوم', wk: '{0} أسبوع · {1} يوم عمل (اثنين إلى جمعة)' }
+  : { start: 'Start date', end: 'End date', incl: 'Include the end date', calc: 'Calculate', both: 'Enter both dates.',
+      days: '{0} days', ymd: '{0} years, {1} months, {2} days', wk: '{0} weeks · {1} weekdays' };
+---
+<form id="db" onsubmit="return false" data-s={JSON.stringify(S)}>
+  <div class="row">
+    <div><label for="db-a">{S.start}</label><input id="db-a" type="date" /></div>
+    <div><label for="db-b">{S.end}</label><input id="db-b" type="date" /></div>
+  </div>
+  <label><input id="db-i" type="checkbox" style="width:auto" /> {S.incl}</label>
+  <button id="db-go" type="button">{S.calc}</button>
+  <div class="result" id="db-out" aria-live="polite"></div>
+</form>
+
+<script>
+  import { $, num, fill, strings } from '../../lib/util';
+  const S = strings('db');
+  const iso = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  const parse = (s: string) => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+  const today = new Date();
+  $('db-a').value = iso(today);
+  $('db-b').value = iso(new Date(today.getFullYear(), today.getMonth(), today.getDate() + 30));
+  function run() {
+    const out = $('db-out');
+    if (!$('db-a').value || !$('db-b').value) { out.textContent = S.both; return; }
+    let a = parse($('db-a').value), b = parse($('db-b').value);
+    if (b < a) [a, b] = [b, a];
+    let days = Math.round((b.getTime() - a.getTime()) / 86400000);
+    if ($('db-i').checked) days += 1;
+    let weekdays = 0;
+    const c = new Date(a);
+    for (let i = 0; i < days; i++) { const w = c.getDay(); if (w !== 0 && w !== 6) weekdays++; c.setDate(c.getDate() + 1); }
+    let y = b.getFullYear() - a.getFullYear(), m = b.getMonth() - a.getMonth(), d = b.getDate() - a.getDate();
+    if (d < 0) { m--; d += new Date(b.getFullYear(), b.getMonth(), 0).getDate(); }
+    if (m < 0) { y--; m += 12; }
+    out.innerHTML = `<p class="big">${fill(S.days, num(days))}</p><p>${fill(S.ymd, y, m, d)}</p><p>${fill(S.wk, (days / 7).toFixed(1), num(weekdays))}</p>`;
+  }
+  $('db-go').addEventListener('click', run);
+  ['db-a', 'db-b', 'db-i'].forEach((id) => $(id).addEventListener('input', run));
+  run();
+</script>
