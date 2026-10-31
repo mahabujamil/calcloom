@@ -1,0 +1,42 @@
+---
+const { lang } = Astro.props;
+const S = lang === 'ar'
+  ? { value: 'درجة الحرارة', from: 'من وحدة', c: 'مئوي (°م)', f: 'فهرنهايت (°ف)', k: 'كلفن (K)', calc: 'حوّل',
+      err: 'أدخل رقماً.', low: 'أقل من الصفر المطلق، أدخل قيمة أعلى.' }
+  : { value: 'Temperature', from: 'From unit', c: 'Celsius (°C)', f: 'Fahrenheit (°F)', k: 'Kelvin (K)', calc: 'Convert',
+      err: 'Enter a number.', low: 'Below absolute zero, enter a higher value.' };
+---
+<form id="tc" onsubmit="return false" data-s={JSON.stringify(S)}>
+  <div class="row">
+    <div><label for="tc-v">{S.value}</label><input id="tc-v" type="number" step="any" value="25" /></div>
+    <div>
+      <label for="tc-u">{S.from}</label>
+      <select id="tc-u">
+        <option value="c">{S.c}</option>
+        <option value="f">{S.f}</option>
+        <option value="k">{S.k}</option>
+      </select>
+    </div>
+  </div>
+  <button id="tc-go" type="button">{S.calc}</button>
+  <div class="result" id="tc-out" aria-live="polite"></div>
+</form>
+
+<script>
+  import { $, strings } from '../../lib/util';
+  const S = strings('tc');
+  const r = (n: number) => String(Number(n.toFixed(2)));
+  function run() {
+    const v = parseFloat($('tc-v').value), u = $('tc-u').value;
+    const out = $('tc-out');
+    if (isNaN(v)) { out.textContent = S.err; return; }
+    const c = u === 'c' ? v : u === 'f' ? ((v - 32) * 5) / 9 : v - 273.15;
+    if (c < -273.15) { out.textContent = S.low; return; }
+    const f = (c * 9) / 5 + 32, k = c + 273.15;
+    out.innerHTML = `<p class="big" dir="ltr">${r(c)} °C</p><p dir="ltr">${r(f)} °F</p><p dir="ltr">${r(k)} K</p>`;
+  }
+  $('tc-u').addEventListener('change', run);
+  $('tc-go').addEventListener('click', run);
+  $('tc-v').addEventListener('input', run);
+  run();
+</script>

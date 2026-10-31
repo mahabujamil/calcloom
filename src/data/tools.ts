@@ -196,6 +196,86 @@ export const tools: Tool[] = [
     ],
     related: ['age-calculator', 'percentage-calculator', 'tip-calculator'],
   },
+  {
+    slug: 'temperature-converter',
+    name: 'Temperature Converter',
+    title: 'Temperature Converter: Celsius, Fahrenheit and Kelvin',
+    description:
+      'Free temperature converter. Convert between Celsius, Fahrenheit and Kelvin instantly, with the formulas and common reference points explained.',
+    h1: 'Temperature Converter',
+    intro: 'Convert any temperature between Celsius, Fahrenheit and Kelvin in one step.',
+    steps: ['Enter the temperature.', 'Choose the unit you are converting from.', 'Read all three units at once.'],
+    faq: [
+      { q: 'How do you convert Celsius to Fahrenheit?', a: 'Multiply by 9/5 and add 32. For example, 25°C × 1.8 + 32 = 77°F.' },
+      { q: 'How do you convert Fahrenheit to Celsius?', a: 'Subtract 32 and multiply by 5/9. For example, (68 − 32) × 5/9 = 20°C.' },
+      { q: 'What is absolute zero?', a: 'Absolute zero is 0 K, which equals −273.15°C or −459.67°F. Nothing can be colder.' },
+    ],
+    related: ['unit-converter', 'percentage-calculator', 'age-calculator'],
+  },
+  {
+    slug: 'password-generator',
+    name: 'Password Generator',
+    title: 'Password Generator: Strong Random Passwords, Free',
+    description:
+      'Free strong password generator. Create secure random passwords of any length with letters, numbers and symbols. Generated in your browser, never stored.',
+    h1: 'Strong Password Generator',
+    intro: 'Create a secure random password in your browser. Nothing is sent or stored anywhere.',
+    steps: ['Choose the length.', 'Pick which character types to include.', 'Press Generate and copy the password.'],
+    faq: [
+      { q: 'How long should a password be?', a: 'At least 12 characters, and 16 or more for important accounts such as email and banking. Length matters more than complexity.' },
+      { q: 'Is this generator safe?', a: 'Yes. It uses your browser\'s cryptographic random generator and the password never leaves your device.' },
+      { q: 'Should I reuse passwords?', a: 'No. Use a different password for every account and keep them in a password manager.' },
+    ],
+    related: ['word-counter', 'temperature-converter', 'age-calculator'],
+  },
+  {
+    slug: 'savings-goal-calculator',
+    name: 'Savings Goal Calculator',
+    title: 'Savings Goal Calculator: How Long to Reach Your Target',
+    description:
+      'Free savings goal calculator. See how many years and months it takes to reach your savings target with monthly deposits and interest.',
+    h1: 'Savings Goal Calculator',
+    intro: 'Find out how long it will take to reach a savings target with regular monthly deposits and optional interest.',
+    steps: ['Enter your goal and what you have saved so far.', 'Enter your monthly deposit and expected yearly interest.', 'See how long it takes.'],
+    faq: [
+      { q: 'How do I calculate how long it takes to save a goal?', a: 'Add your monthly deposit and the interest earned each month to the balance until it reaches the goal. The calculator runs that month by month.' },
+      { q: 'Should I count interest?', a: 'If your savings earn interest, yes. Enter 0 to see the result without interest.' },
+      { q: 'How can I reach my goal sooner?', a: 'Raise the monthly deposit, or lower the target. Even a small increase in the deposit can shorten the time noticeably.' },
+    ],
+    related: ['compound-interest-calculator', 'loan-calculator', 'hourly-to-salary-calculator'],
+  },
+  {
+    slug: 'unit-converter',
+    name: 'Unit Converter',
+    title: 'Unit Converter: Length and Weight (km, miles, kg, lb)',
+    description:
+      'Free unit converter for length and weight. Convert kilometres, miles, feet, inches, kilograms, pounds and more instantly.',
+    h1: 'Unit Converter',
+    intro: 'Convert length and weight between metric and imperial units: km, miles, metres, feet, inches, kg, pounds and ounces.',
+    steps: ['Choose length or weight.', 'Enter the value and pick the two units.', 'Read the converted value.'],
+    faq: [
+      { q: 'How many kilometres are in a mile?', a: 'One mile is 1.609344 kilometres.' },
+      { q: 'How many pounds are in a kilogram?', a: 'One kilogram is about 2.20462 pounds.' },
+      { q: 'How many centimetres are in an inch?', a: 'One inch is exactly 2.54 centimetres.' },
+    ],
+    related: ['temperature-converter', 'bmi-calculator', 'fuel-cost-calculator'],
+  },
+  {
+    slug: 'fuel-cost-calculator',
+    name: 'Fuel Cost Calculator',
+    title: 'Fuel Cost Calculator: Trip Cost from Distance and Mileage',
+    description:
+      'Free fuel cost calculator. Enter distance, fuel consumption and fuel price to see how much fuel and money your trip needs.',
+    h1: 'Fuel Cost Calculator',
+    intro: 'Estimate the fuel you will use and the cost of a trip from the distance, your car\'s consumption and the price per litre.',
+    steps: ['Enter the trip distance in kilometres.', 'Enter consumption in litres per 100 km.', 'Enter the fuel price per litre.'],
+    faq: [
+      { q: 'How do I calculate fuel cost for a trip?', a: 'Fuel used = distance ÷ 100 × litres per 100 km. Cost = fuel used × price per litre.' },
+      { q: 'Where do I find my car\'s consumption?', a: 'Check the car\'s manual or trip computer. A typical petrol car uses 6 to 9 litres per 100 km.' },
+      { q: 'Does driving style change the result?', a: 'Yes. Speed, traffic, air conditioning and load all change consumption, so treat the result as an estimate.' },
+    ],
+    related: ['unit-converter', 'tip-calculator', 'percentage-calculator'],
+  },
 ];
 
 export const bySlug = (s: string) => tools.find((t) => t.slug === s)!;

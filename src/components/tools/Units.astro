@@ -1,0 +1,70 @@
+---
+const { lang } = Astro.props;
+const ar = lang === 'ar';
+const S = {
+  type: ar ? 'النوع' : 'Type',
+  length: ar ? 'الطول' : 'Length',
+  weight: ar ? 'الوزن' : 'Weight',
+  value: ar ? 'القيمة' : 'Value',
+  from: ar ? 'من' : 'From',
+  to: ar ? 'إلى' : 'To',
+  calc: ar ? 'حوّل' : 'Convert',
+  err: ar ? 'أدخل رقماً.' : 'Enter a number.',
+  units: {
+    length: [
+      ['m', ar ? 'متر' : 'Metres (m)', 1], ['km', ar ? 'كيلومتر' : 'Kilometres (km)', 1000],
+      ['cm', ar ? 'سنتيمتر' : 'Centimetres (cm)', 0.01], ['mm', ar ? 'ملليمتر' : 'Millimetres (mm)', 0.001],
+      ['mi', ar ? 'ميل' : 'Miles (mi)', 1609.344], ['yd', ar ? 'ياردة' : 'Yards (yd)', 0.9144],
+      ['ft', ar ? 'قدم' : 'Feet (ft)', 0.3048], ['in', ar ? 'إنش' : 'Inches (in)', 0.0254],
+    ],
+    weight: [
+      ['kg', ar ? 'كيلوغرام' : 'Kilograms (kg)', 1], ['g', ar ? 'غرام' : 'Grams (g)', 0.001],
+      ['lb', ar ? 'رطل' : 'Pounds (lb)', 0.45359237], ['oz', ar ? 'أونصة' : 'Ounces (oz)', 0.028349523125],
+    ],
+  },
+};
+---
+<form id="un" onsubmit="return false" data-s={JSON.stringify(S)}>
+  <label for="un-t">{S.type}</label>
+  <select id="un-t">
+    <option value="length">{S.length}</option>
+    <option value="weight">{S.weight}</option>
+  </select>
+  <div class="row">
+    <div><label for="un-v">{S.value}</label><input id="un-v" type="number" step="any" value="10" /></div>
+    <div><label for="un-a">{S.from}</label><select id="un-a"></select></div>
+    <div><label for="un-b">{S.to}</label><select id="un-b"></select></div>
+  </div>
+  <button id="un-go" type="button">{S.calc}</button>
+  <div class="result" id="un-out" aria-live="polite"></div>
+</form>
+
+<script>
+  import { $, strings } from '../../lib/util';
+  const S = strings('un');
+  const units = S.units as Record<string, [string, string, number][]>;
+  function fillSelects() {
+    const list = units[$('un-t').value];
+    for (const [id, idx] of [['un-a', 0], ['un-b', 1]] as const) {
+      const el = $(id) as unknown as HTMLSelectElement;
+      el.replaceChildren(...list.map(([k, label]) => new Option(label, k)));
+      el.selectedIndex = Math.min(idx === 0 ? (list.length > 4 ? 4 : 0) : 0, list.length - 1);
+    }
+    ($('un-b') as unknown as HTMLSelectElement).selectedIndex = $('un-t').value === 'length' ? 1 : 2;
+  }
+  function run() {
+    const out = $('un-out');
+    const v = parseFloat($('un-v').value);
+    if (isNaN(v)) { out.textContent = S.err; return; }
+    const list = units[$('un-t').value];
+    const f = list.find(([k]) => k === $('un-a').value)!, t = list.find(([k]) => k === $('un-b').value)!;
+    const res = (v * f[2]) / t[2];
+    out.innerHTML = `<p class="big" dir="ltr">${Number(res.toPrecision(8)).toLocaleString('en-US', { maximumFractionDigits: 8 })}</p><p>${f[1]} → ${t[1]}</p>`;
+  }
+  $('un-t').addEventListener('change', () => { fillSelects(); run(); });
+  ['un-a', 'un-b'].forEach((id) => $(id).addEventListener('change', run));
+  $('un-v').addEventListener('input', run);
+  $('un-go').addEventListener('click', run);
+  fillSelects();
+  run();
+</script>

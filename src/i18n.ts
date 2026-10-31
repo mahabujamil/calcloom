@@ -16,7 +16,7 @@ export const ui = {
     allCalcs: 'All calculators',
     homeTitle: 'Calcloom: Free Online Calculators for Money, Health and Dates',
     homeDesc:
-      'Free, fast online calculators: percentage, loan, compound interest, age, BMI, tip, discount, dates and more. No sign-up, nothing stored.',
+      'Free, fast online calculators: percentage, loan, compound interest, age, BMI, tip, discount, unit and temperature converters, password generator and more. No sign-up, nothing stored.',
     homeH1: 'Free online calculators that just work',
     homeLead:
       'Fast, private and simple. Pick a tool, type your numbers, get the answer. No sign-up, nothing is stored.',

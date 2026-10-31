@@ -1,0 +1,32 @@
+---
+const { lang } = Astro.props;
+const S = lang === 'ar'
+  ? { dist: 'المسافة (كم)', cons: 'الاستهلاك (لتر/100 كم)', price: 'سعر اللتر', calc: 'احسب',
+      err: 'أدخل أرقاماً موجبة.', cost: 'تكلفة الرحلة: {0}', fuel: 'الوقود المطلوب: <strong>{0}</strong> لتر', per: 'التكلفة لكل كم: <strong>{0}</strong>' }
+  : { dist: 'Distance (km)', cons: 'Consumption (L/100 km)', price: 'Price per litre', calc: 'Calculate',
+      err: 'Enter positive numbers.', cost: '{0} trip cost', fuel: 'Fuel needed: <strong>{0}</strong> litres', per: 'Cost per km: <strong>{0}</strong>' };
+---
+<form id="fu" onsubmit="return false" data-s={JSON.stringify(S)}>
+  <div class="row">
+    <div><label for="fu-d">{S.dist}</label><input id="fu-d" type="number" min="0" step="any" value="300" /></div>
+    <div><label for="fu-c">{S.cons}</label><input id="fu-c" type="number" min="0" step="any" value="7.5" /></div>
+    <div><label for="fu-p">{S.price}</label><input id="fu-p" type="number" min="0" step="any" value="1.5" /></div>
+  </div>
+  <button id="fu-go" type="button">{S.calc}</button>
+  <div class="result" id="fu-out" aria-live="polite"></div>
+</form>
+
+<script>
+  import { $, money, fill, strings } from '../../lib/util';
+  const S = strings('fu');
+  function run() {
+    const d = parseFloat($('fu-d').value), c = parseFloat($('fu-c').value), p = parseFloat($('fu-p').value);
+    const out = $('fu-out');
+    if ([d, c, p].some(isNaN) || d <= 0 || c <= 0 || p < 0) { out.textContent = S.err; return; }
+    const litres = (d / 100) * c, cost = litres * p;
+    out.innerHTML = `<p class="big">${fill(S.cost, money(cost))}</p><p>${fill(S.fuel, litres.toFixed(1))}</p><p>${fill(S.per, money(cost / d))}</p>`;
+  }
+  $('fu-go').addEventListener('click', run);
+  ['fu-d', 'fu-c', 'fu-p'].forEach((id) => $(id).addEventListener('input', run));
+  run();
+</script>

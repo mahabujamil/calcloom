@@ -1,0 +1,40 @@
+---
+const { lang } = Astro.props;
+const S = lang === 'ar'
+  ? { goal: 'هدف الادخار', have: 'المدخر حالياً', monthly: 'الإيداع الشهري', rate: 'الفائدة السنوية (%)', calc: 'احسب',
+      err: 'أدخل أرقاماً صحيحة غير سالبة.', done: 'وصلت لهدفك بالفعل.', never: 'لن تصل للهدف خلال 100 سنة بهذه الأرقام. ارفع الإيداع.',
+      time: '{0} سنة و{1} شهر', total: 'إجمالي إيداعاتك: <strong>{0}</strong>', int: 'الفائدة المكتسبة: <strong>{1}</strong>', months: '({0} شهراً)' }
+  : { goal: 'Savings goal', have: 'Saved so far', monthly: 'Monthly deposit', rate: 'Yearly interest (%)', calc: 'Calculate',
+      err: 'Enter valid, non-negative numbers.', done: 'You have already reached your goal.', never: 'You will not reach the goal in 100 years with these numbers. Raise the deposit.',
+      time: '{0} years, {1} months', total: 'Total deposits: <strong>{0}</strong>', int: 'Interest earned: <strong>{1}</strong>', months: '({0} months)' };
+---
+<form id="sv" onsubmit="return false" data-s={JSON.stringify(S)}>
+  <div class="row">
+    <div><label for="sv-g">{S.goal}</label><input id="sv-g" type="number" min="0" step="any" value="10000" /></div>
+    <div><label for="sv-h">{S.have}</label><input id="sv-h" type="number" min="0" step="any" value="1000" /></div>
+    <div><label for="sv-m">{S.monthly}</label><input id="sv-m" type="number" min="0" step="any" value="300" /></div>
+    <div><label for="sv-r">{S.rate}</label><input id="sv-r" type="number" min="0" step="any" value="3" /></div>
+  </div>
+  <button id="sv-go" type="button">{S.calc}</button>
+  <div class="result" id="sv-out" aria-live="polite"></div>
+</form>
+
+<script>
+  import { $, money, fill, strings } from '../../lib/util';
+  const S = strings('sv');
+  function run() {
+    const g = parseFloat($('sv-g').value), h = parseFloat($('sv-h').value), m = parseFloat($('sv-m').value), apr = parseFloat($('sv-r').value);
+    const out = $('sv-out');
+    if ([g, h, m, apr].some(isNaN) || g < 0 || h < 0 || m < 0 || apr < 0) { out.textContent = S.err; return; }
+    if (h >= g) { out.textContent = S.done; return; }
+    const r = apr / 100 / 12;
+    let bal = h, n = 0;
+    while (bal < g && n < 1200) { bal = bal * (1 + r) + m; n++; }
+    if (bal < g) { out.textContent = S.never; return; }
+    const put = m * n;
+    out.innerHTML = `<p class="big">${fill(S.time, Math.floor(n / 12), n % 12)}</p><p>${fill(S.months, n)}</p><p>${fill(S.total, money(put), '')}</p><p>${fill(S.int, '', money(bal - h - put))}</p>`;
+  }
+  $('sv-go').addEventListener('click', run);
+  ['sv-g', 'sv-h', 'sv-m', 'sv-r'].forEach((id) => $(id).addEventListener('input', run));
+  run();
+</script>

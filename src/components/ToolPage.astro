@@ -12,6 +12,11 @@ import Discount from './tools/Discount.astro';
 import DaysBetween from './tools/DaysBetween.astro';
 import Hourly from './tools/Hourly.astro';
 import Words from './tools/Words.astro';
+import Temperature from './tools/Temperature.astro';
+import Password from './tools/Password.astro';
+import Savings from './tools/Savings.astro';
+import Units from './tools/Units.astro';
+import Fuel from './tools/Fuel.astro';
 
 interface Props { slug: string; lang: Lang }
 const { slug, lang } = Astro.props;
@@ -27,6 +32,11 @@ const components: Record<string, any> = {
   'days-between-dates-calculator': DaysBetween,
   'hourly-to-salary-calculator': Hourly,
   'word-counter': Words,
+  'temperature-converter': Temperature,
+  'password-generator': Password,
+  'savings-goal-calculator': Savings,
+  'unit-converter': Units,
+  'fuel-cost-calculator': Fuel,
 };
 
 const t = ui[lang];
