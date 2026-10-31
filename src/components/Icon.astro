@@ -1,0 +1,10 @@
+---
+import { meta, cats } from '../data/meta';
+interface Props { slug: string; size?: number }
+const { slug, size = 24 } = Astro.props;
+const m = meta[slug];
+const hue = cats[m.cat].hue;
+---
+<span class="ico" style={`--h:${hue}`} aria-hidden="true">
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={m.icon} />
+</span>

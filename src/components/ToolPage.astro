@@ -12,6 +12,8 @@ import Discount from './tools/Discount.astro';
 import DaysBetween from './tools/DaysBetween.astro';
 import Hourly from './tools/Hourly.astro';
 import Words from './tools/Words.astro';
+import Icon from './Icon.astro';
+import { meta, cats } from '../data/meta';
 import Temperature from './tools/Temperature.astro';
 import Password from './tools/Password.astro';
 import Savings from './tools/Savings.astro';
@@ -77,32 +79,41 @@ const schema = [
 ];
 ---
 <Base title={tool.title} description={tool.description} {lang} {schema}>
-  <h1>{tool.h1}</h1>
+  <nav class="crumbs" aria-label="Breadcrumb">
+    <a href={localePath(lang, '/')}>{t.home}</a> › <span>{tool.name}</span>
+  </nav>
+  <div class="tool-head">
+    <Icon slug={slug} size={30} />
+    <h1>{tool.h1}</h1>
+  </div>
   <p class="lead">{tool.intro}</p>
 
   <section class="card" aria-label={tool.name}>
     <Tool {lang} />
   </section>
 
-  <h2>{t.howTo(tool.name)}</h2>
-  <ol>{tool.steps.map((s) => <li>{s}</li>)}</ol>
+  <h2 class="reveal">{t.howTo(tool.name)}</h2>
+  <ol class="reveal">{tool.steps.map((s) => <li>{s}</li>)}</ol>
 
-  <h2>{t.faq}</h2>
+  <h2 class="reveal">{t.faq}</h2>
   {tool.faq.map((f) => (
-    <details>
+    <details class="reveal">
       <summary>{f.q}</summary>
       <p>{f.a}</p>
     </details>
   ))}
 
-  <h2>{t.more}</h2>
+  <h2 class="reveal">{t.more}</h2>
   <div class="grid">
-    {tool.related.map((r) => {
+    {tool.related.map((r, i) => {
       const rt = getTool(r, lang);
       return (
-        <a class="tile" href={localePath(lang, `/${rt.slug}/`)}>
-          <strong>{rt.name}</strong>
-          <span>{rt.intro}</span>
+        <a class="tile reveal" style={`--h:${cats[meta[r].cat].hue};--d:${i * 0.07}s`} href={localePath(lang, `/${rt.slug}/`)}>
+          <Icon slug={r} />
+          <div class="tx">
+            <strong>{rt.name}</strong>
+            <span class="d">{rt.intro}</span>
+          </div>
         </a>
       );
     })}

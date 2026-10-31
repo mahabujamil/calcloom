@@ -1,25 +1,98 @@
 ---
 import Base from '../layouts/Base.astro';
+import Icon from './Icon.astro';
 import { allTools } from '../data/get';
+import { meta, cats, type Cat } from '../data/meta';
 import { ui, localePath, type Lang } from '../i18n';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = ui[lang];
+const ar = lang === 'ar';
+const list = allTools(lang);
 const schema = [
   { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Calcloom', url: Astro.site?.href, inLanguage: lang },
 ];
+const L = ar
+  ? { badge: 'مجاني 100% · بدون تسجيل · خاص', search: 'ابحث عن حاسبة...', all: 'الكل', none: 'ما لقينا أداة بهذا الاسم.',
+      s1: 'أداة', s2: 'لغتان', s3: 'بياناتك محفوظة عندك',
+      f1: ['نسبة مئوية', '15% من 200 = 30', 'percentage-calculator'], f2: ['قسط شهري', '$395.4', 'loan-calculator'],
+      f3: ['مؤشر BMI', '22.9', 'bmi-calculator'], f4: ['بعد 20 سنة', '$93,612', 'compound-interest-calculator'] }
+  : { badge: '100% free · No sign-up · Private', search: 'Search calculators...', all: 'All', none: 'No tool matches that search.',
+      s1: 'tools', s2: 'languages', s3: 'of your data stored',
+      f1: ['Percentage', '15% of 200 = 30', 'percentage-calculator'], f2: ['Monthly payment', '$395.4', 'loan-calculator'],
+      f3: ['BMI', '22.9', 'bmi-calculator'], f4: ['In 20 years', '$93,612', 'compound-interest-calculator'] };
+const floats = [L.f1, L.f2, L.f3, L.f4];
 ---
 <Base title={t.homeTitle} description={t.homeDesc} {lang} {schema}>
-  <h1>{t.homeH1}</h1>
-  <p class="lead">{t.homeLead}</p>
-  <h2>{t.allCalcs}</h2>
-  <div class="grid">
-    {allTools(lang).map((tool) => (
-      <a class="tile" href={localePath(lang, `/${tool.slug}/`)}>
-        <strong>{tool.name}</strong>
-        <span>{tool.intro}</span>
+  <section class="hero">
+    <div class="hero-grid">
+      <div>
+        <span class="badge"><i></i>{L.badge}</span>
+        <h1><span class="grad-text">{t.homeH1}</span></h1>
+        <p class="lead">{t.homeLead}</p>
+        <div class="search">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+          <input id="q" type="search" placeholder={L.search} aria-label={L.search} autocomplete="off" />
+        </div>
+        <div class="stats">
+          <div><b>{list.length}</b><span>{L.s1}</span></div>
+          <div><b>2</b><span>{L.s2}</span></div>
+          <div><b>0</b><span>{L.s3}</span></div>
+        </div>
+      </div>
+      <div class="float-stack" aria-hidden="true">
+        {floats.map((f, i) => (
+          <div class={`fc fc${i + 1}`}>
+            <Icon slug={f[2]} size={20} />
+            <div><small>{f[0]}</small><b dir="ltr">{f[1]}</b></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <h2 class="reveal">{t.allCalcs}</h2>
+  <div class="chips reveal" role="group" aria-label={t.allCalcs}>
+    <button class="chip" type="button" data-cat="all" aria-pressed="true">{L.all}</button>
+    {(Object.keys(cats) as Cat[]).map((c) => (
+      <button class="chip" type="button" data-cat={c} aria-pressed="false">{ar ? cats[c].ar : cats[c].en}</button>
+    ))}
+  </div>
+  <div class="grid" id="grid">
+    {list.map((tool, i) => (
+      <a class="tile reveal" style={`--h:${cats[meta[tool.slug].cat].hue};--d:${(i % 6) * 0.05}s`} href={localePath(lang, `/${tool.slug}/`)} data-cat={meta[tool.slug].cat} data-name={tool.name.toLowerCase()}>
+        <Icon slug={tool.slug} />
+        <div class="tx">
+          <strong>{tool.name}</strong>
+          <span class="d">{tool.intro}</span>
+        </div>
       </a>
     ))}
   </div>
+  <p class="empty hidden" id="empty">{L.none}</p>
 </Base>
+
+<script>
+  const tiles = Array.from(document.querySelectorAll<HTMLElement>('#grid .tile'));
+  const chips = Array.from(document.querySelectorAll<HTMLButtonElement>('.chip'));
+  const q = document.getElementById('q') as HTMLInputElement;
+  const empty = document.getElementById('empty')!;
+  let cat = 'all';
+  function apply() {
+    const s = q.value.trim().toLowerCase();
+    let shown = 0;
+    for (const el of tiles) {
+      const ok = (cat === 'all' || el.dataset.cat === cat) && (!s || el.dataset.name!.includes(s));
+      el.classList.toggle('hidden', !ok);
+      if (ok) { shown++; el.classList.add('in'); }
+    }
+    empty.classList.toggle('hidden', shown > 0);
+  }
+  chips.forEach((c) => c.addEventListener('click', () => {
+    cat = c.dataset.cat!;
+    chips.forEach((x) => x.setAttribute('aria-pressed', String(x === c)));
+    apply();
+  }));
+  q.addEventListener('input', apply);
+</script>
