@@ -1,7 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
 import Icon from './Icon.astro';
-import { allTools } from '../data/get';
+import { tools } from '../data/tools';
+import { allTools, getTool } from '../data/get';
 import { meta, cats, type Cat } from '../data/meta';
 import { ui, localePath, type Lang } from '../i18n';
 
@@ -9,45 +10,41 @@ interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = ui[lang];
 const ar = lang === 'ar';
-const list = allTools(lang);
+const list = allTools(lang).filter((x) => x.kind !== 'pair');
+const popular = tools.filter((x) => x.kind === 'pair').slice(0, 14).map((x) => getTool(x.slug, lang));
 const schema = [
   { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Calcloom', url: Astro.site?.href, inLanguage: lang },
 ];
 const L = ar
-  ? { badge: 'مجاني 100% · بدون تسجيل · خاص', search: 'ابحث عن حاسبة...', all: 'الكل', none: 'ما لقينا أداة بهذا الاسم.',
-      s1: 'أداة', s2: 'لغتان', s3: 'بياناتك محفوظة عندك',
-      f1: ['نسبة مئوية', '15% من 200 = 30', 'percentage-calculator'], f2: ['قسط شهري', '$395.4', 'loan-calculator'],
-      f3: ['مؤشر BMI', '22.9', 'bmi-calculator'], f4: ['بعد 20 سنة', '$93,612', 'compound-interest-calculator'] }
-  : { badge: '100% free · No sign-up · Private', search: 'Search calculators...', all: 'All', none: 'No tool matches that search.',
-      s1: 'tools', s2: 'languages', s3: 'of your data stored',
-      f1: ['Percentage', '15% of 200 = 30', 'percentage-calculator'], f2: ['Monthly payment', '$395.4', 'loan-calculator'],
-      f3: ['BMI', '22.9', 'bmi-calculator'], f4: ['In 20 years', '$93,612', 'compound-interest-calculator'] };
-const floats = [L.f1, L.f2, L.f3, L.f4];
+  ? { badge: 'مجاني 100% · بدون تسجيل', h1a: 'كل حاسبة ومحوّل تحتاجه،', h1b: 'بسرعة ودقة.', search: 'ابحث عن حاسبة أو محوّل...', all: 'الكل',
+      none: 'ما لقينا أداة بهذا الاسم.', t1: 'مجاني دائماً', t2: 'بدون تسجيل', t3: 'بياناتك لا تُخزَّن', t4: 'عربي وإنجليزي',
+      wTitle: 'كيلومتر إلى ميل', wFrom: 'كيلومتر', wTo: 'ميل', wMore: 'كل محوّلات الطول ←', pop: 'تحويلات شائعة' }
+  : { badge: '100% free · No sign-up', h1a: 'Every calculator and converter you need.', h1b: 'Fast.', search: 'Search calculators and converters...', all: 'All',
+      none: 'No tool matches that search.', t1: 'Free forever', t2: 'No sign-up', t3: 'Your data is never stored', t4: 'English and Arabic',
+      wTitle: 'Kilometres to Miles', wFrom: 'Kilometres', wTo: 'Miles', wMore: 'All length converters →', pop: 'Popular conversions' };
+const lenSlug = localePath(lang, '/length-converter/');
 ---
 <Base title={t.homeTitle} description={t.homeDesc} {lang} {schema}>
   <section class="hero">
     <div class="hero-grid">
       <div>
         <span class="badge"><i></i>{L.badge}</span>
-        <h1><span class="grad-text">{t.homeH1}</span></h1>
+        <h1>{L.h1a} <em>{L.h1b}</em></h1>
         <p class="lead">{t.homeLead}</p>
         <div class="search">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
           <input id="q" type="search" placeholder={L.search} aria-label={L.search} autocomplete="off" />
         </div>
-        <div class="stats">
-          <div><b>{list.length}</b><span>{L.s1}</span></div>
-          <div><b>2</b><span>{L.s2}</span></div>
-          <div><b>0</b><span>{L.s3}</span></div>
-        </div>
+        <div class="trust"><span>{L.t1}</span><span>{L.t2}</span><span>{L.t3}</span><span>{L.t4}</span></div>
       </div>
-      <div class="float-stack" aria-hidden="true">
-        {floats.map((f, i) => (
-          <div class={`fc fc${i + 1}`}>
-            <Icon slug={f[2]} size={20} />
-            <div><small>{f[0]}</small><b dir="ltr">{f[1]}</b></div>
-          </div>
-        ))}
+      <div class="widget">
+        <h2>{L.wTitle}</h2>
+        <div class="wrow">
+          <div><label for="w-a">{L.wFrom}</label><input id="w-a" type="number" value="10" step="any" inputmode="decimal" /></div>
+          <span class="eq">=</span>
+          <div><label>{L.wTo}</label><output id="w-b" dir="ltr">6.2137</output></div>
+        </div>
+        <a class="more" href={lenSlug}>{L.wMore}</a>
       </div>
     </div>
   </section>
@@ -61,7 +58,7 @@ const floats = [L.f1, L.f2, L.f3, L.f4];
   </div>
   <div class="grid" id="grid">
     {list.map((tool, i) => (
-      <a class="tile reveal" style={`--h:${cats[meta[tool.slug].cat].hue};--d:${(i % 6) * 0.05}s`} href={localePath(lang, `/${tool.slug}/`)} data-cat={meta[tool.slug].cat} data-name={tool.name.toLowerCase()}>
+      <a class="tile reveal" style={`--d:${(i % 6) * 0.04}s`} href={localePath(lang, `/${tool.slug}/`)} data-cat={meta[tool.slug].cat} data-name={tool.name.toLowerCase()}>
         <Icon slug={tool.slug} />
         <div class="tx">
           <strong>{tool.name}</strong>
@@ -71,6 +68,11 @@ const floats = [L.f1, L.f2, L.f3, L.f4];
     ))}
   </div>
   <p class="empty hidden" id="empty">{L.none}</p>
+
+  <h2 class="reveal">{L.pop}</h2>
+  <div class="pills reveal">
+    {popular.map((p) => <a href={localePath(lang, `/${p.slug}/`)}>{p.name}</a>)}
+  </div>
 </Base>
 
 <script>
@@ -95,4 +97,13 @@ const floats = [L.f1, L.f2, L.f3, L.f4];
     apply();
   }));
   q.addEventListener('input', apply);
+
+  const wa = document.getElementById('w-a') as HTMLInputElement;
+  const wb = document.getElementById('w-b')!;
+  function conv() {
+    const v = parseFloat(wa.value);
+    wb.textContent = isNaN(v) ? '—' : Number((v * 0.621371).toPrecision(8)).toLocaleString('en-US', { maximumFractionDigits: 8 });
+  }
+  wa.addEventListener('input', conv);
+  conv();
 </script>

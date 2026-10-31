@@ -1,0 +1,49 @@
+---
+import { ucat } from '../../data/units';
+const { lang, conv } = Astro.props;
+const c = ucat(conv.cat);
+const ar = lang === 'ar';
+const S = {
+  value: ar ? 'القيمة' : 'Value',
+  from: ar ? 'من' : 'From',
+  to: ar ? 'إلى' : 'To',
+  swap: ar ? 'تبديل' : 'Swap',
+  err: ar ? 'أدخل رقماً.' : 'Enter a number.',
+  formula: ar ? '1 {0} = {1} {2}' : '1 {0} = {1} {2}',
+  from0: conv.from,
+  to0: conv.to,
+  units: c.units.map((x) => [x.id, ar ? `${x.ar} (${x.sym})` : `${x.en} (${x.sym})`, x.f, x.sym]),
+};
+---
+<form id="cv" onsubmit="return false" data-s={JSON.stringify(S)}>
+  <div class="cv-grid">
+    <div><label for="cv-v">{S.value}</label><input id="cv-v" type="number" step="any" value="1" inputmode="decimal" /></div>
+    <div><label for="cv-a">{S.from}</label><select id="cv-a"></select></div>
+    <button id="cv-sw" type="button" class="swap" aria-label={S.swap} title={S.swap}>⇄</button>
+    <div><label for="cv-b">{S.to}</label><select id="cv-b"></select></div>
+  </div>
+  <div class="result" id="cv-out" aria-live="polite"></div>
+</form>
+
+<script>
+  import { $, fill, strings } from '../../lib/util';
+  const S = strings('cv');
+  const units = S.units as [string, string, number, string][];
+  const a = $('cv-a') as unknown as HTMLSelectElement, b = $('cv-b') as unknown as HTMLSelectElement;
+  for (const el of [a, b]) el.replaceChildren(...units.map(([id, label]) => new Option(label, id)));
+  a.value = S.from0; b.value = S.to0;
+  const f = (id: string) => units.find((u) => u[0] === id)!;
+  const fmt = (n: number) => Number(n.toPrecision(8)).toLocaleString('en-US', { maximumFractionDigits: 12 });
+  function run() {
+    const out = $('cv-out');
+    const v = parseFloat($('cv-v').value);
+    if (isNaN(v)) { out.textContent = S.err; return; }
+    const A = f(a.value), B = f(b.value);
+    const r = A[2] / B[2];
+    out.innerHTML = `<p class="big" dir="ltr">${fmt(v * r)} ${B[3]}</p><p dir="ltr">${fmt(v)} ${A[3]} = ${fmt(v * r)} ${B[3]}</p><p dir="ltr" class="muted">${fill(S.formula, A[3], fmt(r), B[3])}</p>`;
+  }
+  $('cv-sw').addEventListener('click', () => { const t = a.value; a.value = b.value; b.value = t; run(); });
+  [a, b].forEach((el) => el.addEventListener('change', run));
+  $('cv-v').addEventListener('input', run);
+  run();
+</script>

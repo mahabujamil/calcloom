@@ -8,9 +8,13 @@ export interface Tool {
   steps: string[];
   faq: { q: string; a: string }[];
   related: string[];
+  kind?: 'tool' | 'pair';
+  conv?: { cat: string; from: string; to: string };
+  tableTitle?: string;
+  table?: { head: string[]; rows: string[][] };
 }
 
-export const tools: Tool[] = [
+const coreTools: Tool[] = [
   {
     slug: 'percentage-calculator',
     name: 'Percentage Calculator',
@@ -210,7 +214,7 @@ export const tools: Tool[] = [
       { q: 'How do you convert Fahrenheit to Celsius?', a: 'Subtract 32 and multiply by 5/9. For example, (68 − 32) × 5/9 = 20°C.' },
       { q: 'What is absolute zero?', a: 'Absolute zero is 0 K, which equals −273.15°C or −459.67°F. Nothing can be colder.' },
     ],
-    related: ['unit-converter', 'percentage-calculator', 'age-calculator'],
+    related: ['length-converter', 'percentage-calculator', 'age-calculator'],
   },
   {
     slug: 'password-generator',
@@ -245,20 +249,36 @@ export const tools: Tool[] = [
     related: ['compound-interest-calculator', 'loan-calculator', 'hourly-to-salary-calculator'],
   },
   {
-    slug: 'unit-converter',
-    name: 'Unit Converter',
-    title: 'Unit Converter: Length and Weight (km, miles, kg, lb)',
+    slug: 'kg-to-liters-converter',
+    name: 'Kilograms to Litres Converter',
+    title: 'Kilograms to Litres Converter (kg to L) by Density',
     description:
-      'Free unit converter for length and weight. Convert kilometres, miles, feet, inches, kilograms, pounds and more instantly.',
-    h1: 'Unit Converter',
-    intro: 'Convert length and weight between metric and imperial units: km, miles, metres, feet, inches, kg, pounds and ounces.',
-    steps: ['Choose length or weight.', 'Enter the value and pick the two units.', 'Read the converted value.'],
+      'Free kg to litres converter. Convert kilograms to litres and litres to kilograms for water, milk, oil, petrol, honey and more using real densities.',
+    h1: 'Kilograms to Litres Converter',
+    intro: 'Kilograms measure mass and litres measure volume, so the conversion depends on the density of the liquid. Pick the substance and convert both ways.',
+    steps: ['Choose the substance (water, milk, oil, petrol and more).', 'Enter kilograms or litres.', 'Read the converted amount.'],
     faq: [
-      { q: 'How many kilometres are in a mile?', a: 'One mile is 1.609344 kilometres.' },
-      { q: 'How many pounds are in a kilogram?', a: 'One kilogram is about 2.20462 pounds.' },
-      { q: 'How many centimetres are in an inch?', a: 'One inch is exactly 2.54 centimetres.' },
+      { q: 'How do you convert kg to litres?', a: 'Divide the mass in kilograms by the density in kg per litre. For water (1 kg/L), 1 kg is 1 litre. For olive oil (0.91 kg/L), 1 kg is about 1.1 litres.' },
+      { q: 'Is 1 kg always 1 litre?', a: 'Only for water at about 4°C. Other substances are lighter or heavier, so 1 kg is more or fewer litres.' },
+      { q: 'How do I convert litres to kg?', a: 'Multiply the litres by the density. For petrol (about 0.745 kg/L), 10 litres weigh about 7.45 kg.' },
     ],
-    related: ['temperature-converter', 'bmi-calculator', 'fuel-cost-calculator'],
+    related: ['weight-converter', 'volume-converter', 'fuel-economy-converter'],
+  },
+  {
+    slug: 'fuel-economy-converter',
+    name: 'Fuel Economy Converter',
+    title: 'Fuel Economy Converter: MPG to L/100 km and km/L',
+    description:
+      'Free fuel economy converter. Convert miles per gallon (US and UK) to litres per 100 km and kilometres per litre instantly.',
+    h1: 'Fuel Economy Converter',
+    intro: 'Convert fuel consumption between MPG (US), MPG (UK), litres per 100 km and kilometres per litre.',
+    steps: ['Enter the value.', 'Choose the unit you have.', 'Read all other units at once.'],
+    faq: [
+      { q: 'How do I convert MPG to L/100 km?', a: 'Divide 235.215 by the MPG (US). For example, 30 MPG is 235.215 ÷ 30 = 7.84 L/100 km.' },
+      { q: 'Why is a lower L/100 km better?', a: 'L/100 km measures fuel used per distance, so a lower number means the car uses less fuel. MPG is the opposite: higher is better.' },
+      { q: 'What is the difference between US and UK MPG?', a: 'A UK (imperial) gallon is about 20% bigger than a US gallon, so the same car shows a higher MPG in UK units.' },
+    ],
+    related: ['fuel-cost-calculator', 'speed-converter', 'volume-converter'],
   },
   {
     slug: 'fuel-cost-calculator',
@@ -274,8 +294,11 @@ export const tools: Tool[] = [
       { q: 'Where do I find my car\'s consumption?', a: 'Check the car\'s manual or trip computer. A typical petrol car uses 6 to 9 litres per 100 km.' },
       { q: 'Does driving style change the result?', a: 'Yes. Speed, traffic, air conditioning and load all change consumption, so treat the result as an estimate.' },
     ],
-    related: ['unit-converter', 'tip-calculator', 'percentage-calculator'],
+    related: ['length-converter', 'tip-calculator', 'percentage-calculator'],
   },
 ];
 
+import { converterTools } from './converters';
+
+export const tools: Tool[] = [...coreTools, ...converterTools];
 export const bySlug = (s: string) => tools.find((t) => t.slug === s)!;

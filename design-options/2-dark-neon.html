@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Option: Dark Neon (modern app, glass, glowing)</title><style>*{box-sizing:border-box}body{margin:0}a{text-decoration:none;color:inherit}.in{max-width:1080px;margin:0 auto;padding:0 18px}
+.top .in{display:flex;justify-content:space-between;align-items:center;padding-top:14px;padding-bottom:14px}
+nav a{margin-inline-start:18px}.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.wrow{display:flex;align-items:center;gap:12px}.wrow input,.wrow output{flex:1;min-width:0;font:inherit;font-size:1.6rem;padding:12px 14px;display:block}
+.wrow.small{margin-top:6px;font-size:.85rem}.wrow.small span{flex:1}.wrow.small span:nth-child(2){flex:0 0 24px}.eq{flex:0 0 24px;text-align:center;font-size:1.4rem}
+.card{display:flex;flex-direction:column;gap:4px;padding:18px}.card small{opacity:.7}.ic{font-size:1.8rem}
+body{background:#070b16;color:#e8ecff;font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background-image:radial-gradient(800px 400px at 15% -5%,rgba(124,58,237,.35),transparent),radial-gradient(700px 400px at 90% 10%,rgba(6,182,212,.28),transparent)}
+.top{backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.08)}.brand{font-weight:800;font-size:1.3rem;display:flex;align-items:center;gap:8px}
+.logo{background:linear-gradient(135deg,#7c3aed,#06b6d4);border-radius:10px;width:32px;height:32px;display:grid;place-items:center;box-shadow:0 0 20px rgba(124,58,237,.7)}
+nav a{color:#a5b0d6}nav a.lang{color:#22d3ee}
+.hero{padding:70px 0 50px}.hero .in{display:grid;gap:40px;grid-template-columns:1.1fr .9fr;align-items:center}
+@media(max-width:800px){.hero .in{grid-template-columns:1fr}}
+h1{font-size:3rem;line-height:1.08;margin:0 0 14px;letter-spacing:-1.2px}h1 em{font-style:normal;background:linear-gradient(90deg,#a78bfa,#22d3ee);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:#a5b0d6;font-size:1.1rem}.btn{display:inline-block;background:linear-gradient(90deg,#7c3aed,#06b6d4);color:#fff;padding:13px 26px;border-radius:999px;font-weight:700;margin-top:16px;box-shadow:0 0 30px rgba(124,58,237,.5)}
+.widget{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:22px;padding:24px;backdrop-filter:blur(16px);box-shadow:0 0 60px rgba(124,58,237,.25)}
+.widget h3{margin:0 0 14px;color:#c4b5fd}.wrow input,.wrow output{border:1px solid rgba(255,255,255,.18);border-radius:14px;background:rgba(0,0,0,.35);color:#fff}
+.wrow output{color:#22d3ee;text-shadow:0 0 14px rgba(34,211,238,.6)}
+.tools{padding:30px 0 50px}.tools h2{font-size:1.5rem}.card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:18px;transition:.25s}
+.card:hover{transform:translateY(-4px);border-color:#a78bfa;box-shadow:0 0 30px rgba(124,58,237,.4)}
+footer{border-top:1px solid rgba(255,255,255,.08);padding:24px 0;color:#7c88b3;font-size:.9rem}</style></head><body>
+<header class="top"><div class="in"><a class="brand" href="#"><b class="logo">C</b>Calcloom</a>
+<nav><a href="#">All tools</a><a href="#">Converters</a><a href="#">About</a><a class="lang" href="#">العربية</a></nav></div></header>
+<main>
+<section class="hero"><div class="in"><div><h1>Calculate anything. <em>Instantly.</em></h1><p class="sub">The fastest converters and calculators on the web. Free forever.</p><a class="btn" href="#">Explore tools →</a></div>
+<div class="widget"><h3>Kilometres to Miles</h3>
+<div class="wrow"><input id="a" type="number" value="10" step="any"><span class="eq">=</span><output id="b">6.2137</output></div>
+<div class="wrow small"><span>km</span><span></span><span>miles</span></div></div></div></section>
+<section class="tools"><div class="in"><h2>Popular tools</h2><div class="grid">
+<a class="card" href="#"><span class="ic">📏</span><b>Unit Converter</b><small>Length, weight, volume and more</small></a>
+<a class="card" href="#"><span class="ic">⚖️</span><b>kg to Pounds</b><small>Convert kilograms to lb instantly</small></a>
+<a class="card" href="#"><span class="ic">🛣️</span><b>km to Miles</b><small>Kilometres to miles and back</small></a>
+<a class="card" href="#"><span class="ic">💧</span><b>kg to Litres</b><small>Convert by density: water, oil, milk</small></a>
+<a class="card" href="#"><span class="ic">🏦</span><b>Loan Calculator</b><small>Monthly payment and total interest</small></a>
+<a class="card" href="#"><span class="ic">📈</span><b>Compound Interest</b><small>Watch your savings grow</small></a>
+<a class="card" href="#"><span class="ic">❤️</span><b>BMI Calculator</b><small>Body mass index for adults</small></a>
+<a class="card" href="#"><span class="ic">🔐</span><b>Password Generator</b><small>Strong random passwords</small></a>
+</div></div></section></main>
+<footer><div class="in">© Calcloom · Free calculators · Design option: Dark Neon (modern app, glass, glowing)</div></footer>
+<script>var a=document.getElementById('a'),b=document.getElementById('b');
+function r(){var v=parseFloat(a.value);b.textContent=isNaN(v)?'—':(Math.round(v*0.621371*10000)/10000).toLocaleString('en-US')}
+a.addEventListener('input',r);r();</script></body></html>

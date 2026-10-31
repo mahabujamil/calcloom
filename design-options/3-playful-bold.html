@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Option: Playful Bold (big colors, chunky, fun)</title><style>*{box-sizing:border-box}body{margin:0}a{text-decoration:none;color:inherit}.in{max-width:1080px;margin:0 auto;padding:0 18px}
+.top .in{display:flex;justify-content:space-between;align-items:center;padding-top:14px;padding-bottom:14px}
+nav a{margin-inline-start:18px}.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.wrow{display:flex;align-items:center;gap:12px}.wrow input,.wrow output{flex:1;min-width:0;font:inherit;font-size:1.6rem;padding:12px 14px;display:block}
+.wrow.small{margin-top:6px;font-size:.85rem}.wrow.small span{flex:1}.wrow.small span:nth-child(2){flex:0 0 24px}.eq{flex:0 0 24px;text-align:center;font-size:1.4rem}
+.card{display:flex;flex-direction:column;gap:4px;padding:18px}.card small{opacity:.7}.ic{font-size:1.8rem}
+body{background:#fff8e7;color:#1a1a2e;font:17px/1.6 "Trebuchet MS",system-ui,sans-serif}
+.top{background:#fff8e7;border-bottom:3px solid #1a1a2e}.brand{font-weight:900;font-size:1.5rem;display:flex;align-items:center;gap:8px}
+.logo{background:#ff5d8f;border:3px solid #1a1a2e;border-radius:12px;width:36px;height:36px;display:grid;place-items:center;box-shadow:3px 3px 0 #1a1a2e;color:#fff}
+nav a{font-weight:700}nav a.lang{background:#ffd23f;border:2px solid #1a1a2e;border-radius:999px;padding:3px 14px}
+.hero{padding:54px 0 40px}.hero .in{display:grid;gap:36px;grid-template-columns:1.1fr .9fr;align-items:center}
+@media(max-width:800px){.hero .in{grid-template-columns:1fr}}
+h1{font-size:3.2rem;line-height:1.05;margin:0 0 14px;font-weight:900}h1 em{font-style:normal;background:#ffd23f;padding:0 10px;border:3px solid #1a1a2e;border-radius:12px;display:inline-block;transform:rotate(-2deg)}
+.sub{font-size:1.15rem}.btn{display:inline-block;background:#3a86ff;color:#fff;padding:13px 26px;border:3px solid #1a1a2e;border-radius:14px;font-weight:900;margin-top:16px;box-shadow:5px 5px 0 #1a1a2e}
+.widget{background:#8ac926;border:3px solid #1a1a2e;border-radius:22px;padding:24px;box-shadow:8px 8px 0 #1a1a2e}
+.widget h3{margin:0 0 14px;font-size:1.3rem}.wrow input,.wrow output{border:3px solid #1a1a2e;border-radius:14px;background:#fff;font-weight:900}
+.tools{padding:30px 0 50px}.tools h2{font-size:1.8rem;font-weight:900}
+.card{border:3px solid #1a1a2e;border-radius:18px;box-shadow:5px 5px 0 #1a1a2e;transition:.15s}
+.card:nth-child(4n+1){background:#ffd6e0}.card:nth-child(4n+2){background:#d0f0c0}.card:nth-child(4n+3){background:#bde0fe}.card:nth-child(4n){background:#ffe5a0}
+.card:hover{transform:translate(-3px,-3px);box-shadow:8px 8px 0 #1a1a2e}.card b{font-size:1.1rem}
+footer{border-top:3px solid #1a1a2e;padding:24px 0;font-weight:700}</style></head><body>
+<header class="top"><div class="in"><a class="brand" href="#"><b class="logo">C</b>Calcloom</a>
+<nav><a href="#">All tools</a><a href="#">Converters</a><a href="#">About</a><a class="lang" href="#">العربية</a></nav></div></header>
+<main>
+<section class="hero"><div class="in"><div><h1>Math made <em>fun</em> and fast!</h1><p class="sub">Converters and calculators for everything in your day. Free, no sign-up.</p><a class="btn" href="#">Let's go →</a></div>
+<div class="widget"><h3>Kilometres to Miles</h3>
+<div class="wrow"><input id="a" type="number" value="10" step="any"><span class="eq">=</span><output id="b">6.2137</output></div>
+<div class="wrow small"><span>km</span><span></span><span>miles</span></div></div></div></section>
+<section class="tools"><div class="in"><h2>Popular tools</h2><div class="grid">
+<a class="card" href="#"><span class="ic">📏</span><b>Unit Converter</b><small>Length, weight, volume and more</small></a>
+<a class="card" href="#"><span class="ic">⚖️</span><b>kg to Pounds</b><small>Convert kilograms to lb instantly</small></a>
+<a class="card" href="#"><span class="ic">🛣️</span><b>km to Miles</b><small>Kilometres to miles and back</small></a>
+<a class="card" href="#"><span class="ic">💧</span><b>kg to Litres</b><small>Convert by density: water, oil, milk</small></a>
+<a class="card" href="#"><span class="ic">🏦</span><b>Loan Calculator</b><small>Monthly payment and total interest</small></a>
+<a class="card" href="#"><span class="ic">📈</span><b>Compound Interest</b><small>Watch your savings grow</small></a>
+<a class="card" href="#"><span class="ic">❤️</span><b>BMI Calculator</b><small>Body mass index for adults</small></a>
+<a class="card" href="#"><span class="ic">🔐</span><b>Password Generator</b><small>Strong random passwords</small></a>
+</div></div></section></main>
+<footer><div class="in">© Calcloom · Free calculators · Design option: Playful Bold (big colors, chunky, fun)</div></footer>
+<script>var a=document.getElementById('a'),b=document.getElementById('b');
+function r(){var v=parseFloat(a.value);b.textContent=isNaN(v)?'—':(Math.round(v*0.621371*10000)/10000).toLocaleString('en-US')}
+a.addEventListener('input',r);r();</script></body></html>

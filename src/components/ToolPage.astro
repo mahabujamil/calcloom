@@ -17,7 +17,9 @@ import { meta, cats } from '../data/meta';
 import Temperature from './tools/Temperature.astro';
 import Password from './tools/Password.astro';
 import Savings from './tools/Savings.astro';
-import Units from './tools/Units.astro';
+import Convert from './tools/Convert.astro';
+import Density from './tools/Density.astro';
+import FuelEconomy from './tools/FuelEconomy.astro';
 import Fuel from './tools/Fuel.astro';
 
 interface Props { slug: string; lang: Lang }
@@ -37,7 +39,8 @@ const components: Record<string, any> = {
   'temperature-converter': Temperature,
   'password-generator': Password,
   'savings-goal-calculator': Savings,
-  'unit-converter': Units,
+  'kg-to-liters-converter': Density,
+  'fuel-economy-converter': FuelEconomy,
   'fuel-cost-calculator': Fuel,
 };
 
@@ -89,8 +92,18 @@ const schema = [
   <p class="lead">{tool.intro}</p>
 
   <section class="card" aria-label={tool.name}>
-    <Tool {lang} />
+    {tool.conv ? <Convert {lang} conv={tool.conv} /> : <Tool {lang} />}
   </section>
+
+  {tool.table && (
+    <>
+      <h2 class="reveal">{tool.tableTitle}</h2>
+      <table class="conv-table reveal">
+        <thead><tr>{tool.table.head.map((h) => <th>{h}</th>)}</tr></thead>
+        <tbody>{tool.table.rows.map((r) => <tr>{r.map((c) => <td dir="ltr">{c}</td>)}</tr>)}</tbody>
+      </table>
+    </>
+  )}
 
   <h2 class="reveal">{t.howTo(tool.name)}</h2>
   <ol class="reveal">{tool.steps.map((s) => <li>{s}</li>)}</ol>

@@ -1,0 +1,41 @@
+---
+const { lang } = Astro.props;
+const ar = lang === 'ar';
+const S = {
+  val: ar ? 'القيمة' : 'Value',
+  unit: ar ? 'الوحدة التي لديك' : 'Unit you have',
+  mpgus: 'MPG (US)', mpguk: 'MPG (UK)', l100: ar ? 'لتر / 100 كم' : 'L / 100 km', kml: ar ? 'كم / لتر' : 'km / L',
+  err: ar ? 'أدخل رقماً موجباً.' : 'Enter a positive number.',
+};
+---
+<form id="fe" onsubmit="return false" data-s={JSON.stringify(S)}>
+  <div class="row">
+    <div><label for="fe-v">{S.val}</label><input id="fe-v" type="number" min="0" step="any" value="30" inputmode="decimal" /></div>
+    <div><label for="fe-u">{S.unit}</label>
+      <select id="fe-u">
+        <option value="mpgus">{S.mpgus}</option><option value="mpguk">{S.mpguk}</option>
+        <option value="l100">{S.l100}</option><option value="kml">{S.kml}</option>
+      </select>
+    </div>
+  </div>
+  <div class="result" id="fe-out" aria-live="polite"></div>
+</form>
+
+<script>
+  import { $, strings } from '../../lib/util';
+  const S = strings('fe');
+  const fmt = (n: number) => Number(n.toFixed(2)).toLocaleString('en-US');
+  const KM_PER_MILE = 1.609344, L_US = 3.785411784, L_UK = 4.54609;
+  function run() {
+    const out = $('fe-out');
+    const v = parseFloat($('fe-v').value);
+    if (isNaN(v) || v <= 0) { out.textContent = S.err; return; }
+    const u = $('fe-u').value;
+    // everything goes through km per litre
+    const kml = u === 'mpgus' ? (v * KM_PER_MILE) / L_US : u === 'mpguk' ? (v * KM_PER_MILE) / L_UK : u === 'l100' ? 100 / v : v;
+    out.innerHTML = `<p class="big" dir="ltr">${fmt(100 / kml)} L/100 km</p><p dir="ltr">${fmt(kml)} km/L</p><p dir="ltr">${fmt((kml * L_US) / KM_PER_MILE)} MPG (US)</p><p dir="ltr">${fmt((kml * L_UK) / KM_PER_MILE)} MPG (UK)</p>`;
+  }
+  $('fe-u').addEventListener('change', run);
+  $('fe-v').addEventListener('input', run);
+  run();
+</script>

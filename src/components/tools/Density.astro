@@ -1,0 +1,58 @@
+---
+const { lang } = Astro.props;
+const ar = lang === 'ar';
+// density in kg per litre
+const subs: [string, string, number][] = [
+  [ar ? 'ماء' : 'Water', 'water', 1],
+  [ar ? 'حليب' : 'Milk', 'milk', 1.03],
+  [ar ? 'زيت زيتون' : 'Olive oil', 'olive', 0.91],
+  [ar ? 'زيت نباتي' : 'Vegetable oil', 'veg', 0.92],
+  [ar ? 'بنزين' : 'Petrol / gasoline', 'petrol', 0.745],
+  [ar ? 'ديزل' : 'Diesel', 'diesel', 0.832],
+  [ar ? 'عسل' : 'Honey', 'honey', 1.42],
+  [ar ? 'عصير' : 'Juice', 'juice', 1.05],
+  [ar ? 'كحول إيثيلي' : 'Ethanol', 'ethanol', 0.789],
+  [ar ? 'طحين (تقريبي)' : 'Flour (approx.)', 'flour', 0.53],
+  [ar ? 'سكر (تقريبي)' : 'Sugar (approx.)', 'sugar', 0.85],
+  [ar ? 'أرز (تقريبي)' : 'Rice (approx.)', 'rice', 0.85],
+  [ar ? 'ملح (تقريبي)' : 'Salt (approx.)', 'salt', 1.2],
+];
+const S = {
+  sub: ar ? 'المادة' : 'Substance',
+  dir: ar ? 'الاتجاه' : 'Direction',
+  k2l: ar ? 'كيلوغرام إلى لتر' : 'Kilograms to litres',
+  l2k: ar ? 'لتر إلى كيلوغرام' : 'Litres to kilograms',
+  val: ar ? 'القيمة' : 'Value',
+  err: ar ? 'أدخل رقماً موجباً.' : 'Enter a positive number.',
+  dens: ar ? 'الكثافة: {0} كغ/لتر' : 'Density: {0} kg/L',
+  note: ar ? 'القيم تقريبية وتتغير بدرجة الحرارة والنوع.' : 'Values are approximate and vary with temperature and type.',
+  subs,
+};
+---
+<form id="dn" onsubmit="return false" data-s={JSON.stringify(S)}>
+  <div class="row">
+    <div><label for="dn-s">{S.sub}</label><select id="dn-s">{subs.map((x) => <option value={x[1]}>{x[0]}</option>)}</select></div>
+    <div><label for="dn-d">{S.dir}</label><select id="dn-d"><option value="k">{S.k2l}</option><option value="l">{S.l2k}</option></select></div>
+    <div><label for="dn-v">{S.val}</label><input id="dn-v" type="number" min="0" step="any" value="1" inputmode="decimal" /></div>
+  </div>
+  <div class="result" id="dn-out" aria-live="polite"></div>
+</form>
+
+<script>
+  import { $, fill, strings } from '../../lib/util';
+  const S = strings('dn');
+  const subs = S.subs as [string, string, number][];
+  const fmt = (n: number) => Number(n.toPrecision(6)).toLocaleString('en-US', { maximumFractionDigits: 8 });
+  function run() {
+    const out = $('dn-out');
+    const v = parseFloat($('dn-v').value);
+    if (isNaN(v) || v < 0) { out.textContent = S.err; return; }
+    const d = subs.find((x) => x[1] === $('dn-s').value)![2];
+    const kgToL = $('dn-d').value === 'k';
+    const res = kgToL ? v / d : v * d;
+    out.innerHTML = `<p class="big" dir="ltr">${fmt(res)} ${kgToL ? 'L' : 'kg'}</p><p dir="ltr">${fmt(v)} ${kgToL ? 'kg' : 'L'} → ${fmt(res)} ${kgToL ? 'L' : 'kg'}</p><p>${fill(S.dens, d)}</p><p class="muted">${S.note}</p>`;
+  }
+  ['dn-s', 'dn-d'].forEach((id) => $(id).addEventListener('change', run));
+  $('dn-v').addEventListener('input', run);
+  run();
+</script>

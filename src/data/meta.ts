@@ -4,6 +4,7 @@ export const cats = {
   health: { hue: 345, en: 'Health', ar: 'الصحة' },
   time: { hue: 215, en: 'Dates & time', ar: 'التواريخ والوقت' },
   daily: { hue: 35, en: 'Everyday', ar: 'الحياة اليومية' },
+  convert: { hue: 215, en: 'Converters', ar: 'المحوّلات' },
   tools: { hue: 265, en: 'Handy tools', ar: 'أدوات مفيدة' },
 } as const;
 
@@ -21,8 +22,28 @@ export const meta: Record<string, { cat: Cat; icon: string }> = {
   'tip-calculator': { cat: 'daily', icon: '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>' },
   'discount-calculator': { cat: 'daily', icon: '<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.2"/>' },
   'fuel-cost-calculator': { cat: 'daily', icon: '<path d="M4 21V5a2 2 0 012-2h6a2 2 0 012 2v16"/><path d="M3 21h12"/><path d="M14 9h2a2 2 0 012 2v6a1.5 1.5 0 003 0V9l-3-3"/>' },
-  'unit-converter': { cat: 'tools', icon: '<path d="M7 7h13M16 3l4 4-4 4"/><path d="M17 17H4M8 13l-4 4 4 4"/>' },
-  'temperature-converter': { cat: 'tools', icon: '<path d="M14 14.8V5a2 2 0 10-4 0v9.8a4 4 0 104 0z"/>' },
+  'temperature-converter': { cat: 'convert', icon: '<path d="M14 14.8V5a2 2 0 10-4 0v9.8a4 4 0 104 0z"/>' },
   'password-generator': { cat: 'tools', icon: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 118 0v3"/>' },
   'word-counter': { cat: 'tools', icon: '<path d="M4 6h16M4 12h16M4 18h10"/>' },
 };
+
+// Converters: one icon per unit category, shared by the category page and its pair pages.
+import { ucats, pairs, pairSlug } from './units';
+
+const catIcons: Record<string, string> = {
+  length: '<path d="M3 17L17 3l4 4L7 21z"/><path d="M7 13l2 2M10 10l2 2M13 7l2 2"/>',
+  weight: '<path d="M6 7h12l2 13H4z"/><circle cx="12" cy="4.5" r="1.8"/>',
+  volume: '<path d="M9 3h6M10 3v6l-5 9a2 2 0 002 3h10a2 2 0 002-3l-5-9V3"/>',
+  area: '<rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 12h16M12 4v16"/>',
+  speed: '<path d="M4 17a8 8 0 1116 0"/><path d="M12 17l4-5"/>',
+  time: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  data: '<ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/>',
+  pressure: '<circle cx="12" cy="12" r="9"/><path d="M12 12l4-4M7 12h1M12 7v1M17 12h-1"/>',
+  energy: '<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>',
+};
+const swap = '<path d="M7 7h13M16 3l4 4-4 4"/><path d="M17 17H4M8 13l-4 4 4 4"/>';
+
+for (const c of ucats) meta[c.slug] = { cat: 'convert', icon: catIcons[c.id] ?? swap };
+for (const p of pairs) meta[pairSlug(...p)] = { cat: 'convert', icon: catIcons[p[0]] ?? swap };
+meta['kg-to-liters-converter'] = { cat: 'convert', icon: catIcons.volume };
+meta['fuel-economy-converter'] = { cat: 'convert', icon: '<path d="M4 21V5a2 2 0 012-2h6a2 2 0 012 2v16"/><path d="M3 21h12"/><path d="M14 9h2a2 2 0 012 2v6a1.5 1.5 0 003 0V9l-3-3"/>' };

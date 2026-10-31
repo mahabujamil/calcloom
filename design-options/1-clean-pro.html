@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Option: Clean Pro (white, sharp, practical)</title><style>*{box-sizing:border-box}body{margin:0}a{text-decoration:none;color:inherit}.in{max-width:1080px;margin:0 auto;padding:0 18px}
+.top .in{display:flex;justify-content:space-between;align-items:center;padding-top:14px;padding-bottom:14px}
+nav a{margin-inline-start:18px}.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.wrow{display:flex;align-items:center;gap:12px}.wrow input,.wrow output{flex:1;min-width:0;font:inherit;font-size:1.6rem;padding:12px 14px;display:block}
+.wrow.small{margin-top:6px;font-size:.85rem}.wrow.small span{flex:1}.wrow.small span:nth-child(2){flex:0 0 24px}.eq{flex:0 0 24px;text-align:center;font-size:1.4rem}
+.card{display:flex;flex-direction:column;gap:4px;padding:18px}.card small{opacity:.7}.ic{font-size:1.8rem}
+body{background:#fff;color:#0f172a;font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.top{border-bottom:1px solid #e2e8f0}.brand{font-weight:800;font-size:1.3rem;display:flex;align-items:center;gap:8px}
+.logo{background:#2563eb;color:#fff;border-radius:8px;width:30px;height:30px;display:grid;place-items:center}
+nav a{color:#475569;font-weight:500}nav a.lang{color:#2563eb}
+.hero{background:linear-gradient(#f8fafc,#fff);padding:56px 0 40px;border-bottom:1px solid #e2e8f0}
+.hero .in{display:grid;gap:36px;grid-template-columns:1.1fr .9fr;align-items:center}
+@media(max-width:800px){.hero .in{grid-template-columns:1fr}}
+h1{font-size:2.8rem;line-height:1.1;margin:0 0 12px;letter-spacing:-1px}h1 em{font-style:normal;color:#2563eb}
+.sub{color:#475569;font-size:1.1rem}.btn{display:inline-block;background:#2563eb;color:#fff;padding:12px 22px;border-radius:8px;font-weight:700;margin-top:14px}
+.widget{background:#fff;border:1px solid #cbd5e1;border-radius:12px;padding:22px;box-shadow:0 8px 30px rgba(15,23,42,.08)}
+.widget h3{margin:0 0 14px}.wrow input,.wrow output{border:1px solid #cbd5e1;border-radius:8px;background:#f8fafc}
+.tools{padding:44px 0}.tools h2{font-size:1.5rem}.card{background:#fff;border:1px solid #e2e8f0;border-radius:10px}.card:hover{border-color:#2563eb;box-shadow:0 4px 16px rgba(37,99,235,.12)}
+footer{border-top:1px solid #e2e8f0;padding:24px 0;color:#64748b;font-size:.9rem}</style></head><body>
+<header class="top"><div class="in"><a class="brand" href="#"><b class="logo">C</b>Calcloom</a>
+<nav><a href="#">All tools</a><a href="#">Converters</a><a href="#">About</a><a class="lang" href="#">العربية</a></nav></div></header>
+<main>
+<section class="hero"><div class="in"><div><h1>Every calculator and converter you need. <em>Fast.</em></h1><p class="sub">Free, accurate, no sign-up. Works in English and Arabic.</p><a class="btn" href="#">Browse all tools</a></div>
+<div class="widget"><h3>Kilometres to Miles</h3>
+<div class="wrow"><input id="a" type="number" value="10" step="any"><span class="eq">=</span><output id="b">6.2137</output></div>
+<div class="wrow small"><span>km</span><span></span><span>miles</span></div></div></div></section>
+<section class="tools"><div class="in"><h2>Popular tools</h2><div class="grid">
+<a class="card" href="#"><span class="ic">📏</span><b>Unit Converter</b><small>Length, weight, volume and more</small></a>
+<a class="card" href="#"><span class="ic">⚖️</span><b>kg to Pounds</b><small>Convert kilograms to lb instantly</small></a>
+<a class="card" href="#"><span class="ic">🛣️</span><b>km to Miles</b><small>Kilometres to miles and back</small></a>
+<a class="card" href="#"><span class="ic">💧</span><b>kg to Litres</b><small>Convert by density: water, oil, milk</small></a>
+<a class="card" href="#"><span class="ic">🏦</span><b>Loan Calculator</b><small>Monthly payment and total interest</small></a>
+<a class="card" href="#"><span class="ic">📈</span><b>Compound Interest</b><small>Watch your savings grow</small></a>
+<a class="card" href="#"><span class="ic">❤️</span><b>BMI Calculator</b><small>Body mass index for adults</small></a>
+<a class="card" href="#"><span class="ic">🔐</span><b>Password Generator</b><small>Strong random passwords</small></a>
+</div></div></section></main>
+<footer><div class="in">© Calcloom · Free calculators · Design option: Clean Pro (white, sharp, practical)</div></footer>
+<script>var a=document.getElementById('a'),b=document.getElementById('b');
+function r(){var v=parseFloat(a.value);b.textContent=isNaN(v)?'—':(Math.round(v*0.621371*10000)/10000).toLocaleString('en-US')}
+a.addEventListener('input',r);r();</script></body></html>
