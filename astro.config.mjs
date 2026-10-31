@@ -1,10 +1,10 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// Free GitHub address for now. When a custom domain is bought, set site to it and base to '/'.
+// Custom domain calcloom.com (GitHub Pages, DNS at Namecheap).
 export default defineConfig({
-  site: 'https://mahabujamil.github.io',
-  base: '/calcloom',
+  site: 'https://calcloom.com',
+  base: '/',
   integrations: [
     sitemap({ i18n: { defaultLocale: 'en', locales: { en: 'en', ar: 'ar' } } }),
   ],
