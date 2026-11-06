@@ -63,7 +63,7 @@ const footTools = allTools(lang).filter((x) => x.kind !== 'pair');
         <nav>
           <a href={localePath(lang, '/')}>{t.allTools}</a>
           <a href={localePath(lang, '/about/')}>{t.about}</a>
-          <a class="lang" href={localePath(other, enPath)} hreflang={other} lang={other}>{ui[other].switchLabel}</a>
+          <a class="lang" href={localePath(other, enPath)} hreflang={other} lang={other}>{t.switchLabel}</a>
         </nav>
       </div>
     </header>
