@@ -1,7 +1,7 @@
 import type { Tool } from './tools';
 import { converterAr } from './converters';
 
-type ArTool = Pick<Tool, 'name' | 'title' | 'description' | 'h1' | 'intro' | 'steps' | 'faq' | 'tableTitle' | 'table'>;
+type ArTool = Pick<Tool, 'name' | 'title' | 'description' | 'h1' | 'intro' | 'steps' | 'faq' | 'about' | 'tableTitle' | 'table'>;
 
 const coreAr: Record<string, ArTool> = {
   'percentage-calculator': {

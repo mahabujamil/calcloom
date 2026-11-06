@@ -14,9 +14,9 @@ export const ui = {
     faq: 'Frequently asked questions',
     more: 'More calculators',
     allCalcs: 'All calculators',
-    homeTitle: 'Calcloom: Free Online Calculators for Money, Health and Dates',
+    homeTitle: 'Calcloom: Free Online Calculators and Unit Converters',
     homeDesc:
-      'Free, fast online calculators: percentage, loan, compound interest, age, BMI, tip, discount, unit and temperature converters, password generator and more. No sign-up, nothing stored.',
+      'Free online calculators and unit converters: km to miles, kg to lb, loan, BMI, percentage and more. Fast, private, no sign-up.',
     homeH1: 'Free online calculators that just work',
     homeLead:
       'Fast, private and simple. Pick a tool, type your numbers, get the answer. No sign-up, nothing is stored.',
@@ -34,9 +34,9 @@ export const ui = {
     faq: 'الأسئلة الشائعة',
     more: 'حاسبات أخرى',
     allCalcs: 'كل الحاسبات',
-    homeTitle: 'Calcloom: حاسبات أونلاين مجانية للمال والصحة والتواريخ',
+    homeTitle: 'Calcloom: حاسبات ومحوّلات وحدات أونلاين مجانية',
     homeDesc:
-      'حاسبات أونلاين مجانية وسريعة: النسبة المئوية، القروض، الفائدة المركبة، العمر، مؤشر كتلة الجسم، البقشيش، الخصم والتواريخ. بدون تسجيل ولا تخزين.',
+      'حاسبات ومحوّلات وحدات مجانية: كم إلى ميل، كيلو إلى رطل، القروض، BMI، النسبة المئوية وأكثر. سريعة وخاصة وبدون تسجيل.',
     homeH1: 'حاسبات أونلاين مجانية تعمل بسهولة',
     homeLead:
       'سريعة وخاصة وبسيطة. اختر الأداة، اكتب أرقامك، واحصل على الجواب. بدون تسجيل ولا تخزين لبياناتك.',

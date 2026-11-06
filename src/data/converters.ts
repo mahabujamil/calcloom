@@ -3,7 +3,7 @@
 import type { Tool } from './tools';
 import { ucats, pairs, ucat, unit, pairSlug, type Unit } from './units';
 
-type Text = Pick<Tool, 'name' | 'title' | 'description' | 'h1' | 'intro' | 'steps' | 'faq' | 'tableTitle' | 'table'>;
+type Text = Pick<Tool, 'name' | 'title' | 'description' | 'h1' | 'intro' | 'steps' | 'faq' | 'tableTitle' | 'table' | 'about'>;
 
 const num = (n: number) =>
   Number(n.toPrecision(7)).toLocaleString('en-US', { maximumFractionDigits: 10 });
@@ -27,13 +27,20 @@ function pairText(cat: string, fromId: string, toId: string, lang: 'en' | 'ar'):
         { q: `كيف أحوّل ${a.ar} إلى ${b.ar}؟`, a: `اضرب القيمة بوحدة ${a.sym} في ${num(r)}. مثلاً 10 ${a.sym} × ${num(r)} = ${num(10 * r)} ${b.sym}.` },
         { q: `كيف أحوّل ${b.ar} إلى ${a.ar}؟`, a: `اضرب القيمة بوحدة ${b.sym} في ${num(inv)}، أو اقسمها على ${num(r)}.` },
       ],
+      about: {
+        title: `طريقة تحويل ${a.ar} إلى ${b.ar}`,
+        paras: [
+          `لتحويل ${a.ar} (${a.sym}) إلى ${b.ar} (${b.sym}) اضرب القيمة في ${num(r)}. بالمعادلة: ${b.sym} = ${a.sym} × ${num(r)}.`,
+          `وللتحويل بالاتجاه المعاكس اضرب في ${num(inv)}. مثال: 25 ${a.sym} تساوي ${num(25 * r)} ${b.sym}، و25 ${b.sym} تساوي ${num(25 * inv)} ${a.sym}.`,
+        ],
+      },
       tableTitle: `جدول تحويل ${a.ar} إلى ${b.ar}`,
       table: { head: [a.sym, b.sym], rows: rows(a, b) },
     };
   }
   return {
     name: `${a.en} to ${b.en}`,
-    title: `${a.en} to ${b.en} Converter (${a.sym} to ${b.sym}) + Table`,
+    title: [`${a.en} to ${b.en} Converter (${a.sym} to ${b.sym}) + Table`, `${a.en} to ${b.en} Converter (${a.sym} to ${b.sym})`, `${a.en} to ${b.en} Converter`].find((x) => x.length <= 62)!,
     description: `Free ${a.en.toLowerCase()} to ${b.en.toLowerCase()} converter. Convert ${a.sym} to ${b.sym} instantly with the formula (1 ${a.sym} = ${num(r)} ${b.sym}) and a quick conversion table.`,
     h1: `${a.en} to ${b.en} Converter`,
     intro: `Convert ${a.en.toLowerCase()} to ${b.en.toLowerCase()} instantly. 1 ${a.en1} = ${num(r)} ${b.en.toLowerCase()}.`,
@@ -43,6 +50,13 @@ function pairText(cat: string, fromId: string, toId: string, lang: 'en' | 'ar'):
       { q: `How do I convert ${a.en.toLowerCase()} to ${b.en.toLowerCase()}?`, a: `Multiply the value in ${a.sym} by ${num(r)}. For example, 10 ${a.sym} × ${num(r)} = ${num(10 * r)} ${b.sym}.` },
       { q: `How do I convert ${b.en.toLowerCase()} back to ${a.en.toLowerCase()}?`, a: `Multiply the value in ${b.sym} by ${num(inv)}, or divide it by ${num(r)}.` },
     ],
+    about: {
+      title: `How to convert ${a.en.toLowerCase()} to ${b.en.toLowerCase()}`,
+      paras: [
+        `To convert ${a.en.toLowerCase()} (${a.sym}) to ${b.en.toLowerCase()} (${b.sym}), multiply the value by ${num(r)}. As a formula: ${b.sym} = ${a.sym} × ${num(r)}.`,
+        `To convert the other way, multiply by ${num(inv)}. Example: 25 ${a.sym} is ${num(25 * r)} ${b.sym}, and 25 ${b.sym} is ${num(25 * inv)} ${a.sym}.`,
+      ],
+    },
     tableTitle: `${a.en} to ${b.en} conversion table`,
     table: { head: [a.sym, b.sym], rows: rows(a, b) },
   };
@@ -69,7 +83,7 @@ function catText(catId: string, lang: 'en' | 'ar'): Text {
   }
   return {
     name: `${c.en} Converter`,
-    title: `${c.en} Converter: Convert Between All Units (${short})`,
+    title: [`${c.en} Converter: Convert Between All Units (${short})`, `${c.en} Converter: Convert All Units (${short})`, `${c.en} Converter`].find((x) => x.length <= 62)!,
     description: `Free instant ${c.en.toLowerCase()} converter. Convert between ${c.units.length} units such as ${short} accurately, with links to the most popular conversions.`,
     h1: `${c.en} Unit Converter`,
     intro: `Convert between different ${c.en.toLowerCase()} units in one step.`,

@@ -95,6 +95,13 @@ const schema = [
     {tool.conv ? <Convert {lang} conv={tool.conv} /> : <Tool {lang} />}
   </section>
 
+  {tool.about && (
+    <>
+      <h2 class="reveal">{tool.about.title}</h2>
+      {tool.about.paras.map((p) => <p class="reveal" dir="auto">{p}</p>)}
+    </>
+  )}
+
   {tool.table && (
     <>
       <h2 class="reveal">{tool.tableTitle}</h2>

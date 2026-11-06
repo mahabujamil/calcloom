@@ -35,6 +35,9 @@ const lenSlug = localePath(lang, '/length-converter/');
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
           <input id="q" type="search" placeholder={L.search} aria-label={L.search} autocomplete="off" />
         </div>
+        <div class="quick" aria-label={L.pop}>
+          {popular.slice(0, 6).map((p) => <a href={localePath(lang, `/${p.slug}/`)}>{p.name}</a>)}
+        </div>
         <div class="trust"><span>{L.t1}</span><span>{L.t2}</span><span>{L.t3}</span><span>{L.t4}</span></div>
       </div>
       <div class="widget">

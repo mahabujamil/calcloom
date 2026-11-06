@@ -22,6 +22,10 @@ const S = {
     <button id="cv-sw" type="button" class="swap" aria-label={S.swap} title={S.swap}>⇄</button>
     <div><label for="cv-b">{S.to}</label><select id="cv-b"></select></div>
   </div>
+  <div class="cv-quick">
+    {[1, 5, 10, 50, 100, 1000].map((n) => <button type="button" data-q={n}>{n}</button>)}
+    <button type="button" class="copy" id="cv-copy">{ar ? 'نسخ النتيجة' : 'Copy result'}</button>
+  </div>
   <div class="result" id="cv-out" aria-live="polite"></div>
 </form>
 
@@ -40,10 +44,17 @@ const S = {
     if (isNaN(v)) { out.textContent = S.err; return; }
     const A = f(a.value), B = f(b.value);
     const r = A[2] / B[2];
-    out.innerHTML = `<p class="big" dir="ltr">${fmt(v * r)} ${B[3]}</p><p dir="ltr">${fmt(v)} ${A[3]} = ${fmt(v * r)} ${B[3]}</p><p dir="ltr" class="muted">${fill(S.formula, A[3], fmt(r), B[3])}</p>`;
+    out.innerHTML = `<p class="big" dir="ltr">${fmt(v * r)} ${B[3]}</p>${v === 1 ? "" : `<p dir="ltr">${fmt(v)} ${A[3]} = ${fmt(v * r)} ${B[3]}</p>`}<p dir="ltr" class="muted">${fill(S.formula, A[3], fmt(r), B[3])}</p>`;
   }
   $('cv-sw').addEventListener('click', () => { const t = a.value; a.value = b.value; b.value = t; run(); });
   [a, b].forEach((el) => el.addEventListener('change', run));
   $('cv-v').addEventListener('input', run);
+  document.querySelectorAll<HTMLButtonElement>('.cv-quick [data-q]').forEach((el) => el.addEventListener('click', () => { $('cv-v').value = el.dataset.q!; run(); }));
+  const cp = $('cv-copy');
+  const cpLabel = cp.textContent;
+  cp.addEventListener('click', async () => {
+    const txt = ($('cv-out').querySelector('.big') as HTMLElement | null)?.textContent ?? '';
+    try { await navigator.clipboard.writeText(txt); cp.textContent = '✓'; setTimeout(() => (cp.textContent = cpLabel), 1200); } catch {}
+  });
   run();
 </script>

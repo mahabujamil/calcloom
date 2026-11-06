@@ -10,6 +10,7 @@ export interface Tool {
   related: string[];
   kind?: 'tool' | 'pair';
   conv?: { cat: string; from: string; to: string };
+  about?: { title: string; paras: string[] };
   tableTitle?: string;
   table?: { head: string[]; rows: string[][] };
 }
