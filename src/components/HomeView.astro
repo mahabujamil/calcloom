@@ -11,7 +11,8 @@ const { lang } = Astro.props;
 const t = ui[lang];
 const ar = lang === 'ar';
 const list = allTools(lang).filter((x) => x.kind !== 'pair');
-const popular = tools.filter((x) => x.kind === 'pair').slice(0, 14).map((x) => getTool(x.slug, lang));
+const featured = ['celsius-to-fahrenheit', 'fahrenheit-to-celsius', 'days-until-christmas', 'days-until-ramadan', 'days-until-new-year', 'days-until-black-friday'];
+const popular = [...tools.filter((x) => x.kind === 'pair' && !featured.includes(x.slug)).slice(0, 12).map((x) => x.slug), ...featured].map((s) => getTool(s, lang));
 const schema = [
   { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Calcloom', url: Astro.site?.href, inLanguage: lang },
 ];

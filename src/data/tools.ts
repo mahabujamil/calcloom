@@ -10,6 +10,8 @@ export interface Tool {
   related: string[];
   kind?: 'tool' | 'pair';
   conv?: { cat: string; from: string; to: string };
+  temp?: { from: 'c' | 'f' | 'k'; to: 'c' | 'f' | 'k' };
+  countdown?: import('./extra').CountdownSpec;
   about?: { title: string; paras: string[] };
   tableTitle?: string;
   table?: { head: string[]; rows: string[][] };
@@ -300,6 +302,7 @@ const coreTools: Tool[] = [
 ];
 
 import { converterTools } from './converters';
+import { extraTools } from './extra';
 
-export const tools: Tool[] = [...coreTools, ...converterTools];
+export const tools: Tool[] = [...coreTools, ...converterTools, ...extraTools];
 export const bySlug = (s: string) => tools.find((t) => t.slug === s)!;

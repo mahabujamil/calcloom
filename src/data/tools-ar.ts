@@ -1,5 +1,6 @@
 import type { Tool } from './tools';
 import { converterAr } from './converters';
+import { extraAr } from './extra';
 
 type ArTool = Pick<Tool, 'name' | 'title' | 'description' | 'h1' | 'intro' | 'steps' | 'faq' | 'about' | 'tableTitle' | 'table'>;
 
@@ -230,4 +231,4 @@ const coreAr: Record<string, ArTool> = {
   },
 };
 
-export const toolsAr: Record<string, ArTool> = { ...coreAr, ...converterAr };
+export const toolsAr: Record<string, ArTool> = { ...coreAr, ...converterAr, ...extraAr };

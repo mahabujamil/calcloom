@@ -21,6 +21,9 @@ import Convert from './tools/Convert.astro';
 import Density from './tools/Density.astro';
 import FuelEconomy from './tools/FuelEconomy.astro';
 import Fuel from './tools/Fuel.astro';
+import TempPair from './tools/TempPair.astro';
+import Countdown from './tools/Countdown.astro';
+import Gpa from './tools/Gpa.astro';
 
 interface Props { slug: string; lang: Lang }
 const { slug, lang } = Astro.props;
@@ -42,6 +45,7 @@ const components: Record<string, any> = {
   'kg-to-liters-converter': Density,
   'fuel-economy-converter': FuelEconomy,
   'fuel-cost-calculator': Fuel,
+  'gpa-calculator': Gpa,
 };
 
 const t = ui[lang];
@@ -92,7 +96,7 @@ const schema = [
   <p class="lead">{tool.intro}</p>
 
   <section class="card" aria-label={tool.name}>
-    {tool.conv ? <Convert {lang} conv={tool.conv} /> : <Tool {lang} />}
+    {tool.temp ? <TempPair {lang} temp={tool.temp} /> : tool.countdown ? <Countdown {lang} spec={tool.countdown} /> : tool.conv ? <Convert {lang} conv={tool.conv} /> : <Tool {lang} />}
   </section>
 
   {tool.about && (

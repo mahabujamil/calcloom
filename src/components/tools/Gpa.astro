@@ -1,0 +1,86 @@
+---
+import { gradeScale } from '../../data/extra';
+const { lang } = Astro.props;
+const ar = lang === 'ar';
+const S = {
+  course: ar ? 'المادة' : 'Course',
+  grade: ar ? 'التقدير' : 'Grade',
+  credits: ar ? 'الساعات' : 'Credits',
+  add: ar ? '+ إضافة مادة' : '+ Add course',
+  remove: ar ? 'حذف' : 'Remove',
+  reset: ar ? 'مسح الكل' : 'Reset',
+  prev: ar ? 'معدلك الحالي (اختياري)' : 'Current GPA (optional)',
+  prevCr: ar ? 'ساعاتك المنجزة (اختياري)' : 'Credits completed (optional)',
+  sem: ar ? 'المعدل الفصلي' : 'Semester GPA',
+  cum: ar ? 'المعدل التراكمي الجديد' : 'New cumulative GPA',
+  tot: ar ? 'مجموع الساعات: {0}' : 'Total credits: {0}',
+  none: ar ? 'أضف ساعات لمادة واحدة على الأقل.' : 'Enter credits for at least one course.',
+  ph: ar ? 'اختياري' : 'Optional',
+  scale: gradeScale,
+};
+---
+<form id="gp" onsubmit="return false" data-s={JSON.stringify(S)}>
+  <div id="gp-rows"></div>
+  <div class="cv-quick">
+    <button type="button" id="gp-add">{S.add}</button>
+    <button type="button" id="gp-reset">{S.reset}</button>
+  </div>
+  <div class="row" style="margin-top:14px">
+    <div><label for="gp-pg">{S.prev}</label><input id="gp-pg" type="number" min="0" max="4.5" step="0.01" inputmode="decimal" placeholder={S.ph} /></div>
+    <div><label for="gp-pc">{S.prevCr}</label><input id="gp-pc" type="number" min="0" step="0.5" inputmode="decimal" placeholder={S.ph} /></div>
+  </div>
+  <div class="result" id="gp-out" aria-live="polite"></div>
+</form>
+<style>
+  .gp-row { display: grid; grid-template-columns: 1.4fr 1fr 1fr auto; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .gp-row button { margin: 0; padding: 10px 12px; background: var(--card); color: var(--muted); border: 1px solid var(--line); }
+  @media (max-width: 520px) { .gp-row { grid-template-columns: 1fr 1fr; } .gp-row input[type=text] { grid-column: 1 / -1; } }
+</style>
+<script>
+  import { $, strings, fill } from '../../lib/util';
+  const S = strings('gp');
+  const scale = S.scale as [string, number][];
+  const pts = new Map(scale);
+  const rows = $('gp-rows') as unknown as HTMLElement;
+  function addRow(grade = 'A', credits = '3') {
+    const d = document.createElement('div');
+    d.className = 'gp-row';
+    const name = document.createElement('input');
+    name.type = 'text'; name.placeholder = S.course; name.setAttribute('aria-label', S.course);
+    const sel = document.createElement('select');
+    sel.setAttribute('aria-label', S.grade);
+    for (const [g] of scale) sel.append(new Option(g, g));
+    sel.value = grade;
+    const cr = document.createElement('input');
+    cr.type = 'number'; cr.min = '0'; cr.step = '0.5'; cr.value = credits; cr.setAttribute('aria-label', S.credits); cr.placeholder = S.credits;
+    const rm = document.createElement('button');
+    rm.type = 'button'; rm.textContent = '×'; rm.title = S.remove; rm.setAttribute('aria-label', S.remove);
+    rm.addEventListener('click', () => { d.remove(); run(); });
+    d.append(name, sel, cr, rm);
+    rows.append(d);
+  }
+  function run() {
+    let qp = 0, cr = 0;
+    rows.querySelectorAll<HTMLElement>('.gp-row').forEach((r) => {
+      const g = (r.querySelector('select') as HTMLSelectElement).value;
+      const c = parseFloat((r.querySelector('input[type=number]') as HTMLInputElement).value);
+      if (c > 0) { qp += (pts.get(g) ?? 0) * c; cr += c; }
+    });
+    const out = $('gp-out');
+    if (!cr) { out.textContent = S.none; return; }
+    const sem = qp / cr;
+    let html = `<p class="big" dir="ltr">${sem.toFixed(2)}</p><p>${S.sem}</p><p class="muted">${fill(S.tot, String(Number(cr.toFixed(2))))}</p>`;
+    const pg = parseFloat($('gp-pg').value), pc = parseFloat($('gp-pc').value);
+    if (pg >= 0 && pc > 0) {
+      const cum = (pg * pc + qp) / (pc + cr);
+      html += `<p class="big" dir="ltr" style="margin-top:12px">${cum.toFixed(2)}</p><p>${S.cum}</p>`;
+    }
+    out.innerHTML = html;
+  }
+  ['A', 'B+', 'A-', 'B', 'A'].forEach((g, i) => addRow(g, i === 3 ? '4' : '3'));
+  $('gp-add').addEventListener('click', () => { addRow(); run(); });
+  $('gp-reset').addEventListener('click', () => { rows.replaceChildren(); addRow(); $('gp-pg').value = ''; $('gp-pc').value = ''; run(); });
+  document.getElementById('gp')!.addEventListener('input', run);
+  document.getElementById('gp')!.addEventListener('change', run);
+  run();
+</script>

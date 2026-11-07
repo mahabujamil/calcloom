@@ -47,3 +47,12 @@ for (const c of ucats) meta[c.slug] = { cat: 'convert', icon: catIcons[c.id] ?? 
 for (const p of pairs) meta[pairSlug(...p)] = { cat: 'convert', icon: catIcons[p[0]] ?? swap };
 meta['kg-to-liters-converter'] = { cat: 'convert', icon: catIcons.volume };
 meta['fuel-economy-converter'] = { cat: 'convert', icon: '<path d="M4 21V5a2 2 0 012-2h6a2 2 0 012 2v16"/><path d="M3 21h12"/><path d="M14 9h2a2 2 0 012 2v6a1.5 1.5 0 003 0V9l-3-3"/>' };
+
+import { extraTools } from './extra';
+const thermo = '<path d="M14 14.8V5a2 2 0 10-4 0v9.8a4 4 0 104 0z"/>';
+const calClock = '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><circle cx="12" cy="15.5" r="2.5"/>';
+for (const x of extraTools) {
+  if (x.temp) meta[x.slug] = { cat: 'convert', icon: thermo };
+  else if (x.countdown) meta[x.slug] = { cat: 'time', icon: calClock };
+}
+meta['gpa-calculator'] = { cat: 'daily', icon: '<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/>' };

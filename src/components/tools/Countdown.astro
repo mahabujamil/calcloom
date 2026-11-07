@@ -1,0 +1,87 @@
+---
+const { lang, spec, name } = Astro.props;
+const ar = lang === 'ar';
+const S = {
+  spec,
+  loc: ar ? 'ar-u-nu-latn' : 'en-US',
+  days: ar ? 'يوم' : 'days',
+  day1: ar ? 'يوم' : 'day',
+  hours: ar ? 'ساعة' : 'hours',
+  minutes: ar ? 'دقيقة' : 'minutes',
+  seconds: ar ? 'ثانية' : 'seconds',
+  weeks: ar ? '{0} أسبوع و{1} يوم' : '{0} weeks and {1} days',
+  target: ar ? 'الموعد: {0}' : 'Date: {0}',
+  today: ar ? 'اليوم هو الموعد!' : 'It is today!',
+};
+---
+<div id="cd" data-s={JSON.stringify(S)}>
+  <div class="result cd-box" aria-live="off">
+    <p class="big cd-days" id="cd-days" dir="ltr">…</p>
+    <p class="cd-sub" id="cd-sub"></p>
+    <div class="cd-units" dir="ltr">
+      <div><b id="cd-h">–</b><span>{S.hours}</span></div>
+      <div><b id="cd-m">–</b><span>{S.minutes}</span></div>
+      <div><b id="cd-s">–</b><span>{S.seconds}</span></div>
+    </div>
+    <p class="muted" id="cd-date"></p>
+  </div>
+</div>
+<style>
+  .cd-box { text-align: center; }
+  .cd-days { font-size: clamp(2.6rem, 11vw, 4.4rem) !important; margin: 0; }
+  .cd-sub { margin: 2px 0 14px; color: var(--muted); }
+  .cd-units { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+  .cd-units div { min-width: 84px; padding: 10px 12px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; }
+  .cd-units b { display: block; font-size: 1.6rem; font-variant-numeric: tabular-nums; }
+  .cd-units span { font-size: .8rem; color: var(--muted); }
+</style>
+<script>
+  import { $, strings, fill } from '../../lib/util';
+  const S = strings('cd');
+  const spec = S.spec;
+  const nth = (y: number, m: number, wd: number, n: number) => {
+    const first = new Date(y, m - 1, 1).getDay();
+    return new Date(y, m - 1, 1 + ((wd - first + 7) % 7) + (n - 1) * 7);
+  };
+  function dateIn(y: number): Date | null {
+    if (spec.kind === 'fixed') return new Date(y, spec.m - 1, spec.d);
+    if (spec.kind === 'nth') return nth(y, spec.m, spec.wd, spec.n);
+    if (spec.kind === 'black') { const t = nth(y, 11, 4, 4); return new Date(y, 10, t.getDate() + 1); }
+    const hit = (spec.dates as string[]).find((s) => s.startsWith(String(y)));
+    if (!hit) return null;
+    const [yy, mm, dd] = hit.split('-').map(Number);
+    return new Date(yy, mm - 1, dd);
+  }
+  function next(now: Date): Date | null {
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    for (let y = now.getFullYear(); y <= now.getFullYear() + 12; y++) {
+      const d = dateIn(y);
+      if (d && d >= today) return d;
+    }
+    return null;
+  }
+  const pad = (n: number) => String(n).padStart(2, '0');
+  function tick() {
+    const now = new Date();
+    const t = next(now);
+    if (!t) { $('cd-days').textContent = '—'; return; }
+    $('cd-date').textContent = fill(S.target, t.toLocaleDateString(S.loc, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
+    const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const days = Math.round((t.getTime() - todayStart.getTime()) / 86400000);
+    if (days === 0) {
+      $('cd-days').textContent = S.today; $('cd-sub').textContent = '';
+      $('cd-h').textContent = $('cd-m').textContent = $('cd-s').textContent = '0';
+      return;
+    }
+    const ms = t.getTime() - now.getTime();
+    const left = Math.max(ms, 0);
+    const daysFull = Math.floor(left / 86400000);
+    $('cd-days').textContent = `${daysFull} ${daysFull === 1 ? S.day1 : S.days}`;
+    $('cd-sub').textContent = daysFull >= 7 ? fill(S.weeks, Math.floor(daysFull / 7), daysFull % 7) : '';
+    $('cd-h').textContent = String(Math.floor((left % 86400000) / 3600000));
+    $('cd-m').textContent = pad(Math.floor((left % 3600000) / 60000));
+    $('cd-s').textContent = pad(Math.floor((left % 60000) / 1000));
+  }
+  tick();
+  setInterval(tick, 1000);
+</script>

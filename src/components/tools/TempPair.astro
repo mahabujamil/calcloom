@@ -1,0 +1,61 @@
+---
+const { lang, temp } = Astro.props;
+const ar = lang === 'ar';
+const N = {
+  c: { l: ar ? 'مئوي' : 'Celsius', s: '°C' },
+  f: { l: ar ? 'فهرنهايت' : 'Fahrenheit', s: '°F' },
+  k: { l: ar ? 'كلفن' : 'Kelvin', s: 'K' },
+};
+const S = {
+  err: ar ? 'أدخل رقماً.' : 'Enter a number.',
+  low: ar ? 'أقل من الصفر المطلق، أدخل قيمة أعلى.' : 'Below absolute zero, enter a higher value.',
+  swap: ar ? 'تبديل' : 'Swap',
+  copy: ar ? 'نسخ النتيجة' : 'Copy result',
+  from: temp.from,
+  to: temp.to,
+  N,
+};
+---
+<form id="tp" onsubmit="return false" data-s={JSON.stringify(S)}>
+  <div class="cv-grid">
+    <div><label for="tp-v" id="tp-vl"></label><input id="tp-v" type="number" step="any" value="25" inputmode="decimal" /></div>
+    <div><label>{ar ? 'من' : 'From'}</label><output id="tp-a" class="unit-out"></output></div>
+    <button id="tp-sw" type="button" class="swap" aria-label={S.swap} title={S.swap}>⇄</button>
+    <div><label>{ar ? 'إلى' : 'To'}</label><output id="tp-b" class="unit-out"></output></div>
+  </div>
+  <div class="cv-quick">
+    <button type="button" class="copy" id="tp-copy">{S.copy}</button>
+  </div>
+  <div class="result" id="tp-out" aria-live="polite"></div>
+</form>
+
+<script>
+  import { $, strings } from '../../lib/util';
+  const S = strings('tp');
+  let from: 'c' | 'f' | 'k' = S.from, to: 'c' | 'f' | 'k' = S.to;
+  const toC = (u: string, v: number) => (u === 'c' ? v : u === 'f' ? ((v - 32) * 5) / 9 : v - 273.15);
+  const fromC = (u: string, c: number) => (u === 'c' ? c : u === 'f' ? (c * 9) / 5 + 32 : c + 273.15);
+  const r = (n: number) => String(Number(n.toFixed(4)));
+  function labels() {
+    $('tp-a').textContent = `${S.N[from].l} (${S.N[from].s})`;
+    $('tp-b').textContent = `${S.N[to].l} (${S.N[to].s})`;
+    document.getElementById('tp-vl')!.textContent = S.N[from].l;
+  }
+  function run() {
+    const out = $('tp-out');
+    const v = parseFloat($('tp-v').value);
+    if (isNaN(v)) { out.textContent = S.err; return; }
+    const c = toC(from, v);
+    if (c < -273.15 - 1e-9) { out.textContent = S.low; return; }
+    const res = fromC(to, c);
+    out.innerHTML = `<p class="big" dir="ltr">${r(res)} ${S.N[to].s}</p><p dir="ltr">${r(v)} ${S.N[from].s} = ${r(res)} ${S.N[to].s}</p>`;
+  }
+  $('tp-sw').addEventListener('click', () => { [from, to] = [to, from]; labels(); run(); });
+  $('tp-v').addEventListener('input', run);
+  const cp = $('tp-copy'); const label = cp.textContent;
+  cp.addEventListener('click', async () => {
+    const txt = ($('tp-out').querySelector('.big') as HTMLElement | null)?.textContent ?? '';
+    try { await navigator.clipboard.writeText(txt); cp.textContent = '✓'; setTimeout(() => (cp.textContent = label), 1200); } catch {}
+  });
+  labels(); run();
+</script>
