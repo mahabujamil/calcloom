@@ -17,7 +17,7 @@ function pairText(cat: string, fromId: string, toId: string, lang: 'en' | 'ar'):
   if (lang === 'ar') {
     return {
       name: `${a.ar} إلى ${b.ar}`,
-      title: `تحويل ${a.ar} إلى ${b.ar} (${a.sym} إلى ${b.sym}) مع الجدول`,
+      title: (/[/(]/.test(a.ar + b.ar) ? ([] as string[]) : [`${a.ar} كم ${b.ar}؟ تحويل ${a.ar} إلى ${b.ar} (${a.sym} إلى ${b.sym})`, `${a.ar} كم ${b.ar}؟ تحويل ${a.ar} إلى ${b.ar} مع الجدول`]).concat([`تحويل ${a.ar} إلى ${b.ar} (${a.sym} إلى ${b.sym}) مع الجدول`]).find((x) => x.length <= 62) ?? `تحويل ${a.ar} إلى ${b.ar}`,
       description: `محوّل ${a.ar} إلى ${b.ar} مجاني وفوري. حوّل ${a.sym} إلى ${b.sym} بدقة، مع المعادلة (1 ${a.sym} = ${num(r)} ${b.sym}) وجدول تحويل سريع.`,
       h1: `محوّل ${a.ar} إلى ${b.ar}`,
       intro: `حوّل ${a.ar} إلى ${b.ar} فوراً. 1 ${a.sym} = ${num(r)} ${b.sym}.`,

@@ -24,6 +24,7 @@ const href = (l: Lang) => new URL(localePath(l, enPath), Astro.site).href;
 const other: Lang = lang === 'ar' ? 'en' : 'ar';
 const ogImage = new URL(`${BASE}/og.png`, Astro.site).href;
 const footTools = allTools(lang).filter((x) => x.kind !== 'pair');
+const GA_ID = 'G-LVY865ZX9M';
 ---
 <!doctype html>
 <html lang={lang} dir={t.dir}>
@@ -52,6 +53,14 @@ const footTools = allTools(lang).filter((x) => x.kind !== 'pair');
     <meta name="twitter:image" content={ogImage} />
     <script is:inline>document.documentElement.classList.add('js')</script>
     {schema.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+    {/* Google Analytics 4 (property «Calcloom», stream 16312515903) */}
+    <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>
+    <script is:inline define:vars={{ GA_ID }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', GA_ID);
+    </script>
   </head>
   <body>
     <header class="top">
