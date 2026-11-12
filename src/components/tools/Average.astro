@@ -1,0 +1,50 @@
+---
+const { lang } = Astro.props;
+const ar = lang === 'ar';
+const S = {
+  label: ar ? 'أدخل الأرقام (افصل بينها بفاصلة أو مسافة أو سطر جديد)' : 'Enter numbers (separate with commas, spaces or new lines)',
+  none: ar ? 'أدخل رقمين على الأقل.' : 'Enter at least two numbers.',
+  mean: ar ? 'المتوسط الحسابي' : 'Mean (average)',
+  median: ar ? 'الوسيط' : 'Median',
+  mode: ar ? 'المنوال' : 'Mode',
+  sum: ar ? 'المجموع' : 'Sum',
+  count: ar ? 'العدد' : 'Count',
+  min: ar ? 'الأصغر' : 'Smallest',
+  max: ar ? 'الأكبر' : 'Largest',
+  range: ar ? 'المدى' : 'Range',
+  nomode: ar ? 'لا يوجد' : 'None',
+};
+---
+<form id="av" onsubmit="return false" data-s={JSON.stringify(S)}>
+  <label for="av-t">{S.label}</label>
+  <textarea id="av-t" rows="4">12, 7, 9, 15, 7</textarea>
+  <div class="result" id="av-out" aria-live="polite"></div>
+</form>
+<style is:global>
+  #av textarea { width: 100%; font: inherit; padding: 12px; background: var(--card); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; }
+  .av-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 12px; }
+  .av-grid div { background: var(--soft); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; }
+  .av-grid b { display: block; font-size: 1.1rem; }
+  .av-grid span { color: var(--muted); font-size: .85rem; }
+</style>
+<script>
+  import { $, strings } from '../../lib/util';
+  const S = strings('av');
+  const f = (n: number) => Number(n.toFixed(6)).toLocaleString('en-US', { maximumFractionDigits: 6 });
+  function run() {
+    const raw = ($('av-t') as unknown as HTMLTextAreaElement).value.split(/[\s,;،]+/).filter((s) => s !== '' && !isNaN(Number(s))).map(Number);
+    const out = $('av-out');
+    if (raw.length < 2) { out.textContent = S.none; return; }
+    const s = [...raw].sort((a, b) => a - b), n = s.length, sum = s.reduce((a, b) => a + b, 0);
+    const med = n % 2 ? s[(n - 1) / 2] : (s[n / 2 - 1] + s[n / 2]) / 2;
+    const cnt = new Map<number, number>();
+    s.forEach((x) => cnt.set(x, (cnt.get(x) ?? 0) + 1));
+    const top = Math.max(...cnt.values());
+    const modes = top > 1 ? [...cnt].filter(([, c]) => c === top).map(([x]) => f(x)).join(', ') : S.nomode;
+    const cells = [[S.median, f(med)], [S.mode, modes], [S.sum, f(sum)], [S.count, String(n)], [S.min, f(s[0])], [S.max, f(s[n - 1])], [S.range, f(s[n - 1] - s[0])]];
+    out.innerHTML = `<p class="big" dir="ltr">${f(sum / n)}</p><p>${S.mean}</p><div class="av-grid">` +
+      cells.map(([k, x]) => `<div><b dir="ltr">${x}</b><span>${k}</span></div>`).join('') + '</div>';
+  }
+  $('av-t').addEventListener('input', run);
+  run();
+</script>

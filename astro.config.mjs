@@ -6,6 +6,6 @@ export default defineConfig({
   site: 'https://calcloom.com',
   base: '/',
   integrations: [
-    sitemap({ i18n: { defaultLocale: 'en', locales: { en: 'en', ar: 'ar' } } }),
+    sitemap({ filter: (page) => !/\/admin\/$/.test(page), i18n: { defaultLocale: 'en', locales: { en: 'en', ar: 'ar' } } }),
   ],
 });

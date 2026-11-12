@@ -1,0 +1,39 @@
+---
+const { lang } = Astro.props;
+const ar = lang === 'ar';
+const S = {
+  amount: ar ? 'المبلغ' : 'Amount',
+  rate: ar ? 'نسبة الضريبة %' : 'Tax rate %',
+  mode: ar ? 'نوع الحساب' : 'Calculation',
+  add: ar ? 'إضافة الضريبة إلى المبلغ' : 'Add tax to the amount',
+  rem: ar ? 'استخراج الضريبة من مبلغ شامل' : 'Remove tax from a total',
+  net: ar ? 'المبلغ بدون ضريبة' : 'Amount without tax',
+  tax: ar ? 'قيمة الضريبة' : 'Tax amount',
+  gross: ar ? 'المبلغ شامل الضريبة' : 'Amount with tax',
+  err: ar ? 'أدخل المبلغ والنسبة.' : 'Enter the amount and the rate.',
+};
+---
+<form id="vt" onsubmit="return false" data-s={JSON.stringify(S)}>
+  <div class="row">
+    <div><label for="vt-a">{S.amount}</label><input id="vt-a" type="number" step="any" value="100" inputmode="decimal" /></div>
+    <div><label for="vt-r">{S.rate}</label><input id="vt-r" type="number" step="any" value="15" inputmode="decimal" /></div>
+  </div>
+  <label for="vt-m">{S.mode}</label>
+  <select id="vt-m"><option value="add">{S.add}</option><option value="rem">{S.rem}</option></select>
+  <div class="result" id="vt-out" aria-live="polite"></div>
+</form>
+<script>
+  import { $, strings, money } from '../../lib/util';
+  const S = strings('vt');
+  function run() {
+    const a = parseFloat($('vt-a').value), r = parseFloat($('vt-r').value), out = $('vt-out');
+    if (isNaN(a) || isNaN(r) || r < 0) { out.textContent = S.err; return; }
+    const rem = $('vt-m').value === 'rem';
+    const net = rem ? a / (1 + r / 100) : a;
+    const gross = rem ? a : a * (1 + r / 100);
+    out.innerHTML = `<p class="big" dir="ltr">${money(rem ? net : gross)}</p><p>${rem ? S.net : S.gross}</p><p dir="ltr" class="muted">${S.tax}: ${money(gross - net)}</p><p dir="ltr" class="muted">${S.net}: ${money(net)} · ${S.gross}: ${money(gross)}</p>`;
+  }
+  document.getElementById('vt')!.addEventListener('input', run);
+  document.getElementById('vt')!.addEventListener('change', run);
+  run();
+</script>

@@ -1,0 +1,36 @@
+---
+const { lang } = Astro.props;
+const ar = lang === 'ar';
+const S = {
+  start: ar ? 'تاريخ البداية' : 'Start date', n: ar ? 'عدد الأيام' : 'Number of days',
+  op: ar ? 'العملية' : 'Operation', add: ar ? 'إضافة أيام' : 'Add days', sub: ar ? 'طرح أيام' : 'Subtract days',
+  err: ar ? 'اختر تاريخاً وأدخل عدد الأيام.' : 'Pick a date and enter the number of days.',
+  loc: ar ? 'ar-u-nu-latn' : 'en-US',
+  res: ar ? 'التاريخ الناتج' : 'Resulting date',
+};
+---
+<form id="da" onsubmit="return false" data-s={JSON.stringify(S)}>
+  <div class="row">
+    <div><label for="da-s">{S.start}</label><input id="da-s" type="date" /></div>
+    <div><label for="da-n">{S.n}</label><input id="da-n" type="number" step="1" value="30" inputmode="numeric" /></div>
+  </div>
+  <label for="da-o">{S.op}</label>
+  <select id="da-o"><option value="1">{S.add}</option><option value="-1">{S.sub}</option></select>
+  <div class="result" id="da-out" aria-live="polite"></div>
+</form>
+<script>
+  import { $, strings } from '../../lib/util';
+  const S = strings('da');
+  const now = new Date();
+  $('da-s').value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  function run() {
+    const out = $('da-out'), v = $('da-s').value, n = parseInt($('da-n').value, 10);
+    if (!v || isNaN(n)) { out.textContent = S.err; return; }
+    const [y, m, d] = v.split('-').map(Number);
+    const r = new Date(Date.UTC(y, m - 1, d + n * parseInt($('da-o').value, 10)));
+    out.innerHTML = `<p class="big">${r.toLocaleDateString(S.loc, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}</p><p>${S.res}</p>`;
+  }
+  document.getElementById('da')!.addEventListener('input', run);
+  document.getElementById('da')!.addEventListener('change', run);
+  run();
+</script>

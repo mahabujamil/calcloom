@@ -7,6 +7,7 @@ import '@fontsource/cairo/arabic-600.css';
 import '@fontsource/cairo/arabic-800.css';
 import { ui, localePath, BASE, type Lang } from '../i18n';
 import { allTools } from '../data/get';
+import { cats, meta, type Cat } from '../data/meta';
 
 interface Props {
   title: string;
@@ -25,6 +26,36 @@ const other: Lang = lang === 'ar' ? 'en' : 'ar';
 const ogImage = new URL(`${BASE}/og.png`, Astro.site).href;
 const footTools = allTools(lang).filter((x) => x.kind !== 'pair');
 const GA_ID = 'G-LVY865ZX9M';
+const catIcon: Record<string, string> = {
+  convert: '<path d="M3 17L17 3l4 4L7 21z"/><path d="M7 13l2 2M10 10l2 2M13 7l2 2"/>',
+  money: '<path d="M3 10l9-6 9 6"/><path d="M5 10v8M9 10v8M15 10v8M19 10v8"/><path d="M3 20h18"/>',
+  health: '<path d="M3 12h4l2-5 4 10 2-5h6"/>',
+  time: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  daily: '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>',
+  tools: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 118 0v3"/>',
+};
+const ar = lang === 'ar';
+const calcCats = (['money', 'health', 'time', 'daily', 'tools'] as Cat[]).map((c) => ({ id: c, name: ar ? cats[c].ar : cats[c].en, icon: catIcon[c] }));
+const conv = [
+  { slug: 'length-converter', label: ar ? 'تحويل الأطوال' : 'Length converter' },
+  { slug: 'km-to-miles', label: ar ? 'تحويل المسافات (كم ↔ ميل)' : 'Distance (km ↔ miles)' },
+  { slug: 'weight-converter', label: ar ? 'تحويل الوزن' : 'Weight converter' },
+  { slug: 'currency-converter', label: ar ? 'تحويل العملات' : 'Currency converter' },
+  { slug: 'temperature-converter', label: ar ? 'تحويل الحرارة' : 'Temperature converter' },
+  { slug: 'volume-converter', label: ar ? 'تحويل الحجم' : 'Volume converter' },
+  { slug: 'kg-to-liters-converter', label: ar ? 'تحويل الكيلو إلى لتر' : 'Kilograms to litres' },
+  { slug: 'area-converter', label: ar ? 'تحويل المساحات' : 'Area converter' },
+  { slug: 'speed-converter', label: ar ? 'تحويل السرعة' : 'Speed converter' },
+  { slug: 'time-converter', label: ar ? 'تحويل الوقت' : 'Time converter' },
+  { slug: 'fuel-economy-converter', label: ar ? 'تحويل استهلاك الوقود' : 'Fuel economy converter' },
+  { slug: 'data-storage-converter', label: ar ? 'تحويل التخزين الرقمي' : 'Data storage converter' },
+  { slug: 'pressure-converter', label: ar ? 'تحويل الضغط' : 'Pressure converter' },
+  { slug: 'energy-converter', label: ar ? 'تحويل الطاقة' : 'Energy converter' },
+].filter((x) => meta[x.slug]);
+const here = Astro.url.pathname;
+const allLabel = ar ? 'كل الأدوات' : 'All tools';
+const convHead = ar ? 'التحويلات' : 'Converters';
+const calcHead = ar ? 'الحاسبات' : 'Calculators';
 ---
 <!doctype html>
 <html lang={lang} dir={t.dir}>
@@ -39,7 +70,7 @@ const GA_ID = 'G-LVY865ZX9M';
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href={`${BASE}/favicon.svg`} />
-    <meta name="theme-color" content="#2563eb" />
+    <meta name="theme-color" content="#111111" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -63,11 +94,35 @@ const GA_ID = 'G-LVY865ZX9M';
     </script>
   </head>
   <body>
+    <div class="shell">
+    <aside class="side" aria-label="Calcloom">
+      <a class="brand" href={localePath(lang, '/')} aria-label="Calcloom">
+        <svg class="logo" width="30" height="30" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#fbbf24"/><path d="M42 22a14 14 0 100 20" fill="none" stroke="#241800" stroke-width="7" stroke-linecap="round"/></svg>
+        <b class="bn">Calc<span>loom</span></b>
+      </a>
+      <nav class="side-nav" aria-label="Categories">
+        <a class="cat" href={localePath(lang, '/')}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>{allLabel}</a>
+        <p class="side-h">{convHead}</p>
+        {conv.map((c) => (
+          <a class={'cat' + (here === localePath(lang, '/' + c.slug + '/') ? ' on' : '')} href={localePath(lang, '/' + c.slug + '/')}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={meta[c.slug].icon} />{c.label}</a>
+        ))}
+        <p class="side-h">{calcHead}</p>
+        {calcCats.map((c) => (
+          <a class="cat" href={localePath(lang, '/') + '#' + c.id}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={c.icon} />{c.name}</a>
+        ))}
+      </nav>
+      <div class="side-foot">
+        <a href={localePath(lang, '/about/')}>{t.about}</a>
+        <a href={localePath(lang, '/privacy/')}>{t.privacy}</a>
+        <a class="lang" href={localePath(other, enPath)} hreflang={other} lang={other}>{t.switchLabel}</a>
+      </div>
+    </aside>
+    <div class="content">
     <header class="top">
       <div class="top-in">
         <a class="brand" href={localePath(lang, '/')} aria-label="Calcloom">
-          <svg class="logo" width="30" height="30" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#2563eb"/><path d="M42 22a14 14 0 100 20" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"/></svg>
-          Calc<span>loom</span>
+          <svg class="logo" width="30" height="30" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#fbbf24"/><path d="M42 22a14 14 0 100 20" fill="none" stroke="#241800" stroke-width="7" stroke-linecap="round"/></svg>
+          <b class="bn">Calc<span>loom</span></b>
         </a>
         <nav>
           <a href={localePath(lang, '/')}>{t.allTools}</a>
@@ -89,6 +144,8 @@ const GA_ID = 'G-LVY865ZX9M';
         <p><a href={localePath(lang, '/about/')}>{t.about}</a> · <a href={localePath(lang, '/privacy/')}>{t.privacy}</a></p>
       </div>
     </footer>
+    </div>
+    </div>
     <script is:inline>
       (function () {
         var els = document.querySelectorAll('.reveal');
@@ -104,17 +161,10 @@ const GA_ID = 'G-LVY865ZX9M';
 
 <style is:global>
   :root {
-    --bg: #ffffff; --soft: #f8fafc; --card: #ffffff; --ink: #0f172a; --muted: #475569;
-    --line: #e2e8f0; --accent: #2563eb; --accent-d: #1d4ed8; --accent-ink: #fff;
-    --tint: #eff6ff; --shadow: 0 1px 2px rgba(15, 23, 42, .05), 0 8px 24px -12px rgba(15, 23, 42, .12);
-    --shadow-lg: 0 10px 40px -12px rgba(15, 23, 42, .18);
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #0b1220; --soft: #0f1829; --card: #121c31; --ink: #e5eaf5; --muted: #94a3b8;
-      --line: #24324d; --accent: #60a5fa; --accent-d: #93c5fd; --accent-ink: #0b1220; --tint: #15233f;
-      --shadow: 0 1px 2px rgba(0, 0, 0, .4); --shadow-lg: 0 10px 40px -12px rgba(0, 0, 0, .6);
-    }
+    color-scheme: dark;
+    --bg: #111111; --soft: #161616; --card: #1c1c1c; --ink: #f2f2f2; --muted: #b0b0b0;
+    --line: #333333; --accent: #fbbf24; --accent-d: #f59e0b; --accent-ink: #241800;
+    --tint: #2a2108; --shadow: 0 1px 2px rgba(0, 0, 0, .4); --shadow-lg: 0 10px 40px -12px rgba(0, 0, 0, .6);
   }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
@@ -124,11 +174,30 @@ const GA_ID = 'G-LVY865ZX9M';
   ::selection { background: color-mix(in srgb, var(--accent) 25%, transparent); }
   .muted { color: var(--muted); font-size: .9rem; }
 
+  /* shell with sidebar */
+  .shell { display: grid; grid-template-columns: 250px minmax(0, 1fr); min-height: 100vh; }
+  .content { min-width: 0; }
+  .side { position: sticky; top: 0; height: 100vh; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; padding: 22px 14px; background: var(--soft); border-inline-end: 1px solid var(--line); }
+  .side .brand { margin: 0 6px 20px; }
+  .side-nav { display: flex; flex-direction: column; gap: 2px; }
+  .side-nav a.cat { display: flex; align-items: center; gap: 11px; padding: 9px 12px; border-radius: 9px; color: var(--muted); text-decoration: none; font-weight: 500; }
+  .side-nav a.cat:hover, .side-nav a.cat.on { background: var(--card); color: var(--ink); }
+  .side-nav a.cat.on svg, .side-nav a.cat:hover svg { color: var(--accent); }
+  .side-h { margin: 14px 12px 4px; font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); opacity: .7; }
+  html[lang="ar"] .side-h { letter-spacing: 0; font-size: .8rem; }
+  .side-foot { margin-top: auto; display: flex; flex-direction: column; gap: 2px; padding-top: 16px; border-top: 1px solid var(--line); }
+  .side-foot a { color: var(--muted); text-decoration: none; padding: 7px 12px; border-radius: 8px; font-size: .92rem; }
+  .side-foot a:hover { color: var(--ink); background: var(--card); }
+  .side-foot a.lang { color: var(--accent); font-weight: 700; }
+  @media (max-width: 899px) { .shell { display: block; } .side { display: none; } }
+  @media (min-width: 900px) { .top { display: none; } }
+
   /* header */
   .top { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
   .top-in { display: flex; justify-content: space-between; align-items: center; max-width: 1080px; margin: 0 auto; padding: 12px 18px; }
   .brand { display: inline-flex; align-items: center; gap: 9px; font-weight: 800; font-size: 1.3rem; text-decoration: none; color: var(--ink); letter-spacing: -.3px; }
   .brand span { color: var(--accent); }
+  .bn { font-weight: inherit; }
   .top nav { display: flex; align-items: center; gap: 2px; }
   .top nav a { text-decoration: none; color: var(--muted); padding: 7px 13px; border-radius: 8px; font-weight: 500; font-size: .95rem; }
   .top nav a:hover { color: var(--ink); background: var(--soft); }

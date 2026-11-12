@@ -1,0 +1,50 @@
+---
+const { lang } = Astro.props;
+const ar = lang === 'ar';
+const S = {
+  sex: ar ? 'الجنس' : 'Sex', m: ar ? 'ذكر' : 'Male', f: ar ? 'أنثى' : 'Female',
+  age: ar ? 'العمر (سنة)' : 'Age (years)', w: ar ? 'الوزن (كغ)' : 'Weight (kg)', h: ar ? 'الطول (سم)' : 'Height (cm)',
+  act: ar ? 'مستوى النشاط' : 'Activity level',
+  a1: ar ? 'خامل (قليل الحركة)' : 'Sedentary (little exercise)',
+  a2: ar ? 'خفيف (1-3 أيام تمرين)' : 'Light (1-3 days a week)',
+  a3: ar ? 'متوسط (3-5 أيام تمرين)' : 'Moderate (3-5 days a week)',
+  a4: ar ? 'عالٍ (6-7 أيام تمرين)' : 'Active (6-7 days a week)',
+  a5: ar ? 'عالٍ جداً (عمل بدني شاق)' : 'Very active (hard physical work)',
+  err: ar ? 'أدخل العمر والوزن والطول.' : 'Enter age, weight and height.',
+  bmr: ar ? 'معدل الحرق الأساسي (BMR)' : 'Basal metabolic rate (BMR)',
+  tdee: ar ? 'السعرات اللازمة للحفاظ على وزنك' : 'Calories to maintain your weight',
+  lose: ar ? 'لإنقاص الوزن تدريجياً (-500)' : 'To lose weight gradually (-500)',
+  gain: ar ? 'لزيادة الوزن تدريجياً (+500)' : 'To gain weight gradually (+500)',
+  kc: ar ? 'سعرة/يوم' : 'kcal/day',
+};
+---
+<form id="cl" onsubmit="return false" data-s={JSON.stringify(S)}>
+  <div class="row">
+    <div><label for="cl-s">{S.sex}</label><select id="cl-s"><option value="m">{S.m}</option><option value="f">{S.f}</option></select></div>
+    <div><label for="cl-a">{S.age}</label><input id="cl-a" type="number" min="10" max="100" value="30" inputmode="numeric" /></div>
+  </div>
+  <div class="row">
+    <div><label for="cl-w">{S.w}</label><input id="cl-w" type="number" step="any" value="75" inputmode="decimal" /></div>
+    <div><label for="cl-h">{S.h}</label><input id="cl-h" type="number" step="any" value="175" inputmode="decimal" /></div>
+  </div>
+  <label for="cl-x">{S.act}</label>
+  <select id="cl-x">
+    <option value="1.2">{S.a1}</option><option value="1.375">{S.a2}</option><option value="1.55" selected>{S.a3}</option><option value="1.725">{S.a4}</option><option value="1.9">{S.a5}</option>
+  </select>
+  <div class="result" id="cl-out" aria-live="polite"></div>
+</form>
+<script>
+  import { $, strings } from '../../lib/util';
+  const S = strings('cl');
+  const f = (n: number) => Math.round(n).toLocaleString('en-US');
+  function run() {
+    const a = parseFloat($('cl-a').value), w = parseFloat($('cl-w').value), h = parseFloat($('cl-h').value), out = $('cl-out');
+    if (!(a > 0 && w > 0 && h > 0)) { out.textContent = S.err; return; }
+    const bmr = 10 * w + 6.25 * h - 5 * a + ($('cl-s').value === 'm' ? 5 : -161);
+    const t = bmr * parseFloat($('cl-x').value);
+    out.innerHTML = `<p class="big" dir="ltr">${f(t)}</p><p>${S.tdee} (${S.kc})</p><p class="muted" dir="ltr">${S.lose}: ${f(t - 500)} · ${S.gain}: ${f(t + 500)}</p><p class="muted" dir="ltr">${S.bmr}: ${f(bmr)}</p>`;
+  }
+  document.getElementById('cl')!.addEventListener('input', run);
+  document.getElementById('cl')!.addEventListener('change', run);
+  run();
+</script>

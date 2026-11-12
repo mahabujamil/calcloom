@@ -1,0 +1,75 @@
+---
+import { currencies } from '../../data/currencies';
+const { lang, fx } = Astro.props;
+const ar = lang === 'ar';
+const S = {
+  value: ar ? 'المبلغ' : 'Amount',
+  from: ar ? 'من' : 'From',
+  to: ar ? 'إلى' : 'To',
+  swap: ar ? 'تبديل' : 'Swap',
+  copy: ar ? 'نسخ النتيجة' : 'Copy result',
+  loading: ar ? 'جاري تحميل الأسعار الحالية…' : 'Loading current rates…',
+  fail: ar ? 'تعذّر تحميل الأسعار الآن. تحقق من اتصالك وأعد المحاولة.' : 'Could not load the rates right now. Check your connection and try again.',
+  err: ar ? 'أدخل رقماً.' : 'Enter a number.',
+  rate: ar ? 'السعر: 1 {0} = {1} {2}' : 'Rate: 1 {0} = {1} {2}',
+  upd: ar ? 'آخر تحديث للأسعار: {0}' : 'Rates last updated: {0}',
+  loc: ar ? 'ar-u-nu-latn' : 'en-US',
+  pa: fx?.from ?? 'USD',
+  pb: fx?.to ?? null,
+  list: currencies.map(([c, en, a]) => [c, `${c} - ${ar ? a : en}`]),
+};
+---
+<form id="fx" onsubmit="return false" data-s={JSON.stringify(S)}>
+  <div class="cv-grid">
+    <div><label for="fx-v">{S.value}</label><input id="fx-v" type="number" step="any" value="100" inputmode="decimal" /></div>
+    <div><label for="fx-a">{S.from}</label><select id="fx-a"></select></div>
+    <button id="fx-sw" type="button" class="swap" aria-label={S.swap} title={S.swap}>⇄</button>
+    <div><label for="fx-b">{S.to}</label><select id="fx-b"></select></div>
+  </div>
+  <div class="cv-quick">
+    {[1, 10, 100, 1000, 10000].map((n) => <button type="button" data-q={n}>{n.toLocaleString('en-US')}</button>)}
+    <button type="button" class="copy" id="fx-copy">{S.copy}</button>
+  </div>
+  <div class="result" id="fx-out" aria-live="polite">{S.loading}</div>
+</form>
+
+<script>
+  import { $, fill, strings } from '../../lib/util';
+  const S = strings('fx');
+  const a = $('fx-a') as unknown as HTMLSelectElement, b = $('fx-b') as unknown as HTMLSelectElement;
+  for (const el of [a, b]) el.replaceChildren(...(S.list as [string, string][]).map(([c, l]) => new Option(l, c)));
+  a.value = S.pa; b.value = S.pb ?? (document.documentElement.lang === 'ar' ? 'EGP' : 'EUR');
+  let rates: Record<string, number> | null = null;
+  let stamp = '';
+  const fmt = (n: number) => Number(n.toPrecision(8)).toLocaleString('en-US', { maximumFractionDigits: n < 1 ? 8 : 4 });
+  function run() {
+    const out = $('fx-out');
+    if (!rates) return;
+    const v = parseFloat($('fx-v').value);
+    if (isNaN(v)) { out.textContent = S.err; return; }
+    const ra = rates[a.value], rb = rates[b.value];
+    if (!ra || !rb) { out.textContent = S.fail; return; }
+    const r = rb / ra;
+    out.innerHTML = `<p class="big" dir="ltr">${fmt(v * r)} ${b.value}</p><p dir="ltr">${fmt(v)} ${a.value} = ${fmt(v * r)} ${b.value}</p><p dir="ltr" class="muted">${fill(S.rate, a.value, fmt(r), b.value)}</p><p class="muted">${fill(S.upd, stamp)}</p>`;
+  }
+  async function load() {
+    try {
+      const res = await fetch('https://open.er-api.com/v6/latest/USD');
+      const j = await res.json();
+      if (j.result !== 'success') throw new Error('bad');
+      rates = j.rates;
+      stamp = new Date(j.time_last_update_utc).toLocaleDateString(S.loc, { year: 'numeric', month: 'long', day: 'numeric' });
+      run();
+    } catch { $('fx-out').textContent = S.fail; }
+  }
+  $('fx-sw').addEventListener('click', () => { const t = a.value; a.value = b.value; b.value = t; run(); });
+  [a, b].forEach((el) => el.addEventListener('change', run));
+  $('fx-v').addEventListener('input', run);
+  document.querySelectorAll<HTMLButtonElement>('.cv-quick [data-q]').forEach((el) => el.addEventListener('click', () => { $('fx-v').value = el.dataset.q!; run(); }));
+  const cp = $('fx-copy'); const label = cp.textContent;
+  cp.addEventListener('click', async () => {
+    const txt = ($('fx-out').querySelector('.big') as HTMLElement | null)?.textContent ?? '';
+    try { await navigator.clipboard.writeText(txt); cp.textContent = '✓'; setTimeout(() => (cp.textContent = label), 1200); } catch {}
+  });
+  load();
+</script>

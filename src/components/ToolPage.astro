@@ -24,6 +24,11 @@ import Fuel from './tools/Fuel.astro';
 import TempPair from './tools/TempPair.astro';
 import Countdown from './tools/Countdown.astro';
 import Gpa from './tools/Gpa.astro';
+import Currency from './tools/Currency.astro';
+import Vat from './tools/Vat.astro';
+import Average from './tools/Average.astro';
+import Calories from './tools/Calories.astro';
+import DateAdd from './tools/DateAdd.astro';
 
 interface Props { slug: string; lang: Lang }
 const { slug, lang } = Astro.props;
@@ -46,6 +51,11 @@ const components: Record<string, any> = {
   'fuel-economy-converter': FuelEconomy,
   'fuel-cost-calculator': Fuel,
   'gpa-calculator': Gpa,
+  'currency-converter': Currency,
+  'vat-calculator': Vat,
+  'average-calculator': Average,
+  'calorie-calculator': Calories,
+  'date-calculator': DateAdd,
 };
 
 const t = ui[lang];
@@ -96,7 +106,7 @@ const schema = [
   <p class="lead">{tool.intro}</p>
 
   <section class="card" aria-label={tool.name}>
-    {tool.temp ? <TempPair {lang} temp={tool.temp} /> : tool.countdown ? <Countdown {lang} spec={tool.countdown} /> : tool.conv ? <Convert {lang} conv={tool.conv} /> : <Tool {lang} />}
+    {tool.fx ? <Currency {lang} fx={tool.fx} /> : tool.temp ? <TempPair {lang} temp={tool.temp} /> : tool.countdown ? <Countdown {lang} spec={tool.countdown} /> : tool.conv ? <Convert {lang} conv={tool.conv} /> : <Tool {lang} />}
   </section>
 
   {tool.about && (

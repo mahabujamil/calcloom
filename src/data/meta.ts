@@ -56,3 +56,13 @@ for (const x of extraTools) {
   else if (x.countdown) meta[x.slug] = { cat: 'time', icon: calClock };
 }
 meta['gpa-calculator'] = { cat: 'daily', icon: '<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/>' };
+
+meta['currency-converter'] = { cat: 'convert', icon: '<circle cx="12" cy="12" r="9"/><path d="M14.5 9.2c-.5-.8-1.4-1.2-2.5-1.2-1.4 0-2.5.7-2.5 1.8 0 2.6 5 1.2 5 3.8 0 1.1-1.1 1.9-2.5 1.9-1.1 0-2.1-.5-2.6-1.3M12 6.5V8m0 8v1.5"/>' };
+
+import { fxPairs, fxSlug } from './extra2';
+const coin = meta['currency-converter'].icon;
+for (const [a, b] of fxPairs) meta[fxSlug(a, b)] = { cat: 'convert', icon: coin };
+meta['vat-calculator'] = { cat: 'money', icon: '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8l6 6M9.5 13.5h.01M14.5 8.5h.01"/>' };
+meta['average-calculator'] = { cat: 'tools', icon: '<path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/>' };
+meta['calorie-calculator'] = { cat: 'health', icon: '<path d="M12 3c1 3 5 5 5 10a5 5 0 01-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-9z"/>' };
+meta['date-calculator'] = { cat: 'time', icon: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M12 13v5M9.5 15.5h5"/>' };

@@ -11,18 +11,20 @@ const { lang } = Astro.props;
 const t = ui[lang];
 const ar = lang === 'ar';
 const list = allTools(lang).filter((x) => x.kind !== 'pair');
-const featured = ['celsius-to-fahrenheit', 'fahrenheit-to-celsius', 'days-until-christmas', 'days-until-ramadan', 'days-until-new-year', 'days-until-black-friday'];
-const popular = [...tools.filter((x) => x.kind === 'pair' && !featured.includes(x.slug)).slice(0, 12).map((x) => x.slug), ...featured].map((s) => getTool(s, lang));
+const topSlugs = ['currency-converter', 'percentage-calculator', 'age-calculator', 'bmi-calculator', 'gpa-calculator', 'loan-calculator', 'date-calculator', 'vat-calculator', 'calorie-calculator', 'length-converter', 'weight-converter', 'days-between-dates-calculator'];
+const top = topSlugs.map((x) => getTool(x, lang));
+const featured = ['usd-to-egp', 'usd-to-sar', 'eur-to-usd', 'celsius-to-fahrenheit', 'fahrenheit-to-celsius', 'days-until-christmas', 'days-until-ramadan', 'days-until-new-year', 'days-until-black-friday'];
+const popular = [...featured, ...tools.filter((x) => x.kind === 'pair' && !featured.includes(x.slug)).slice(0, 12).map((x) => x.slug)].map((s) => getTool(s, lang));
 const schema = [
   { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Calcloom', url: Astro.site?.href, inLanguage: lang },
 ];
 const L = ar
   ? { badge: 'مجاني 100% · بدون تسجيل', h1a: 'كل حاسبة ومحوّل تحتاجه،', h1b: 'بسرعة ودقة.', search: 'ابحث عن حاسبة أو محوّل...', all: 'الكل',
       none: 'ما لقينا أداة بهذا الاسم.', t1: 'مجاني دائماً', t2: 'بدون تسجيل', t3: 'بياناتك لا تُخزَّن', t4: 'عربي وإنجليزي',
-      wTitle: 'كيلومتر إلى ميل', wFrom: 'كيلومتر', wTo: 'ميل', wMore: 'كل محوّلات الطول ←', pop: 'تحويلات شائعة' }
+      wTitle: 'كيلومتر إلى ميل', wFrom: 'كيلومتر', wTo: 'ميل', wMore: 'كل محوّلات الطول ←', pop: 'تحويلات شائعة', top: 'الأكثر طلباً' }
   : { badge: '100% free · No sign-up', h1a: 'Every calculator and converter you need.', h1b: 'Fast.', search: 'Search calculators and converters...', all: 'All',
       none: 'No tool matches that search.', t1: 'Free forever', t2: 'No sign-up', t3: 'Your data is never stored', t4: 'English and Arabic',
-      wTitle: 'Kilometres to Miles', wFrom: 'Kilometres', wTo: 'Miles', wMore: 'All length converters →', pop: 'Popular conversions' };
+      wTitle: 'Kilometres to Miles', wFrom: 'Kilometres', wTo: 'Miles', wMore: 'All length converters →', pop: 'Popular conversions', top: 'Most requested' };
 const lenSlug = localePath(lang, '/length-converter/');
 ---
 <Base title={t.homeTitle} description={t.homeDesc} {lang} {schema}>
@@ -52,6 +54,19 @@ const lenSlug = localePath(lang, '/length-converter/');
       </div>
     </div>
   </section>
+
+  <h2 class="reveal">{L.top}</h2>
+  <div class="grid top">
+    {top.map((tool) => (
+      <a class="tile in" href={localePath(lang, `/${tool.slug}/`)}>
+        <Icon slug={tool.slug} />
+        <div class="tx">
+          <strong>{tool.name}</strong>
+          <span class="d">{tool.intro}</span>
+        </div>
+      </a>
+    ))}
+  </div>
 
   <h2 class="reveal">{t.allCalcs}</h2>
   <div class="chips reveal" role="group" aria-label={t.allCalcs}>
@@ -101,6 +116,20 @@ const lenSlug = localePath(lang, '/length-converter/');
     apply();
   }));
   q.addEventListener('input', apply);
+
+  // category from the sidebar link (/#money)
+  const sideLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('.side-nav a.cat'));
+  function fromHash() {
+    const id = location.hash.slice(1);
+    const valid = chips.some((c) => c.dataset.cat === id);
+    cat = valid ? id : 'all';
+    chips.forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.cat === cat)));
+    sideLinks.forEach((a, i) => a.classList.toggle('on', cat === 'all' ? i === 0 : a.getAttribute('href')!.endsWith('#' + cat)));
+    apply();
+    if (valid) document.getElementById('grid')?.scrollIntoView();
+  }
+  window.addEventListener('hashchange', fromHash);
+  fromHash();
 
   const wa = document.getElementById('w-a') as HTMLInputElement;
   const wb = document.getElementById('w-b')!;

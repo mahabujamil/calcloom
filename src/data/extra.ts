@@ -250,6 +250,51 @@ const gpaAr: Text = {
   table: { head: ['التقدير', 'النقاط'], rows: GRADES.map(([g, p]) => [g, p.toFixed(1)]) },
 };
 
+
+/* ---------- Currency converter ---------- */
+const fxEn: Text = {
+  name: 'Currency Converter',
+  title: 'Currency Converter: Live Exchange Rates for 37 Currencies',
+  description: 'Free currency converter with current exchange rates. Convert US dollars, euros, pounds, Egyptian pounds, Saudi riyals, Jordanian dinars and 30 more currencies.',
+  h1: 'Currency Converter',
+  intro: 'Convert between 37 world currencies using current exchange rates. Rates load fresh each time you open the page.',
+  steps: ['Enter the amount.', 'Pick the currency you convert from and the one you convert to.', 'Read the result and the exchange rate used. Use the swap button to reverse.'],
+  faq: [
+    { q: 'Where do the exchange rates come from?', a: 'The rates come from a public exchange-rate data service that updates once a day. The date of the last update is shown under every result.' },
+    { q: 'Are these the rates my bank or exchange office will give me?', a: 'No. These are mid-market reference rates. Banks, cards and exchange offices add a margin or a fee, so the amount you actually get is usually a little lower.' },
+    { q: 'How do I convert US dollars to another currency?', a: 'Enter the amount in US dollars, pick USD as the From currency and the target currency as To. The converter multiplies the amount by the current rate.' },
+    { q: 'Why does the result change over time?', a: 'Exchange rates move with the market. Open the page again later to see the latest rate.' },
+  ],
+  about: {
+    title: 'How currency conversion works',
+    paras: [
+      'To convert between two currencies, multiply the amount by the exchange rate: amount in the target currency = amount × rate. The rate tells you how many units of the target currency one unit of the source currency buys.',
+      'This converter uses US dollars as a common base. It divides the target currency rate by the source currency rate, so it works between any two of the 37 supported currencies.',
+    ],
+  },
+};
+const fxAr: Text = {
+  name: 'محوّل العملات',
+  title: 'محوّل العملات: أسعار صرف حالية لـ37 عملة',
+  description: 'محوّل عملات مجاني بأسعار صرف حالية. حوّل الدولار واليورو والجنيه الإسترليني والجنيه المصري والريال السعودي والدينار الأردني و30 عملة أخرى.',
+  h1: 'محوّل العملات',
+  intro: 'حوّل بين 37 عملة عالمية بأسعار الصرف الحالية. تُحمَّل الأسعار من جديد كلما فتحت الصفحة.',
+  steps: ['أدخل المبلغ.', 'اختر العملة التي تحوّل منها والعملة التي تحوّل إليها.', 'اقرأ النتيجة وسعر الصرف المستخدم، واستخدم زر التبديل للعكس.'],
+  faq: [
+    { q: 'من أين تأتي أسعار الصرف؟', a: 'تأتي الأسعار من خدمة بيانات عامة لأسعار الصرف تُحدَّث مرة كل يوم. يظهر تاريخ آخر تحديث تحت كل نتيجة.' },
+    { q: 'هل هذه الأسعار هي ما سيعطيني إياه البنك أو الصرّاف؟', a: 'لا. هذه أسعار مرجعية متوسطة للسوق. البنوك والبطاقات ومكاتب الصرافة تضيف هامشاً أو رسوماً، فالمبلغ الذي تحصل عليه فعلاً يكون أقل قليلاً عادة.' },
+    { q: 'كيف أحوّل الدولار إلى عملة أخرى؟', a: 'أدخل المبلغ بالدولار، واختر USD في خانة «من» والعملة المطلوبة في خانة «إلى». يضرب المحوّل المبلغ في سعر الصرف الحالي.' },
+    { q: 'لماذا تتغير النتيجة مع الوقت؟', a: 'أسعار الصرف تتحرك مع السوق. افتح الصفحة لاحقاً لترى أحدث سعر.' },
+  ],
+  about: {
+    title: 'كيف يعمل تحويل العملات',
+    paras: [
+      'لتحويل مبلغ بين عملتين اضرب المبلغ في سعر الصرف: المبلغ بالعملة المطلوبة = المبلغ × السعر. السعر يخبرك كم وحدة من العملة المطلوبة تشتريها وحدة واحدة من العملة الأصلية.',
+      'يستخدم المحوّل الدولار الأمريكي أساساً مشتركاً، فيقسم سعر العملة المطلوبة على سعر العملة الأصلية، ولذلك يعمل بين أي عملتين من العملات الـ37.',
+    ],
+  },
+};
+
 /* ---------- exports ---------- */
 const tempSlugs = tempPairs.map(([a, b]) => tempSlug(a, b));
 const evSlugs = EVENTS.map((e) => countdownSlug(e.id));
@@ -275,6 +320,13 @@ const cdTools: Tool[] = EVENTS.map((e) => {
   } as Tool;
 });
 
+const fxTool: Tool = {
+  slug: 'currency-converter',
+  kind: 'tool',
+  ...fxEn,
+  related: ['percentage-calculator', 'length-converter', 'weight-converter'],
+};
+
 const gpaTool: Tool = {
   slug: 'gpa-calculator',
   kind: 'tool',
@@ -282,9 +334,10 @@ const gpaTool: Tool = {
   related: ['percentage-calculator', 'age-calculator', 'discount-calculator'],
 };
 
-export const extraTools: Tool[] = [gpaTool, ...tempTools, ...cdTools];
+export const extraTools: Tool[] = [fxTool, gpaTool, ...tempTools, ...cdTools];
 export const extraAr: Record<string, Text> = {
   'gpa-calculator': gpaAr,
+  'currency-converter': fxAr,
   ...Object.fromEntries(tempPairs.map(([a, b]) => [tempSlug(a, b), tempText(a, b, 'ar')])),
   ...Object.fromEntries(EVENTS.map((e) => [countdownSlug(e.id), countdownText(e, 'ar')])),
 };
