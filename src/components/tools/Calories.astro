@@ -34,9 +34,9 @@ const S = {
   <div class="result" id="cl-out" aria-live="polite"></div>
 </form>
 <script>
-  import { $, strings } from '../../lib/util';
+  import { $, strings, LOC, dec } from '../../lib/util';
   const S = strings('cl');
-  const f = (n: number) => Math.round(n).toLocaleString('en-US');
+  const f = (n: number) => Math.round(n).toLocaleString(LOC());
   function run() {
     const a = parseFloat($('cl-a').value), w = parseFloat($('cl-w').value), h = parseFloat($('cl-h').value), out = $('cl-out');
     if (!(a > 0 && w > 0 && h > 0)) { out.textContent = S.err; return; }

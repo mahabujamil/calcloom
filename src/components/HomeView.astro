@@ -143,7 +143,7 @@ const lenSlug = localePath(lang, '/length-converter/');
   const wb = document.getElementById('w-b')!;
   function conv() {
     const v = parseFloat(wa.value);
-    wb.textContent = isNaN(v) ? '—' : Number((v * 0.621371).toPrecision(8)).toLocaleString('en-US', { maximumFractionDigits: 8 });
+    wb.textContent = isNaN(v) ? '—' : Number((v * 0.621371).toPrecision(8)).toLocaleString(({ fr: 'fr-FR', es: 'es-ES' } as Record<string, string>)[document.documentElement.lang] ?? 'en-US', { maximumFractionDigits: 8 });
   }
   wa.addEventListener('input', conv);
   conv();

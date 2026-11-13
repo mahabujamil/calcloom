@@ -1,21 +1,33 @@
 ---
 import Base from '../layouts/Base.astro';
 import { localePath } from '../i18n';
-const links: [string, string, string][] = [
-  ['km-to-miles', 'Kilometres to Miles', 'كيلومتر إلى ميل'],
-  ['kg-to-pounds', 'Kilograms to Pounds', 'كيلوغرام إلى رطل'],
-  ['loan-calculator', 'Loan Calculator', 'حاسبة القروض'],
-  ['bmi-calculator', 'BMI Calculator', 'حاسبة BMI'],
+const links: [string, string, string, string, string][] = [
+  ['km-to-miles', 'Kilometres to Miles', 'كيلومتر إلى ميل', 'Kilomètres en miles', 'Kilómetros a millas'],
+  ['kg-to-pounds', 'Kilograms to Pounds', 'كيلوغرام إلى رطل', 'Kilogrammes en livres', 'Kilogramos a libras'],
+  ['loan-calculator', 'Loan Calculator', 'حاسبة القروض', 'Calculateur de prêt', 'Calculadora de préstamos'],
+  ['bmi-calculator', 'BMI Calculator', 'حاسبة BMI', 'Calculateur d’IMC', 'Calculadora de IMC'],
 ];
+const T = {
+  ar: { dir: 'rtl', h: 'الصفحة غير موجودة', back: '← العودة إلى كل الحاسبات', i: 2 },
+  fr: { dir: 'ltr', h: 'Page introuvable', p: 'La page que vous cherchez n’existe pas ou a été déplacée.', back: '← Retour à tous les calculateurs', i: 3 },
+  es: { dir: 'ltr', h: 'Página no encontrada', p: 'La página que buscas no existe o se ha movido.', back: '← Volver a todas las calculadoras', i: 4 },
+} as const;
 ---
 <Base title="Page not found | Calcloom" description="This page does not exist. Browse our free calculators and unit converters." noindex>
   <h1>Page not found</h1>
   <p class="lead">The page you are looking for does not exist or has moved.</p>
   <p><a href={localePath('en', '/')}>← Back to all calculators</a></p>
-  <h2 dir="rtl" lang="ar">الصفحة غير موجودة</h2>
-  <p dir="rtl" lang="ar"><a href={localePath('ar', '/')}>← العودة إلى كل الحاسبات</a></p>
+  {(['ar', 'fr', 'es'] as const).map((l) => (
+    <>
+      <h2 dir={T[l].dir} lang={l}>{T[l].h}</h2>
+      {'p' in T[l] && <p dir={T[l].dir} lang={l}>{(T[l] as { p: string }).p}</p>}
+      <p dir={T[l].dir} lang={l}><a href={localePath(l, '/')}>{T[l].back}</a></p>
+    </>
+  ))}
   <div class="pills" style="margin-top:20px">
     {links.map((l) => <a href={localePath('en', `/${l[0]}/`)}>{l[1]}</a>)}
     {links.map((l) => <a lang="ar" dir="rtl" href={localePath('ar', `/${l[0]}/`)}>{l[2]}</a>)}
+    {links.map((l) => <a lang="fr" href={localePath('fr', `/${l[0]}/`)}>{l[3]}</a>)}
+    {links.map((l) => <a lang="es" href={localePath('es', `/${l[0]}/`)}>{l[4]}</a>)}
   </div>
 </Base>

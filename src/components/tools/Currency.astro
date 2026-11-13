@@ -36,14 +36,14 @@ const S = {
 </form>
 
 <script>
-  import { $, fill, strings } from '../../lib/util';
+  import { $, fill, strings , LOC, dec } from '../../lib/util';
   const S = strings('fx');
   const a = $('fx-a') as unknown as HTMLSelectElement, b = $('fx-b') as unknown as HTMLSelectElement;
   for (const el of [a, b]) el.replaceChildren(...(S.list as [string, string][]).map(([c, l]) => new Option(l, c)));
   a.value = S.pa; b.value = S.pb ?? S.def;
   let rates: Record<string, number> | null = null;
   let stamp = '';
-  const fmt = (n: number) => Number(n.toPrecision(8)).toLocaleString('en-US', { maximumFractionDigits: n < 1 ? 8 : 4 });
+  const fmt = (n: number) => Number(n.toPrecision(8)).toLocaleString(LOC(), { maximumFractionDigits: n < 1 ? 8 : 4 });
   function run() {
     const out = $('fx-out');
     if (!rates) return;

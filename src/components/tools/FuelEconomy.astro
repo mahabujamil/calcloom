@@ -22,9 +22,9 @@ const S = {
 </form>
 
 <script>
-  import { $, strings } from '../../lib/util';
+  import { $, strings, LOC, dec } from '../../lib/util';
   const S = strings('fe');
-  const fmt = (n: number) => Number(n.toFixed(2)).toLocaleString('en-US');
+  const fmt = (n: number) => Number(n.toFixed(2)).toLocaleString(LOC());
   const KM_PER_MILE = 1.609344, L_US = 3.785411784, L_UK = 4.54609;
   function run() {
     const out = $('fe-out');

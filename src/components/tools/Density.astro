@@ -39,10 +39,10 @@ const S = {
 </form>
 
 <script>
-  import { $, fill, strings } from '../../lib/util';
+  import { $, fill, strings , LOC, dec } from '../../lib/util';
   const S = strings('dn');
   const subs = S.subs as [string, string, number][];
-  const fmt = (n: number) => Number(n.toPrecision(6)).toLocaleString('en-US', { maximumFractionDigits: 8 });
+  const fmt = (n: number) => Number(n.toPrecision(6)).toLocaleString(LOC(), { maximumFractionDigits: 8 });
   function run() {
     const out = $('dn-out');
     const v = parseFloat($('dn-v').value);

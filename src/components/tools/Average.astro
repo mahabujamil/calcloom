@@ -28,9 +28,9 @@ const S = {
   .av-grid span { color: var(--muted); font-size: .85rem; }
 </style>
 <script>
-  import { $, strings } from '../../lib/util';
+  import { $, strings, LOC, dec } from '../../lib/util';
   const S = strings('av');
-  const f = (n: number) => Number(n.toFixed(6)).toLocaleString('en-US', { maximumFractionDigits: 6 });
+  const f = (n: number) => Number(n.toFixed(6)).toLocaleString(LOC(), { maximumFractionDigits: 6 });
   function run() {
     const raw = ($('av-t') as unknown as HTMLTextAreaElement).value.split(/[\s,;،]+/).filter((s) => s !== '' && !isNaN(Number(s))).map(Number);
     const out = $('av-out');

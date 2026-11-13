@@ -36,9 +36,9 @@ const S = lang === 'fr'
 </form>
 
 <script>
-  import { $, fill, strings } from '../../lib/util';
+  import { $, fill, strings , LOC, dec } from '../../lib/util';
   const S = strings('pc');
-  const fmt = (n: number) => Number(n.toFixed(6)).toLocaleString('en-US', { maximumFractionDigits: 6 });
+  const fmt = (n: number) => Number(n.toFixed(6)).toLocaleString(LOC(), { maximumFractionDigits: 6 });
   const labels: Record<string, [string, string]> = {
     of: [S.xp, S.yn],
     is: [S.xn, S.yn],

@@ -23,14 +23,14 @@ const S = lang === 'fr'
 </form>
 
 <script>
-  import { $, money, fill, strings } from '../../lib/util';
+  import { $, money, fill, strings , LOC, dec } from '../../lib/util';
   const S = strings('dc');
   function run() {
     const p = parseFloat($('dc-p').value), d = parseFloat($('dc-d').value), e = parseFloat($('dc-e').value || '0');
     const out = $('dc-out');
     if ([p, d, e].some(isNaN) || p < 0 || d < 0 || d > 100 || e < 0 || e > 100) { out.textContent = S.err; return; }
     const final = p * (1 - d / 100) * (1 - e / 100);
-    out.innerHTML = `<p class="big">${money(final)}</p><p>${fill(S.save, money(p - final))}</p><p>${fill(S.totald, ((1 - final / p) * 100 || 0).toFixed(2))}</p>`;
+    out.innerHTML = `<p class="big">${money(final)}</p><p>${fill(S.save, money(p - final))}</p><p>${fill(S.totald, dec(((1 - final / p) * 100 || 0).toFixed(2)))}</p>`;
   }
   $('dc-go').addEventListener('click', run);
   ['dc-p', 'dc-d', 'dc-e'].forEach((id) => $(id).addEventListener('input', run));

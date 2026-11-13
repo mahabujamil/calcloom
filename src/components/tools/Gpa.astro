@@ -37,7 +37,7 @@ const S = {
   @media (max-width: 520px) { .gp-row { grid-template-columns: 1fr 1fr; } .gp-row input[type=text] { grid-column: 1 / -1; } }
 </style>
 <script>
-  import { $, strings, fill } from '../../lib/util';
+  import { $, strings, fill , LOC, dec } from '../../lib/util';
   const S = strings('gp');
   const scale = S.scale as [string, number][];
   const pts = new Map(scale);
@@ -69,11 +69,11 @@ const S = {
     const out = $('gp-out');
     if (!cr) { out.textContent = S.none; return; }
     const sem = qp / cr;
-    let html = `<p class="big" dir="ltr">${sem.toFixed(2)}</p><p>${S.sem}</p><p class="muted">${fill(S.tot, String(Number(cr.toFixed(2))))}</p>`;
+    let html = `<p class="big" dir="ltr">${dec(sem.toFixed(2))}</p><p>${S.sem}</p><p class="muted">${fill(S.tot, String(Number(cr.toFixed(2))))}</p>`;
     const pg = parseFloat($('gp-pg').value), pc = parseFloat($('gp-pc').value);
     if (pg >= 0 && pc > 0) {
       const cum = (pg * pc + qp) / (pc + cr);
-      html += `<p class="big" dir="ltr" style="margin-top:12px">${cum.toFixed(2)}</p><p>${S.cum}</p>`;
+      html += `<p class="big" dir="ltr" style="margin-top:12px">${dec(cum.toFixed(2))}</p><p>${S.cum}</p>`;
     }
     out.innerHTML = html;
   }

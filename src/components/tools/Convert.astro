@@ -32,14 +32,14 @@ const S = {
 </form>
 
 <script>
-  import { $, fill, strings } from '../../lib/util';
+  import { $, fill, strings , LOC, dec } from '../../lib/util';
   const S = strings('cv');
   const units = S.units as [string, string, number, string][];
   const a = $('cv-a') as unknown as HTMLSelectElement, b = $('cv-b') as unknown as HTMLSelectElement;
   for (const el of [a, b]) el.replaceChildren(...units.map(([id, label]) => new Option(label, id)));
   a.value = S.from0; b.value = S.to0;
   const f = (id: string) => units.find((u) => u[0] === id)!;
-  const fmt = (n: number) => Number(n.toPrecision(8)).toLocaleString('en-US', { maximumFractionDigits: 12 });
+  const fmt = (n: number) => Number(n.toPrecision(8)).toLocaleString(LOC(), { maximumFractionDigits: 12 });
   function run() {
     const out = $('cv-out');
     const v = parseFloat($('cv-v').value);

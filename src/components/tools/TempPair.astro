@@ -32,12 +32,12 @@ const S = {
 </form>
 
 <script>
-  import { $, strings } from '../../lib/util';
+  import { $, strings, LOC, dec } from '../../lib/util';
   const S = strings('tp');
   let from: 'c' | 'f' | 'k' = S.from, to: 'c' | 'f' | 'k' = S.to;
   const toC = (u: string, v: number) => (u === 'c' ? v : u === 'f' ? ((v - 32) * 5) / 9 : v - 273.15);
   const fromC = (u: string, c: number) => (u === 'c' ? c : u === 'f' ? (c * 9) / 5 + 32 : c + 273.15);
-  const r = (n: number) => String(Number(n.toFixed(4)));
+  const r = (n: number) => dec(String(Number(n.toFixed(4))));
   function labels() {
     $('tp-a').textContent = `${S.N[from].l} (${S.N[from].s})`;
     $('tp-b').textContent = `${S.N[to].l} (${S.N[to].s})`;

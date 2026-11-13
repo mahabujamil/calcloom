@@ -35,7 +35,7 @@ const S = lang === 'fr'
 </form>
 
 <script>
-  import { $, fill, strings } from '../../lib/util';
+  import { $, fill, strings , LOC, dec } from '../../lib/util';
   const S = strings('bm');
   function run() {
     const imp = $('bm-u').value === 'i';
@@ -44,7 +44,7 @@ const S = lang === 'fr'
     if (isNaN(h) || isNaN(w) || h <= 0 || w <= 0) { out.textContent = S.err; return; }
     const bmi = imp ? (703 * w) / (h * h) : w / Math.pow(h / 100, 2);
     const cat = bmi < 18.5 ? S.under : bmi < 25 ? S.normal : bmi < 30 ? S.over : S.obese;
-    out.innerHTML = `<p class="big">${bmi.toFixed(1)}</p><p>${fill(S.cat, cat)}</p><p>${S.note}</p>`;
+    out.innerHTML = `<p class="big">${dec(bmi.toFixed(1))}</p><p>${fill(S.cat, cat)}</p><p>${S.note}</p>`;
   }
   $('bm-u').addEventListener('change', () => {
     const imp = $('bm-u').value === 'i';

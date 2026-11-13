@@ -29,9 +29,9 @@ const S = lang === 'fr'
 </form>
 
 <script>
-  import { $, strings } from '../../lib/util';
+  import { $, strings, LOC, dec } from '../../lib/util';
   const S = strings('tc');
-  const r = (n: number) => String(Number(n.toFixed(2)));
+  const r = (n: number) => dec(String(Number(n.toFixed(2))));
   function run() {
     const v = parseFloat($('tc-v').value), u = $('tc-u').value;
     const out = $('tc-out');
