@@ -1,12 +1,12 @@
 ---
+import { tr, locale } from '../../lib/t';
 const { lang } = Astro.props;
-const ar = lang === 'ar';
 const S = {
-  start: ar ? 'تاريخ البداية' : 'Start date', n: ar ? 'عدد الأيام' : 'Number of days',
-  op: ar ? 'العملية' : 'Operation', add: ar ? 'إضافة أيام' : 'Add days', sub: ar ? 'طرح أيام' : 'Subtract days',
-  err: ar ? 'اختر تاريخاً وأدخل عدد الأيام.' : 'Pick a date and enter the number of days.',
-  loc: ar ? 'ar-u-nu-latn' : 'en-US',
-  res: ar ? 'التاريخ الناتج' : 'Resulting date',
+  start: tr(lang, 'Start date', 'تاريخ البداية', 'Date de départ', 'Fecha de inicio'), n: tr(lang, 'Number of days', 'عدد الأيام', 'Nombre de jours', 'Número de días'),
+  op: tr(lang, 'Operation', 'العملية', 'Opération', 'Operación'), add: tr(lang, 'Add days', 'إضافة أيام', 'Ajouter des jours', 'Sumar días'), sub: tr(lang, 'Subtract days', 'طرح أيام', 'Retrancher des jours', 'Restar días'),
+  err: tr(lang, 'Pick a date and enter the number of days.', 'اختر تاريخاً وأدخل عدد الأيام.', 'Choisissez une date et saisissez le nombre de jours.', 'Elige una fecha e introduce el número de días.'),
+  loc: locale(lang),
+  res: tr(lang, 'Resulting date', 'التاريخ الناتج', 'Date obtenue', 'Fecha resultante'),
 };
 ---
 <form id="da" onsubmit="return false" data-s={JSON.stringify(S)}>

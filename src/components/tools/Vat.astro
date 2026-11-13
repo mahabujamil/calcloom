@@ -1,16 +1,16 @@
 ---
+import { tr, locale } from '../../lib/t';
 const { lang } = Astro.props;
-const ar = lang === 'ar';
 const S = {
-  amount: ar ? 'المبلغ' : 'Amount',
-  rate: ar ? 'نسبة الضريبة %' : 'Tax rate %',
-  mode: ar ? 'نوع الحساب' : 'Calculation',
-  add: ar ? 'إضافة الضريبة إلى المبلغ' : 'Add tax to the amount',
-  rem: ar ? 'استخراج الضريبة من مبلغ شامل' : 'Remove tax from a total',
-  net: ar ? 'المبلغ بدون ضريبة' : 'Amount without tax',
-  tax: ar ? 'قيمة الضريبة' : 'Tax amount',
-  gross: ar ? 'المبلغ شامل الضريبة' : 'Amount with tax',
-  err: ar ? 'أدخل المبلغ والنسبة.' : 'Enter the amount and the rate.',
+  amount: tr(lang, 'Amount', 'المبلغ', 'Montant', 'Importe'),
+  rate: tr(lang, 'Tax rate %', 'نسبة الضريبة %', 'Taux de TVA %', 'Tipo de IVA %'),
+  mode: tr(lang, 'Calculation', 'نوع الحساب', 'Type de calcul', 'Tipo de cálculo'),
+  add: tr(lang, 'Add tax to the amount', 'إضافة الضريبة إلى المبلغ', 'Ajouter la TVA au montant', 'Añadir el IVA al importe'),
+  rem: tr(lang, 'Remove tax from a total', 'استخراج الضريبة من مبلغ شامل', "Retirer la TVA d'un total TTC", 'Quitar el IVA de un total con IVA'),
+  net: tr(lang, 'Amount without tax', 'المبلغ بدون ضريبة', 'Montant HT', 'Importe sin IVA'),
+  tax: tr(lang, 'Tax amount', 'قيمة الضريبة', 'Montant de la TVA', 'Importe del IVA'),
+  gross: tr(lang, 'Amount with tax', 'المبلغ شامل الضريبة', 'Montant TTC', 'Importe con IVA'),
+  err: tr(lang, 'Enter the amount and the rate.', 'أدخل المبلغ والنسبة.', 'Saisissez le montant et le taux.', 'Introduce el importe y el tipo.'),
 };
 ---
 <form id="vt" onsubmit="return false" data-s={JSON.stringify(S)}>

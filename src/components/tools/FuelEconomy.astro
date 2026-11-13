@@ -1,11 +1,11 @@
 ---
+import { tr, locale } from '../../lib/t';
 const { lang } = Astro.props;
-const ar = lang === 'ar';
 const S = {
-  val: ar ? 'القيمة' : 'Value',
-  unit: ar ? 'الوحدة التي لديك' : 'Unit you have',
-  mpgus: 'MPG (US)', mpguk: 'MPG (UK)', l100: ar ? 'لتر / 100 كم' : 'L / 100 km', kml: ar ? 'كم / لتر' : 'km / L',
-  err: ar ? 'أدخل رقماً موجباً.' : 'Enter a positive number.',
+  val: tr(lang, 'Value', 'القيمة', 'Valeur', 'Valor'),
+  unit: tr(lang, 'Unit you have', 'الوحدة التي لديك', 'Unité de départ', 'Unidad de origen'),
+  mpgus: 'MPG (US)', mpguk: 'MPG (UK)', l100: tr(lang, 'L / 100 km', 'لتر / 100 كم', 'L / 100 km', 'L / 100 km'), kml: tr(lang, 'km / L', 'كم / لتر', 'km / L', 'km / L'),
+  err: tr(lang, 'Enter a positive number.', 'أدخل رقماً موجباً.', 'Saisissez un nombre positif.', 'Introduce un número positivo.'),
 };
 ---
 <form id="fe" onsubmit="return false" data-s={JSON.stringify(S)}>

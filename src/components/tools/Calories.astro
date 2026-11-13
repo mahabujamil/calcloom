@@ -1,21 +1,21 @@
 ---
+import { tr, locale } from '../../lib/t';
 const { lang } = Astro.props;
-const ar = lang === 'ar';
 const S = {
-  sex: ar ? 'الجنس' : 'Sex', m: ar ? 'ذكر' : 'Male', f: ar ? 'أنثى' : 'Female',
-  age: ar ? 'العمر (سنة)' : 'Age (years)', w: ar ? 'الوزن (كغ)' : 'Weight (kg)', h: ar ? 'الطول (سم)' : 'Height (cm)',
-  act: ar ? 'مستوى النشاط' : 'Activity level',
-  a1: ar ? 'خامل (قليل الحركة)' : 'Sedentary (little exercise)',
-  a2: ar ? 'خفيف (1-3 أيام تمرين)' : 'Light (1-3 days a week)',
-  a3: ar ? 'متوسط (3-5 أيام تمرين)' : 'Moderate (3-5 days a week)',
-  a4: ar ? 'عالٍ (6-7 أيام تمرين)' : 'Active (6-7 days a week)',
-  a5: ar ? 'عالٍ جداً (عمل بدني شاق)' : 'Very active (hard physical work)',
-  err: ar ? 'أدخل العمر والوزن والطول.' : 'Enter age, weight and height.',
-  bmr: ar ? 'معدل الحرق الأساسي (BMR)' : 'Basal metabolic rate (BMR)',
-  tdee: ar ? 'السعرات اللازمة للحفاظ على وزنك' : 'Calories to maintain your weight',
-  lose: ar ? 'لإنقاص الوزن تدريجياً (-500)' : 'To lose weight gradually (-500)',
-  gain: ar ? 'لزيادة الوزن تدريجياً (+500)' : 'To gain weight gradually (+500)',
-  kc: ar ? 'سعرة/يوم' : 'kcal/day',
+  sex: tr(lang, 'Sex', 'الجنس', 'Sexe', 'Sexo'), m: tr(lang, 'Male', 'ذكر', 'Homme', 'Hombre'), f: tr(lang, 'Female', 'أنثى', 'Femme', 'Mujer'),
+  age: tr(lang, 'Age (years)', 'العمر (سنة)', 'Âge (ans)', 'Edad (años)'), w: tr(lang, 'Weight (kg)', 'الوزن (كغ)', 'Poids (kg)', 'Peso (kg)'), h: tr(lang, 'Height (cm)', 'الطول (سم)', 'Taille (cm)', 'Estatura (cm)'),
+  act: tr(lang, 'Activity level', 'مستوى النشاط', "Niveau d'activité", 'Nivel de actividad'),
+  a1: tr(lang, 'Sedentary (little exercise)', 'خامل (قليل الحركة)', "Sédentaire (peu d'exercice)", 'Sedentario (poco ejercicio)'),
+  a2: tr(lang, 'Light (1-3 days a week)', 'خفيف (1-3 أيام تمرين)', 'Léger (1 à 3 jours par semaine)', 'Ligero (1-3 días a la semana)'),
+  a3: tr(lang, 'Moderate (3-5 days a week)', 'متوسط (3-5 أيام تمرين)', 'Modéré (3 à 5 jours par semaine)', 'Moderado (3-5 días a la semana)'),
+  a4: tr(lang, 'Active (6-7 days a week)', 'عالٍ (6-7 أيام تمرين)', 'Actif (6 à 7 jours par semaine)', 'Activo (6-7 días a la semana)'),
+  a5: tr(lang, 'Very active (hard physical work)', 'عالٍ جداً (عمل بدني شاق)', 'Très actif (travail physique intense)', 'Muy activo (trabajo físico duro)'),
+  err: tr(lang, 'Enter age, weight and height.', 'أدخل العمر والوزن والطول.', "Saisissez l'âge, le poids et la taille.", 'Introduce edad, peso y estatura.'),
+  bmr: tr(lang, 'Basal metabolic rate (BMR)', 'معدل الحرق الأساسي (BMR)', 'Métabolisme de base (MB)', 'Metabolismo basal (TMB)'),
+  tdee: tr(lang, 'Calories to maintain your weight', 'السعرات اللازمة للحفاظ على وزنك', 'Calories pour maintenir votre poids', 'Calorías para mantener tu peso'),
+  lose: tr(lang, 'To lose weight gradually (-500)', 'لإنقاص الوزن تدريجياً (-500)', 'Pour perdre du poids progressivement (-500)', 'Para perder peso gradualmente (-500)'),
+  gain: tr(lang, 'To gain weight gradually (+500)', 'لزيادة الوزن تدريجياً (+500)', 'Pour prendre du poids progressivement (+500)', 'Para ganar peso gradualmente (+500)'),
+  kc: tr(lang, 'kcal/day', 'سعرة/يوم', 'kcal/jour', 'kcal/día'),
 };
 ---
 <form id="cl" onsubmit="return false" data-s={JSON.stringify(S)}>

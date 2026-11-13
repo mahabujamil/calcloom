@@ -1,6 +1,16 @@
 ---
 const { lang } = Astro.props;
-const S = lang === 'ar'
+const S = lang === 'fr'
+  ? { rate: "Taux horaire", hours: "Heures par semaine", weeks: "Semaines par an", calc: "Calculer",
+      err: "Saisissez des nombres valides (semaines entre 1 et 52).",
+      year: "{0} / an", mo: "Par mois : <strong>{0}</strong>", wk: "Par semaine : <strong>{0}</strong>", day: "Par jour (5 jours) : <strong>{0}</strong>",
+      note: "Tous les montants sont avant impôt." }
+  : lang === 'es'
+  ? { rate: "Tarifa por hora", hours: "Horas por semana", weeks: "Semanas por año", calc: "Calcular",
+      err: "Introduce números válidos (semanas entre 1 y 52).",
+      year: "{0} / año", mo: "Al mes: <strong>{0}</strong>", wk: "A la semana: <strong>{0}</strong>", day: "Al día (5 días): <strong>{0}</strong>",
+      note: "Todos los importes son antes de impuestos." }
+  : lang === 'ar'
   ? { rate: 'الأجر بالساعة', hours: 'ساعات العمل في الأسبوع', weeks: 'أسابيع العمل في السنة', calc: 'احسب',
       err: 'أدخل أرقاماً صحيحة (الأسابيع بين 1 و52).',
       year: '{0} / سنوياً', mo: 'شهرياً: <strong>{0}</strong>', wk: 'أسبوعياً: <strong>{0}</strong>', day: 'يومياً (5 أيام): <strong>{0}</strong>',

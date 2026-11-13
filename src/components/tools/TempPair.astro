@@ -1,16 +1,18 @@
 ---
 const { lang, temp } = Astro.props;
-const ar = lang === 'ar';
+import { tr, locale } from '../../lib/t';
 const N = {
-  c: { l: ar ? 'مئوي' : 'Celsius', s: '°C' },
-  f: { l: ar ? 'فهرنهايت' : 'Fahrenheit', s: '°F' },
-  k: { l: ar ? 'كلفن' : 'Kelvin', s: 'K' },
+  c: { l: tr(lang, 'Celsius', 'مئوي', 'Celsius', 'Celsius'), s: '°C' },
+  f: { l: tr(lang, 'Fahrenheit', 'فهرنهايت', 'Fahrenheit', 'Fahrenheit'), s: '°F' },
+  k: { l: tr(lang, 'Kelvin', 'كلفن', 'Kelvin', 'Kelvin'), s: 'K' },
 };
 const S = {
-  err: ar ? 'أدخل رقماً.' : 'Enter a number.',
-  low: ar ? 'أقل من الصفر المطلق، أدخل قيمة أعلى.' : 'Below absolute zero, enter a higher value.',
-  swap: ar ? 'تبديل' : 'Swap',
-  copy: ar ? 'نسخ النتيجة' : 'Copy result',
+  err: tr(lang, 'Enter a number.', 'أدخل رقماً.', 'Saisissez un nombre.', 'Introduce un número.'),
+  low: tr(lang, 'Below absolute zero, enter a higher value.', 'أقل من الصفر المطلق، أدخل قيمة أعلى.', 'Inférieur au zéro absolu, saisissez une valeur plus élevée.', 'Por debajo del cero absoluto, introduce un valor mayor.'),
+  swap: tr(lang, 'Swap', 'تبديل', 'Inverser', 'Intercambiar'),
+  copy: tr(lang, 'Copy result', 'نسخ النتيجة', 'Copier le résultat', 'Copiar resultado'),
+  fromL: tr(lang, 'From', 'من', 'De', 'De'),
+  toL: tr(lang, 'To', 'إلى', 'Vers', 'A'),
   from: temp.from,
   to: temp.to,
   N,
@@ -19,9 +21,9 @@ const S = {
 <form id="tp" onsubmit="return false" data-s={JSON.stringify(S)}>
   <div class="cv-grid">
     <div><label for="tp-v" id="tp-vl"></label><input id="tp-v" type="number" step="any" value="25" inputmode="decimal" /></div>
-    <div><label>{ar ? 'من' : 'From'}</label><output id="tp-a" class="unit-out"></output></div>
+    <div><label>{S.fromL}</label><output id="tp-a" class="unit-out"></output></div>
     <button id="tp-sw" type="button" class="swap" aria-label={S.swap} title={S.swap}>⇄</button>
-    <div><label>{ar ? 'إلى' : 'To'}</label><output id="tp-b" class="unit-out"></output></div>
+    <div><label>{S.toL}</label><output id="tp-b" class="unit-out"></output></div>
   </div>
   <div class="cv-quick">
     <button type="button" class="copy" id="tp-copy">{S.copy}</button>

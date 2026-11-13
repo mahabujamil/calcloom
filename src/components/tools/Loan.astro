@@ -1,6 +1,14 @@
 ---
 const { lang } = Astro.props;
-const S = lang === 'ar'
+const S = lang === 'fr'
+  ? { amount: "Montant du prêt", rate: "Taux d'intérêt annuel (%)", term: "Durée (années)", calc: "Calculer",
+      err: "Saisissez un montant et une durée positifs, et un taux de 0 ou plus.",
+      month: "{0} / mois", ti: "Total des intérêts : <strong>{0}</strong>", tr: "Total remboursé : <strong>{0}</strong> en {1} mensualités" }
+  : lang === 'es'
+  ? { amount: "Importe del préstamo", rate: "Tasa de interés anual (%)", term: "Plazo (años)", calc: "Calcular",
+      err: "Introduce un importe y un plazo positivos, y una tasa de 0 o más.",
+      month: "{0} / mes", ti: "Total de intereses: <strong>{0}</strong>", tr: "Total devuelto: <strong>{0}</strong> en {1} cuotas" }
+  : lang === 'ar'
   ? { amount: 'مبلغ القرض', rate: 'نسبة الفائدة السنوية (%)', term: 'المدة (سنوات)', calc: 'احسب',
       err: 'أدخل مبلغاً ومدة موجبين ونسبة فائدة 0 أو أكثر.',
       month: '{0} / شهرياً', ti: 'إجمالي الفوائد: <strong>{0}</strong>', tr: 'إجمالي المسدّد: <strong>{0}</strong> على {1} قسطاً' }

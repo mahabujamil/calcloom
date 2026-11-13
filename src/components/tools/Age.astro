@@ -1,6 +1,14 @@
 ---
 const { lang } = Astro.props;
-const S = lang === 'ar'
+const S = lang === 'fr'
+  ? { birth: "Date de naissance", at: "Âge à la date du", calc: "Calculer", both: "Saisissez les deux dates.",
+      after: "La date « âge au » doit être postérieure à la date de naissance.",
+      age: "{0} ans, {1} mois, {2} jours", days: "Nombre total de jours vécus : <strong>{0}</strong>", next: "Prochain anniversaire dans <strong>{0}</strong> jours" }
+  : lang === 'es'
+  ? { birth: "Fecha de nacimiento", at: "Edad en la fecha", calc: "Calcular", both: "Introduce las dos fechas.",
+      after: "La fecha de «edad en» debe ser posterior a la fecha de nacimiento.",
+      age: "{0} años, {1} meses, {2} días", days: "Total de días vividos: <strong>{0}</strong>", next: "Próximo cumpleaños en <strong>{0}</strong> días" }
+  : lang === 'ar'
   ? { birth: 'تاريخ الميلاد', at: 'العمر في تاريخ', calc: 'احسب', both: 'أدخل التاريخين.',
       after: 'يجب أن يكون تاريخ «العمر في» بعد تاريخ الميلاد.',
       age: '{0} سنة و{1} شهر و{2} يوم', days: 'إجمالي الأيام التي عشتها: <strong>{0}</strong>', next: 'عيد ميلادك القادم بعد <strong>{0}</strong> يوم' }

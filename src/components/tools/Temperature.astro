@@ -1,6 +1,12 @@
 ---
 const { lang } = Astro.props;
-const S = lang === 'ar'
+const S = lang === 'fr'
+  ? { value: "Température", from: "Unité de départ", c: "Celsius (°C)", f: "Fahrenheit (°F)", k: "Kelvin (K)", calc: "Convertir",
+      err: "Saisissez un nombre.", low: "Inférieur au zéro absolu, saisissez une valeur plus élevée." }
+  : lang === 'es'
+  ? { value: "Temperatura", from: "Unidad de origen", c: "Celsius (°C)", f: "Fahrenheit (°F)", k: "Kelvin (K)", calc: "Convertir",
+      err: "Introduce un número.", low: "Por debajo del cero absoluto, introduce un valor mayor." }
+  : lang === 'ar'
   ? { value: 'درجة الحرارة', from: 'من وحدة', c: 'مئوي (°م)', f: 'فهرنهايت (°ف)', k: 'كلفن (K)', calc: 'حوّل',
       err: 'أدخل رقماً.', low: 'أقل من الصفر المطلق، أدخل قيمة أعلى.' }
   : { value: 'Temperature', from: 'From unit', c: 'Celsius (°C)', f: 'Fahrenheit (°F)', k: 'Kelvin (K)', calc: 'Convert',

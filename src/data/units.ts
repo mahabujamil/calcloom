@@ -6,6 +6,10 @@ export interface Unit {
   en: string; // plural display name
   en1: string; // singular
   ar: string;
+  fr: string;
+  fr1: string;
+  es: string;
+  es1: string;
   f: number;
 }
 
@@ -14,12 +18,14 @@ export interface UCat {
   slug: string;
   en: string;
   ar: string;
+  fr: string;
+  es: string;
   from: string; // default units on the category page
   to: string;
   units: Unit[];
 }
 
-const u = (id: string, w: string, sym: string, en: string, en1: string, ar: string, f: number): Unit => ({ id, w, sym, en, en1, ar, f });
+const u = (id: string, w: string, sym: string, en: string, en1: string, ar: string, f: number): Unit => ({ id, w, sym, en, en1, ar, fr: '', fr1: '', es: '', es1: '', f });
 
 export const ucats: UCat[] = [
   {
@@ -136,6 +142,12 @@ export const ucats: UCat[] = [
     ],
   },
 ];
+
+import { UN, CN } from './units-i18n';
+for (const c of ucats) {
+  [c.fr, c.es] = CN[c.id];
+  for (const x of c.units) [x.fr, x.fr1, x.es, x.es1] = UN[x.id];
+}
 
 // Popular conversions that get their own landing page: [category, from, to]
 export const pairs: [string, string, string][] = [

@@ -1,17 +1,17 @@
 ---
 const { lang, spec, name } = Astro.props;
-const ar = lang === 'ar';
+import { tr, locale } from '../../lib/t';
 const S = {
   spec,
-  loc: ar ? 'ar-u-nu-latn' : 'en-US',
-  days: ar ? 'يوم' : 'days',
-  day1: ar ? 'يوم' : 'day',
-  hours: ar ? 'ساعة' : 'hours',
-  minutes: ar ? 'دقيقة' : 'minutes',
-  seconds: ar ? 'ثانية' : 'seconds',
-  weeks: ar ? '{0} أسبوع و{1} يوم' : '{0} weeks and {1} days',
-  target: ar ? 'الموعد: {0}' : 'Date: {0}',
-  today: ar ? 'اليوم هو الموعد!' : 'It is today!',
+  loc: locale(lang),
+  days: tr(lang, 'days', 'يوم', 'jours', 'días'),
+  day1: tr(lang, 'day', 'يوم', 'jour', 'día'),
+  hours: tr(lang, 'hours', 'ساعة', 'heures', 'horas'),
+  minutes: tr(lang, 'minutes', 'دقيقة', 'minutes', 'minutos'),
+  seconds: tr(lang, 'seconds', 'ثانية', 'secondes', 'segundos'),
+  weeks: tr(lang, '{0} weeks and {1} days', '{0} أسبوع و{1} يوم', '{0} semaines et {1} jours', '{0} semanas y {1} días'),
+  target: tr(lang, 'Date: {0}', 'الموعد: {0}', 'Date : {0}', 'Fecha: {0}'),
+  today: tr(lang, 'It is today!', 'اليوم هو الموعد!', "C'est aujourd'hui !", '¡Es hoy!'),
 };
 ---
 <div id="cd" data-s={JSON.stringify(S)}>

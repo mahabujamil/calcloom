@@ -1,6 +1,12 @@
 ---
 const { lang } = Astro.props;
-const S = lang === 'ar'
+const S = lang === 'fr'
+  ? { start: "Date de début", end: "Date de fin", incl: "Inclure la date de fin", calc: "Calculer", both: "Saisissez les deux dates.",
+      days: "{0} jours", ymd: "{0} ans, {1} mois, {2} jours", wk: "{0} semaines · {1} jours ouvrés" }
+  : lang === 'es'
+  ? { start: "Fecha de inicio", end: "Fecha de fin", incl: "Incluir la fecha de fin", calc: "Calcular", both: "Introduce las dos fechas.",
+      days: "{0} días", ymd: "{0} años, {1} meses, {2} días", wk: "{0} semanas · {1} días laborables" }
+  : lang === 'ar'
   ? { start: 'تاريخ البداية', end: 'تاريخ النهاية', incl: 'احتساب يوم النهاية', calc: 'احسب', both: 'أدخل التاريخين.',
       days: '{0} يوم', ymd: '{0} سنة و{1} شهر و{2} يوم', wk: '{0} أسبوع · {1} يوم عمل (اثنين إلى جمعة)' }
   : { start: 'Start date', end: 'End date', incl: 'Include the end date', calc: 'Calculate', both: 'Enter both dates.',

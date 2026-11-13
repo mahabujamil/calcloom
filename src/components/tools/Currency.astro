@@ -1,22 +1,24 @@
 ---
 import { currencies } from '../../data/currencies';
+import { tr, locale } from '../../lib/t';
 const { lang, fx } = Astro.props;
-const ar = lang === 'ar';
+const col = lang === 'ar' ? 2 : lang === 'fr' ? 3 : lang === 'es' ? 4 : 1;
 const S = {
-  value: ar ? 'المبلغ' : 'Amount',
-  from: ar ? 'من' : 'From',
-  to: ar ? 'إلى' : 'To',
-  swap: ar ? 'تبديل' : 'Swap',
-  copy: ar ? 'نسخ النتيجة' : 'Copy result',
-  loading: ar ? 'جاري تحميل الأسعار الحالية…' : 'Loading current rates…',
-  fail: ar ? 'تعذّر تحميل الأسعار الآن. تحقق من اتصالك وأعد المحاولة.' : 'Could not load the rates right now. Check your connection and try again.',
-  err: ar ? 'أدخل رقماً.' : 'Enter a number.',
-  rate: ar ? 'السعر: 1 {0} = {1} {2}' : 'Rate: 1 {0} = {1} {2}',
-  upd: ar ? 'آخر تحديث للأسعار: {0}' : 'Rates last updated: {0}',
-  loc: ar ? 'ar-u-nu-latn' : 'en-US',
+  value: tr(lang, 'Amount', 'المبلغ', 'Montant', 'Importe'),
+  from: tr(lang, 'From', 'من', 'De', 'De'),
+  to: tr(lang, 'To', 'إلى', 'Vers', 'A'),
+  swap: tr(lang, 'Swap', 'تبديل', 'Inverser', 'Intercambiar'),
+  copy: tr(lang, 'Copy result', 'نسخ النتيجة', 'Copier le résultat', 'Copiar resultado'),
+  loading: tr(lang, 'Loading current rates…', 'جاري تحميل الأسعار الحالية…', 'Chargement des taux actuels…', 'Cargando los tipos de cambio actuales…'),
+  fail: tr(lang, 'Could not load the rates right now. Check your connection and try again.', 'تعذّر تحميل الأسعار الآن. تحقق من اتصالك وأعد المحاولة.', 'Impossible de charger les taux pour le moment. Vérifiez votre connexion et réessayez.', 'No se pudieron cargar los tipos de cambio ahora mismo. Comprueba tu conexión e inténtalo de nuevo.'),
+  err: tr(lang, 'Enter a number.', 'أدخل رقماً.', 'Saisissez un nombre.', 'Introduce un número.'),
+  rate: tr(lang, 'Rate: 1 {0} = {1} {2}', 'السعر: 1 {0} = {1} {2}', 'Taux : 1 {0} = {1} {2}', 'Tipo: 1 {0} = {1} {2}'),
+  upd: tr(lang, 'Rates last updated: {0}', 'آخر تحديث للأسعار: {0}', 'Taux mis à jour le : {0}', 'Tipos actualizados: {0}'),
+  loc: locale(lang),
+  def: tr(lang, 'EUR', 'EGP', 'EUR', 'EUR'),
   pa: fx?.from ?? 'USD',
   pb: fx?.to ?? null,
-  list: currencies.map(([c, en, a]) => [c, `${c} - ${ar ? a : en}`]),
+  list: currencies.map((r: any) => [r[0], `${r[0]} - ${r[col] ?? r[1]}`]),
 };
 ---
 <form id="fx" onsubmit="return false" data-s={JSON.stringify(S)}>
@@ -38,7 +40,7 @@ const S = {
   const S = strings('fx');
   const a = $('fx-a') as unknown as HTMLSelectElement, b = $('fx-b') as unknown as HTMLSelectElement;
   for (const el of [a, b]) el.replaceChildren(...(S.list as [string, string][]).map(([c, l]) => new Option(l, c)));
-  a.value = S.pa; b.value = S.pb ?? (document.documentElement.lang === 'ar' ? 'EGP' : 'EUR');
+  a.value = S.pa; b.value = S.pb ?? S.def;
   let rates: Record<string, number> | null = null;
   let stamp = '';
   const fmt = (n: number) => Number(n.toPrecision(8)).toLocaleString('en-US', { maximumFractionDigits: n < 1 ? 8 : 4 });

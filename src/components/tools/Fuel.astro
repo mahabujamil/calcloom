@@ -1,6 +1,12 @@
 ---
 const { lang } = Astro.props;
-const S = lang === 'ar'
+const S = lang === 'fr'
+  ? { dist: "Distance (km)", cons: "Consommation (L/100 km)", price: "Prix du litre", calc: "Calculer",
+      err: "Saisissez des nombres positifs.", cost: "Coût du trajet : {0}", fuel: "Carburant nécessaire : <strong>{0}</strong> litres", per: "Coût par km : <strong>{0}</strong>" }
+  : lang === 'es'
+  ? { dist: "Distancia (km)", cons: "Consumo (L/100 km)", price: "Precio por litro", calc: "Calcular",
+      err: "Introduce números positivos.", cost: "Coste del viaje: {0}", fuel: "Combustible necesario: <strong>{0}</strong> litros", per: "Coste por km: <strong>{0}</strong>" }
+  : lang === 'ar'
   ? { dist: 'المسافة (كم)', cons: 'الاستهلاك (لتر/100 كم)', price: 'سعر اللتر', calc: 'احسب',
       err: 'أدخل أرقاماً موجبة.', cost: 'تكلفة الرحلة: {0}', fuel: 'الوقود المطلوب: <strong>{0}</strong> لتر', per: 'التكلفة لكل كم: <strong>{0}</strong>' }
   : { dist: 'Distance (km)', cons: 'Consumption (L/100 km)', price: 'Price per litre', calc: 'Calculate',

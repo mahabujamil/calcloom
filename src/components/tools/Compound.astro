@@ -1,6 +1,16 @@
 ---
 const { lang } = Astro.props;
-const S = lang === 'ar'
+const S = lang === 'fr'
+  ? { start: "Solde initial", monthly: "Versement mensuel", rate: "Taux d'intérêt annuel (%)", years: "Années", calc: "Calculer",
+      err: "Saisissez des nombres valides et non négatifs (1 an minimum).",
+      put: "Total versé : <strong>{0}</strong>", earned: "Intérêts gagnés : <strong>{0}</strong>",
+      note: "Intérêts composés mensuellement, versements en fin de mois." }
+  : lang === 'es'
+  ? { start: "Saldo inicial", monthly: "Aportación mensual", rate: "Tasa de interés anual (%)", years: "Años", calc: "Calcular",
+      err: "Introduce números válidos y no negativos (mínimo 1 año).",
+      put: "Total aportado: <strong>{0}</strong>", earned: "Intereses ganados: <strong>{0}</strong>",
+      note: "Interés compuesto mensual, aportaciones a final de cada mes." }
+  : lang === 'ar'
   ? { start: 'الرصيد الابتدائي', monthly: 'الإيداع الشهري', rate: 'نسبة الفائدة السنوية (%)', years: 'السنوات', calc: 'احسب',
       err: 'أدخل أرقاماً صحيحة غير سالبة (سنة واحدة على الأقل).',
       put: 'إجمالي ما أودعته: <strong>{0}</strong>', earned: 'الفائدة المكتسبة: <strong>{0}</strong>',

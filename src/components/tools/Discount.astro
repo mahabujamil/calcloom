@@ -1,6 +1,12 @@
 ---
 const { lang } = Astro.props;
-const S = lang === 'ar'
+const S = lang === 'fr'
+  ? { price: "Prix d'origine", disc: "Remise (%)", extra: "Remise supplémentaire (%) facultative", calc: "Calculer",
+      err: "Saisissez un prix et des remises entre 0 et 100.", save: "Vous économisez : <strong>{0}</strong>", totald: "Remise totale : <strong>{0} %</strong>" }
+  : lang === 'es'
+  ? { price: "Precio original", disc: "Descuento (%)", extra: "Descuento adicional (%) opcional", calc: "Calcular",
+      err: "Introduce un precio y descuentos entre 0 y 100.", save: "Ahorras: <strong>{0}</strong>", totald: "Descuento total: <strong>{0}%</strong>" }
+  : lang === 'ar'
   ? { price: 'السعر الأصلي', disc: 'الخصم (%)', extra: 'خصم إضافي (%) اختياري', calc: 'احسب',
       err: 'أدخل سعراً وخصومات بين 0 و100.', save: 'توفّر: <strong>{0}</strong>', totald: 'إجمالي الخصم: <strong>{0}%</strong>' }
   : { price: 'Original price', disc: 'Discount (%)', extra: 'Extra discount (%) optional', calc: 'Calculate',

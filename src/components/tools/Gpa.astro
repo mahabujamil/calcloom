@@ -1,21 +1,21 @@
 ---
 import { gradeScale } from '../../data/extra';
+import { tr, locale } from '../../lib/t';
 const { lang } = Astro.props;
-const ar = lang === 'ar';
 const S = {
-  course: ar ? 'المادة' : 'Course',
-  grade: ar ? 'التقدير' : 'Grade',
-  credits: ar ? 'الساعات' : 'Credits',
-  add: ar ? '+ إضافة مادة' : '+ Add course',
-  remove: ar ? 'حذف' : 'Remove',
-  reset: ar ? 'مسح الكل' : 'Reset',
-  prev: ar ? 'معدلك الحالي (اختياري)' : 'Current GPA (optional)',
-  prevCr: ar ? 'ساعاتك المنجزة (اختياري)' : 'Credits completed (optional)',
-  sem: ar ? 'المعدل الفصلي' : 'Semester GPA',
-  cum: ar ? 'المعدل التراكمي الجديد' : 'New cumulative GPA',
-  tot: ar ? 'مجموع الساعات: {0}' : 'Total credits: {0}',
-  none: ar ? 'أضف ساعات لمادة واحدة على الأقل.' : 'Enter credits for at least one course.',
-  ph: ar ? 'اختياري' : 'Optional',
+  course: tr(lang, 'Course', 'المادة', 'Matière', 'Asignatura'),
+  grade: tr(lang, 'Grade', 'التقدير', 'Note', 'Calificación'),
+  credits: tr(lang, 'Credits', 'الساعات', 'Crédits', 'Créditos'),
+  add: tr(lang, '+ Add course', '+ إضافة مادة', '+ Ajouter une matière', '+ Añadir asignatura'),
+  remove: tr(lang, 'Remove', 'حذف', 'Supprimer', 'Eliminar'),
+  reset: tr(lang, 'Reset', 'مسح الكل', 'Réinitialiser', 'Restablecer'),
+  prev: tr(lang, 'Current GPA (optional)', 'معدلك الحالي (اختياري)', 'Moyenne actuelle (facultatif)', 'Promedio actual (opcional)'),
+  prevCr: tr(lang, 'Credits completed (optional)', 'ساعاتك المنجزة (اختياري)', 'Crédits validés (facultatif)', 'Créditos completados (opcional)'),
+  sem: tr(lang, 'Semester GPA', 'المعدل الفصلي', 'Moyenne du semestre', 'Promedio del semestre'),
+  cum: tr(lang, 'New cumulative GPA', 'المعدل التراكمي الجديد', 'Nouvelle moyenne cumulée', 'Nuevo promedio acumulado'),
+  tot: tr(lang, 'Total credits: {0}', 'مجموع الساعات: {0}', 'Total des crédits : {0}', 'Total de créditos: {0}'),
+  none: tr(lang, 'Enter credits for at least one course.', 'أضف ساعات لمادة واحدة على الأقل.', "Saisissez les crédits d'au moins une matière.", 'Introduce los créditos de al menos una asignatura.'),
+  ph: tr(lang, 'Optional', 'اختياري', 'Facultatif', 'Opcional'),
   scale: gradeScale,
 };
 ---

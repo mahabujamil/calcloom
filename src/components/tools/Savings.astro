@@ -1,6 +1,14 @@
 ---
 const { lang } = Astro.props;
-const S = lang === 'ar'
+const S = lang === 'fr'
+  ? { goal: "Objectif d'épargne", have: "Déjà épargné", monthly: "Versement mensuel", rate: "Intérêt annuel (%)", calc: "Calculer",
+      err: "Saisissez des nombres valides et non négatifs.", done: "Vous avez déjà atteint votre objectif.", never: "Vous n'atteindrez pas l'objectif en 100 ans avec ces chiffres. Augmentez le versement.",
+      time: "{0} ans et {1} mois", total: "Total des versements : <strong>{0}</strong>", int: "Intérêts gagnés : <strong>{1}</strong>", months: "({0} mois)" }
+  : lang === 'es'
+  ? { goal: "Meta de ahorro", have: "Ahorrado hasta ahora", monthly: "Aportación mensual", rate: "Interés anual (%)", calc: "Calcular",
+      err: "Introduce números válidos y no negativos.", done: "Ya has alcanzado tu meta.", never: "Con estas cifras no alcanzarás la meta en 100 años. Aumenta la aportación.",
+      time: "{0} años y {1} meses", total: "Total de aportaciones: <strong>{0}</strong>", int: "Intereses ganados: <strong>{1}</strong>", months: "({0} meses)" }
+  : lang === 'ar'
   ? { goal: 'هدف الادخار', have: 'المدخر حالياً', monthly: 'الإيداع الشهري', rate: 'الفائدة السنوية (%)', calc: 'احسب',
       err: 'أدخل أرقاماً صحيحة غير سالبة.', done: 'وصلت لهدفك بالفعل.', never: 'لن تصل للهدف خلال 100 سنة بهذه الأرقام. ارفع الإيداع.',
       time: '{0} سنة و{1} شهر', total: 'إجمالي إيداعاتك: <strong>{0}</strong>', int: 'الفائدة المكتسبة: <strong>{1}</strong>', months: '({0} شهراً)' }

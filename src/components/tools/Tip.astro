@@ -1,6 +1,14 @@
 ---
 const { lang } = Astro.props;
-const S = lang === 'ar'
+const S = lang === 'fr'
+  ? { bill: "Montant de l'addition", tip: "Pourboire (%)", people: "Nombre de personnes", calc: "Calculer",
+      err: "Saisissez une addition, un pourboire et au moins 1 personne.",
+      per: "{0} par personne", tipl: "Pourboire : <strong>{0}</strong> ({1} chacun)", total: "Addition totale avec pourboire : <strong>{0}</strong>" }
+  : lang === 'es'
+  ? { bill: "Importe de la cuenta", tip: "Propina (%)", people: "Personas", calc: "Calcular",
+      err: "Introduce una cuenta, una propina y al menos 1 persona.",
+      per: "{0} por persona", tipl: "Propina: <strong>{0}</strong> ({1} cada uno)", total: "Total de la cuenta con propina: <strong>{0}</strong>" }
+  : lang === 'ar'
   ? { bill: 'قيمة الفاتورة', tip: 'البقشيش (%)', people: 'عدد الأشخاص', calc: 'احسب',
       err: 'أدخل فاتورة وبقشيشاً وشخصاً واحداً على الأقل.',
       per: '{0} للشخص', tipl: 'البقشيش: <strong>{0}</strong> ({1} لكل شخص)', total: 'إجمالي الفاتورة مع البقشيش: <strong>{0}</strong>' }

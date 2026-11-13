@@ -1,18 +1,18 @@
 ---
+import { tr, locale } from '../../lib/t';
 const { lang } = Astro.props;
-const ar = lang === 'ar';
 const S = {
-  label: ar ? 'أدخل الأرقام (افصل بينها بفاصلة أو مسافة أو سطر جديد)' : 'Enter numbers (separate with commas, spaces or new lines)',
-  none: ar ? 'أدخل رقمين على الأقل.' : 'Enter at least two numbers.',
-  mean: ar ? 'المتوسط الحسابي' : 'Mean (average)',
-  median: ar ? 'الوسيط' : 'Median',
-  mode: ar ? 'المنوال' : 'Mode',
-  sum: ar ? 'المجموع' : 'Sum',
-  count: ar ? 'العدد' : 'Count',
-  min: ar ? 'الأصغر' : 'Smallest',
-  max: ar ? 'الأكبر' : 'Largest',
-  range: ar ? 'المدى' : 'Range',
-  nomode: ar ? 'لا يوجد' : 'None',
+  label: tr(lang, 'Enter numbers (separate with commas, spaces or new lines)', 'أدخل الأرقام (افصل بينها بفاصلة أو مسافة أو سطر جديد)', 'Saisissez des nombres (séparés par des virgules, des espaces ou des retours à la ligne)', 'Introduce números (separados por comas, espacios o saltos de línea)'),
+  none: tr(lang, 'Enter at least two numbers.', 'أدخل رقمين على الأقل.', 'Saisissez au moins deux nombres.', 'Introduce al menos dos números.'),
+  mean: tr(lang, 'Mean (average)', 'المتوسط الحسابي', 'Moyenne', 'Media (promedio)'),
+  median: tr(lang, 'Median', 'الوسيط', 'Médiane', 'Mediana'),
+  mode: tr(lang, 'Mode', 'المنوال', 'Mode', 'Moda'),
+  sum: tr(lang, 'Sum', 'المجموع', 'Somme', 'Suma'),
+  count: tr(lang, 'Count', 'العدد', 'Effectif', 'Cantidad'),
+  min: tr(lang, 'Smallest', 'الأصغر', 'Minimum', 'Mínimo'),
+  max: tr(lang, 'Largest', 'الأكبر', 'Maximum', 'Máximo'),
+  range: tr(lang, 'Range', 'المدى', 'Étendue', 'Rango'),
+  nomode: tr(lang, 'None', 'لا يوجد', 'Aucun', 'Ninguna'),
 };
 ---
 <form id="av" onsubmit="return false" data-s={JSON.stringify(S)}>

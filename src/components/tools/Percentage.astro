@@ -1,6 +1,16 @@
 ---
 const { lang } = Astro.props;
-const S = lang === 'ar'
+const S = lang === 'fr'
+  ? { find: "Que voulez-vous calculer ?", of: "Combien font X % de Y ?", is: "X représente quel pourcentage de Y ?", chg: "Variation en pourcentage de X à Y",
+      xp: "X (pourcentage)", yn: "Y (nombre)", xn: "X (nombre)", xo: "X (ancienne valeur)", yv: "Y (nouvelle valeur)",
+      calc: "Calculer", both: "Saisissez les deux nombres.", yzero: "Y ne peut pas être nul.", xzero: "L'ancienne valeur ne peut pas être nulle.",
+      rOf: "{0} % de {1}", rIs: "{0} représente {1} % de {2}", inc: "Hausse de {0} à {1}", dec: "Baisse de {0} à {1}" }
+  : lang === 'es'
+  ? { find: "¿Qué quieres calcular?", of: "¿Cuánto es X% de Y?", is: "¿X es qué porcentaje de Y?", chg: "Variación porcentual de X a Y",
+      xp: "X (porcentaje)", yn: "Y (número)", xn: "X (número)", xo: "X (valor anterior)", yv: "Y (valor nuevo)",
+      calc: "Calcular", both: "Introduce los dos números.", yzero: "Y no puede ser cero.", xzero: "El valor anterior no puede ser cero.",
+      rOf: "{0}% de {1}", rIs: "{0} es el {1}% de {2}", inc: "Aumento de {0} a {1}", dec: "Disminución de {0} a {1}" }
+  : lang === 'ar'
   ? { find: 'ماذا تريد أن تحسب؟', of: 'كم يساوي س% من ص؟', is: 'س تمثل كم بالمئة من ص؟', chg: 'نسبة التغير من س إلى ص',
       xp: 'س (النسبة %)', yn: 'ص (الرقم)', xn: 'س (الرقم)', xo: 'س (القيمة القديمة)', yv: 'ص (القيمة الجديدة)',
       calc: 'احسب', both: 'أدخل الرقمين.', yzero: 'لا يمكن أن تكون ص صفراً.', xzero: 'لا يمكن أن تكون القيمة القديمة صفراً.',

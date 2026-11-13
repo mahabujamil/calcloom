@@ -1,11 +1,11 @@
 // Visual metadata for each tool: category and a 24x24 stroke icon.
 export const cats = {
-  money: { hue: 165, en: 'Money', ar: 'المال' },
-  health: { hue: 345, en: 'Health', ar: 'الصحة' },
-  time: { hue: 215, en: 'Dates & time', ar: 'التواريخ والوقت' },
-  daily: { hue: 35, en: 'Everyday', ar: 'الحياة اليومية' },
-  convert: { hue: 215, en: 'Converters', ar: 'المحوّلات' },
-  tools: { hue: 265, en: 'Handy tools', ar: 'أدوات مفيدة' },
+  money: { hue: 165, en: 'Money', ar: 'المال', fr: 'Argent', es: 'Dinero' },
+  health: { hue: 345, en: 'Health', ar: 'الصحة', fr: 'Santé', es: 'Salud' },
+  time: { hue: 215, en: 'Dates & time', ar: 'التواريخ والوقت', fr: 'Dates et temps', es: 'Fechas y tiempo' },
+  daily: { hue: 35, en: 'Everyday', ar: 'الحياة اليومية', fr: 'Vie quotidienne', es: 'Vida diaria' },
+  convert: { hue: 215, en: 'Converters', ar: 'المحوّلات', fr: 'Convertisseurs', es: 'Conversores' },
+  tools: { hue: 265, en: 'Handy tools', ar: 'أدوات مفيدة', fr: 'Outils pratiques', es: 'Herramientas útiles' },
 } as const;
 
 export type Cat = keyof typeof cats;

@@ -5,6 +5,7 @@ import { tools } from '../data/tools';
 import { allTools, getTool } from '../data/get';
 import { meta, cats, type Cat } from '../data/meta';
 import { ui, localePath, type Lang } from '../i18n';
+import { tr } from '../lib/t';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -18,13 +19,20 @@ const popular = [...featured, ...tools.filter((x) => x.kind === 'pair' && !featu
 const schema = [
   { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Calcloom', url: Astro.site?.href, inLanguage: lang },
 ];
-const L = ar
+const Lbase = ar
   ? { badge: 'مجاني 100% · بدون تسجيل', h1a: 'كل حاسبة ومحوّل تحتاجه،', h1b: 'بسرعة ودقة.', search: 'ابحث عن حاسبة أو محوّل...', all: 'الكل',
-      none: 'ما لقينا أداة بهذا الاسم.', t1: 'مجاني دائماً', t2: 'بدون تسجيل', t3: 'بياناتك لا تُخزَّن', t4: 'عربي وإنجليزي',
+      none: 'ما لقينا أداة بهذا الاسم.', t1: 'مجاني دائماً', t2: 'بدون تسجيل', t3: 'بياناتك لا تُخزَّن', t4: 'أربع لغات',
       wTitle: 'كيلومتر إلى ميل', wFrom: 'كيلومتر', wTo: 'ميل', wMore: 'كل محوّلات الطول ←', pop: 'تحويلات شائعة', top: 'الأكثر طلباً' }
   : { badge: '100% free · No sign-up', h1a: 'Every calculator and converter you need.', h1b: 'Fast.', search: 'Search calculators and converters...', all: 'All',
-      none: 'No tool matches that search.', t1: 'Free forever', t2: 'No sign-up', t3: 'Your data is never stored', t4: 'English and Arabic',
+      none: 'No tool matches that search.', t1: 'Free forever', t2: 'No sign-up', t3: 'Your data is never stored', t4: 'Four languages',
       wTitle: 'Kilometres to Miles', wFrom: 'Kilometres', wTo: 'Miles', wMore: 'All length converters →', pop: 'Popular conversions', top: 'Most requested' };
+const LFR = { badge: '100 % gratuit · Sans inscription', h1a: 'Tous les calculateurs et convertisseurs dont vous avez besoin,', h1b: 'rapidement.', search: 'Rechercher un calculateur ou un convertisseur…', all: 'Tout',
+      none: 'Aucun outil ne correspond à cette recherche.', t1: 'Gratuit pour toujours', t2: 'Sans inscription', t3: 'Vos données ne sont jamais enregistrées', t4: 'Quatre langues',
+      wTitle: 'Kilomètres en miles', wFrom: 'Kilomètres', wTo: 'Miles', wMore: 'Tous les convertisseurs de longueur →', pop: 'Conversions populaires', top: 'Les plus demandés' };
+const LES = { badge: '100 % gratis · Sin registro', h1a: 'Todas las calculadoras y conversores que necesitas,', h1b: 'rápido.', search: 'Buscar una calculadora o un conversor…', all: 'Todo',
+      none: 'Ninguna herramienta coincide con esa búsqueda.', t1: 'Gratis para siempre', t2: 'Sin registro', t3: 'Tus datos nunca se guardan', t4: 'Cuatro idiomas',
+      wTitle: 'Kilómetros a millas', wFrom: 'Kilómetros', wTo: 'Millas', wMore: 'Todos los conversores de longitud →', pop: 'Conversiones populares', top: 'Los más solicitados' };
+const L = lang === 'fr' ? LFR : lang === 'es' ? LES : Lbase;
 const lenSlug = localePath(lang, '/length-converter/');
 ---
 <Base title={t.homeTitle} description={t.homeDesc} {lang} {schema}>
@@ -72,7 +80,7 @@ const lenSlug = localePath(lang, '/length-converter/');
   <div class="chips reveal" role="group" aria-label={t.allCalcs}>
     <button class="chip" type="button" data-cat="all" aria-pressed="true">{L.all}</button>
     {(Object.keys(cats) as Cat[]).map((c) => (
-      <button class="chip" type="button" data-cat={c} aria-pressed="false">{ar ? cats[c].ar : cats[c].en}</button>
+      <button class="chip" type="button" data-cat={c} aria-pressed="false">{tr(lang, cats[c].en, cats[c].ar, cats[c].fr, cats[c].es)}</button>
     ))}
   </div>
   <div class="grid" id="grid">

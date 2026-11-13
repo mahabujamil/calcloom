@@ -1,4 +1,6 @@
-export type Lang = 'en' | 'ar';
+export type Lang = 'en' | 'ar' | 'fr' | 'es';
+export const LANGS: Lang[] = ['en', 'ar', 'fr', 'es'];
+export const LANG_NAME: Record<Lang, string> = { en: 'English', ar: 'العربية', fr: 'Français', es: 'Español' };
 
 export const ui = {
   en: {
@@ -20,6 +22,46 @@ export const ui = {
     homeH1: 'Free online calculators that just work',
     homeLead:
       'Fast, private and simple. Pick a tool, type your numbers, get the answer. No sign-up, nothing is stored.',
+  },
+  fr: {
+    dir: 'ltr',
+    allTools: 'Tous les outils',
+    about: 'À propos',
+    privacy: 'Confidentialité',
+    switchLabel: 'English',
+    home: 'Accueil',
+    footer:
+      '© Calcloom. Des calculateurs gratuits pour les décisions du quotidien. Les résultats sont des estimations à titre informatif, et non des conseils financiers ou médicaux.',
+    howTo: (n: string) => `Comment utiliser : ${n.charAt(0).toLowerCase() + n.slice(1)}`,
+    faq: 'Questions fréquentes',
+    more: 'Autres calculateurs',
+    allCalcs: 'Tous les calculateurs',
+    homeTitle: 'Calcloom : calculateurs et convertisseurs gratuits en ligne',
+    homeDesc:
+      'Calculateurs et convertisseurs gratuits : km en miles, kg en livres, prêt, IMC, pourcentage et plus. Rapides, privés, sans inscription.',
+    homeH1: 'Des calculateurs en ligne gratuits qui marchent',
+    homeLead:
+      'Rapide, privé et simple. Choisissez un outil, saisissez vos chiffres, obtenez la réponse. Sans inscription, rien n’est enregistré.',
+  },
+  es: {
+    dir: 'ltr',
+    allTools: 'Todas las herramientas',
+    about: 'Acerca de',
+    privacy: 'Privacidad',
+    switchLabel: 'English',
+    home: 'Inicio',
+    footer:
+      '© Calcloom. Calculadoras gratuitas para las decisiones del día a día. Los resultados son estimaciones informativas, no asesoramiento financiero ni médico.',
+    howTo: (n: string) => `Cómo usar: ${n.charAt(0).toLowerCase() + n.slice(1)}`,
+    faq: 'Preguntas frecuentes',
+    more: 'Más calculadoras',
+    allCalcs: 'Todas las calculadoras',
+    homeTitle: 'Calcloom: calculadoras y conversores de unidades gratis en línea',
+    homeDesc:
+      'Calculadoras y conversores gratuitos: km a millas, kg a libras, préstamos, IMC, porcentajes y más. Rápidos, privados y sin registro.',
+    homeH1: 'Calculadoras en línea gratuitas que funcionan',
+    homeLead:
+      'Rápido, privado y sencillo. Elige una herramienta, escribe tus números y obtén la respuesta. Sin registro y sin guardar nada.',
   },
   ar: {
     dir: 'rtl',
@@ -47,4 +89,4 @@ export const ui = {
 // Includes the site base path (e.g. /calcloom on the free GitHub address, empty on a custom domain).
 export const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
 export const localePath = (lang: Lang, path: string) =>
-  `${BASE}${lang === 'ar' ? '/ar' : ''}${path}`;
+  `${BASE}${lang === 'en' ? '' : '/' + lang}${path}`;

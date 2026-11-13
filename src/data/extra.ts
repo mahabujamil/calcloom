@@ -5,28 +5,28 @@ import type { Tool } from './tools';
 type Text = Pick<Tool, 'name' | 'title' | 'description' | 'h1' | 'intro' | 'steps' | 'faq' | 'tableTitle' | 'table' | 'about'>;
 type L = 'en' | 'ar';
 
-const n2 = (n: number) => String(Number(n.toFixed(2)));
+export const n2 = (n: number) => String(Number(n.toFixed(2)));
 
 /* ---------- Temperature pairs ---------- */
 type TU = 'c' | 'f' | 'k';
-const TN: Record<TU, { en: string; ar: string; sym: string; word: string }> = {
+export const TN: Record<TU, { en: string; ar: string; sym: string; word: string }> = {
   c: { en: 'Celsius', ar: 'مئوي (سيلسيوس)', sym: '°C', word: 'celsius' },
   f: { en: 'Fahrenheit', ar: 'فهرنهايت', sym: '°F', word: 'fahrenheit' },
   k: { en: 'Kelvin', ar: 'كلفن', sym: 'K', word: 'kelvin' },
 };
 const toC = (u: TU, v: number) => (u === 'c' ? v : u === 'f' ? ((v - 32) * 5) / 9 : v - 273.15);
-const fromC = (u: TU, c: number) => (u === 'c' ? c : u === 'f' ? (c * 9) / 5 + 32 : c + 273.15);
-const tconv = (a: TU, b: TU, v: number) => fromC(b, toC(a, v));
-const formula: Record<string, string> = {
+export const fromC = (u: TU, c: number) => (u === 'c' ? c : u === 'f' ? (c * 9) / 5 + 32 : c + 273.15);
+export const tconv = (a: TU, b: TU, v: number) => fromC(b, toC(a, v));
+export const formula: Record<string, string> = {
   cf: 'F = C × 9/5 + 32', fc: 'C = (F − 32) × 5/9', ck: 'K = C + 273.15',
   kc: 'C = K − 273.15', fk: 'K = (F − 32) × 5/9 + 273.15', kf: 'F = (K − 273.15) × 9/5 + 32',
 };
-const sample: Record<TU, number[]> = {
+export const sample: Record<TU, number[]> = {
   c: [-40, -10, 0, 10, 20, 25, 30, 37, 50, 100],
   f: [-40, 0, 32, 50, 68, 77, 86, 98.6, 100, 212],
   k: [0, 100, 200, 250, 273.15, 293.15, 300, 310, 373.15],
 };
-const exampleVal: Record<TU, number> = { c: 20, f: 68, k: 300 };
+export const exampleVal: Record<TU, number> = { c: 20, f: 68, k: 300 };
 export const tempPairs: [TU, TU][] = [['c', 'f'], ['f', 'c'], ['c', 'k'], ['k', 'c'], ['f', 'k'], ['k', 'f']];
 export const tempSlug = (a: TU, b: TU) => `${TN[a].word}-to-${TN[b].word}`;
 
@@ -95,8 +95,8 @@ export type CountdownSpec =
   | { kind: 'black' }
   | { kind: 'list'; dates: string[] };
 
-interface Ev { id: string; en: string; ar: string; spec: CountdownSpec; note?: boolean }
-const EVENTS: Ev[] = [
+export interface Ev { id: string; en: string; ar: string; spec: CountdownSpec; note?: boolean }
+export const EVENTS: Ev[] = [
   { id: 'christmas', en: 'Christmas', ar: 'الكريسماس (عيد الميلاد المجيد)', spec: { kind: 'fixed', m: 12, d: 25 } },
   { id: 'new-year', en: 'New Year', ar: 'رأس السنة الميلادية', spec: { kind: 'fixed', m: 1, d: 1 } },
   { id: 'halloween', en: 'Halloween', ar: 'الهالوين', spec: { kind: 'fixed', m: 10, d: 31 } },
@@ -114,7 +114,7 @@ const nthWeekday = (y: number, m: number, wd: number, n: number) => {
   const first = new Date(Date.UTC(y, m - 1, 1)).getUTCDay();
   return new Date(Date.UTC(y, m - 1, 1 + ((wd - first + 7) % 7) + (n - 1) * 7));
 };
-function dateIn(spec: CountdownSpec, y: number): Date | null {
+export function dateIn(spec: CountdownSpec, y: number): Date | null {
   if (spec.kind === 'fixed') return new Date(Date.UTC(y, spec.m - 1, spec.d));
   if (spec.kind === 'nth') return nthWeekday(y, spec.m, spec.wd, spec.n);
   if (spec.kind === 'black') {

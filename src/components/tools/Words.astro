@@ -1,6 +1,14 @@
 ---
 const { lang } = Astro.props;
-const S = lang === 'ar'
+const S = lang === 'fr'
+  ? { label: "Votre texte", ph: "Collez ou saisissez ici...", words: "{0} mots",
+      chars: "Caractères : <strong>{0}</strong> ({1} sans espaces)", sp: "Phrases : <strong>{0}</strong> · Paragraphes : <strong>{1}</strong>",
+      time: "Temps de lecture : <strong>{0}</strong> · Temps de parole : <strong>{1}</strong>", lt1: "moins d'1 min", min: "{0} min" }
+  : lang === 'es'
+  ? { label: "Tu texto", ph: "Pega o escribe aquí...", words: "{0} palabras",
+      chars: "Caracteres: <strong>{0}</strong> ({1} sin espacios)", sp: "Frases: <strong>{0}</strong> · Párrafos: <strong>{1}</strong>",
+      time: "Tiempo de lectura: <strong>{0}</strong> · Tiempo de habla: <strong>{1}</strong>", lt1: "menos de 1 min", min: "{0} min" }
+  : lang === 'ar'
   ? { label: 'النص', ph: 'الصق أو اكتب هنا...', words: '{0} كلمة',
       chars: 'الأحرف: <strong>{0}</strong> ({1} بدون مسافات)', sp: 'الجمل: <strong>{0}</strong> · الفقرات: <strong>{1}</strong>',
       time: 'وقت القراءة: <strong>{0}</strong> · وقت الحديث: <strong>{1}</strong>', lt1: 'أقل من دقيقة', min: '{0} دقيقة' }

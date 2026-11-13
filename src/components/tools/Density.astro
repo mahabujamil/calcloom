@@ -1,31 +1,31 @@
 ---
+import { tr, locale } from '../../lib/t';
 const { lang } = Astro.props;
-const ar = lang === 'ar';
 // density in kg per litre
 const subs: [string, string, number][] = [
-  [ar ? 'ماء' : 'Water', 'water', 1],
-  [ar ? 'حليب' : 'Milk', 'milk', 1.03],
-  [ar ? 'زيت زيتون' : 'Olive oil', 'olive', 0.91],
-  [ar ? 'زيت نباتي' : 'Vegetable oil', 'veg', 0.92],
-  [ar ? 'بنزين' : 'Petrol / gasoline', 'petrol', 0.745],
-  [ar ? 'ديزل' : 'Diesel', 'diesel', 0.832],
-  [ar ? 'عسل' : 'Honey', 'honey', 1.42],
-  [ar ? 'عصير' : 'Juice', 'juice', 1.05],
-  [ar ? 'كحول إيثيلي' : 'Ethanol', 'ethanol', 0.789],
-  [ar ? 'طحين (تقريبي)' : 'Flour (approx.)', 'flour', 0.53],
-  [ar ? 'سكر (تقريبي)' : 'Sugar (approx.)', 'sugar', 0.85],
-  [ar ? 'أرز (تقريبي)' : 'Rice (approx.)', 'rice', 0.85],
-  [ar ? 'ملح (تقريبي)' : 'Salt (approx.)', 'salt', 1.2],
+  [tr(lang, 'Water', 'ماء', 'Eau', 'Agua'), 'water', 1],
+  [tr(lang, 'Milk', 'حليب', 'Lait', 'Leche'), 'milk', 1.03],
+  [tr(lang, 'Olive oil', 'زيت زيتون', "Huile d'olive", 'Aceite de oliva'), 'olive', 0.91],
+  [tr(lang, 'Vegetable oil', 'زيت نباتي', 'Huile végétale', 'Aceite vegetal'), 'veg', 0.92],
+  [tr(lang, 'Petrol / gasoline', 'بنزين', 'Essence', 'Gasolina'), 'petrol', 0.745],
+  [tr(lang, 'Diesel', 'ديزل', 'Gazole', 'Diésel'), 'diesel', 0.832],
+  [tr(lang, 'Honey', 'عسل', 'Miel', 'Miel'), 'honey', 1.42],
+  [tr(lang, 'Juice', 'عصير', 'Jus', 'Zumo'), 'juice', 1.05],
+  [tr(lang, 'Ethanol', 'كحول إيثيلي', 'Éthanol', 'Etanol'), 'ethanol', 0.789],
+  [tr(lang, 'Flour (approx.)', 'طحين (تقريبي)', 'Farine (approx.)', 'Harina (aprox.)'), 'flour', 0.53],
+  [tr(lang, 'Sugar (approx.)', 'سكر (تقريبي)', 'Sucre (approx.)', 'Azúcar (aprox.)'), 'sugar', 0.85],
+  [tr(lang, 'Rice (approx.)', 'أرز (تقريبي)', 'Riz (approx.)', 'Arroz (aprox.)'), 'rice', 0.85],
+  [tr(lang, 'Salt (approx.)', 'ملح (تقريبي)', 'Sel (approx.)', 'Sal (aprox.)'), 'salt', 1.2],
 ];
 const S = {
-  sub: ar ? 'المادة' : 'Substance',
-  dir: ar ? 'الاتجاه' : 'Direction',
-  k2l: ar ? 'كيلوغرام إلى لتر' : 'Kilograms to litres',
-  l2k: ar ? 'لتر إلى كيلوغرام' : 'Litres to kilograms',
-  val: ar ? 'القيمة' : 'Value',
-  err: ar ? 'أدخل رقماً موجباً.' : 'Enter a positive number.',
-  dens: ar ? 'الكثافة: {0} كغ/لتر' : 'Density: {0} kg/L',
-  note: ar ? 'القيم تقريبية وتتغير بدرجة الحرارة والنوع.' : 'Values are approximate and vary with temperature and type.',
+  sub: tr(lang, 'Substance', 'المادة', 'Substance', 'Sustancia'),
+  dir: tr(lang, 'Direction', 'الاتجاه', 'Sens', 'Dirección'),
+  k2l: tr(lang, 'Kilograms to litres', 'كيلوغرام إلى لتر', 'Kilogrammes en litres', 'Kilogramos a litros'),
+  l2k: tr(lang, 'Litres to kilograms', 'لتر إلى كيلوغرام', 'Litres en kilogrammes', 'Litros a kilogramos'),
+  val: tr(lang, 'Value', 'القيمة', 'Valeur', 'Valor'),
+  err: tr(lang, 'Enter a positive number.', 'أدخل رقماً موجباً.', 'Saisissez un nombre positif.', 'Introduce un número positivo.'),
+  dens: tr(lang, 'Density: {0} kg/L', 'الكثافة: {0} كغ/لتر', 'Densité : {0} kg/L', 'Densidad: {0} kg/L'),
+  note: tr(lang, 'Values are approximate and vary with temperature and type.', 'القيم تقريبية وتتغير بدرجة الحرارة والنوع.', 'Valeurs approximatives, variables selon la température et le type.', 'Los valores son aproximados y varían con la temperatura y el tipo.'),
   subs,
 };
 ---

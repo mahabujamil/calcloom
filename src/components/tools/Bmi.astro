@@ -1,6 +1,16 @@
 ---
 const { lang } = Astro.props;
-const S = lang === 'ar'
+const S = lang === 'fr'
+  ? { units: "Unités", metric: "Métrique (cm, kg)", imperial: "Impérial (po, lb)", hCm: "Taille (cm)", wKg: "Poids (kg)",
+      hIn: "Taille (pouces)", wLb: "Poids (lb)", calc: "Calculer", err: "Saisissez une taille et un poids positifs.",
+      under: "Insuffisance pondérale", normal: "Poids normal", over: "Surpoids", obese: "Obésité",
+      cat: "Catégorie (seuils OMS pour adultes) : <strong>{0}</strong>", note: "Simple outil de dépistage, pas un diagnostic médical." }
+  : lang === 'es'
+  ? { units: "Unidades", metric: "Métrico (cm, kg)", imperial: "Imperial (pulg, lb)", hCm: "Estatura (cm)", wKg: "Peso (kg)",
+      hIn: "Estatura (pulgadas)", wLb: "Peso (lb)", calc: "Calcular", err: "Introduce una estatura y un peso positivos.",
+      under: "Bajo peso", normal: "Peso normal", over: "Sobrepeso", obese: "Obesidad",
+      cat: "Categoría (rangos de la OMS para adultos): <strong>{0}</strong>", note: "Es solo una herramienta de cribado, no un diagnóstico médico." }
+  : lang === 'ar'
   ? { units: 'الوحدات', metric: 'متري (سم، كغ)', imperial: 'إمبراطوري (إنش، رطل)', hCm: 'الطول (سم)', wKg: 'الوزن (كغ)',
       hIn: 'الطول (إنش)', wLb: 'الوزن (رطل)', calc: 'احسب', err: 'أدخل طولاً ووزناً موجبين.',
       under: 'نحافة', normal: 'وزن طبيعي', over: 'زيادة وزن', obese: 'سمنة',
